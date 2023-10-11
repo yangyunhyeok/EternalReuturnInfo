@@ -1,24 +1,24 @@
-package com.erionna.eternalreturninfo.ui.fragment.walkthrough
+package com.erionna.eternalreturninfo.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.erionna.eternalreturninfo.databinding.WalkThroughFragmentBinding
+import com.erionna.eternalreturninfo.databinding.ChatFragmentBinding
 
-class WalkThroughFragment : Fragment() {
+class ChatFragment : Fragment() {
     companion object {
-        fun newInstance() = WalkThroughFragment()
-
+        fun newInstance() = ChatFragment()
     }
-    private var _binding: WalkThroughFragmentBinding? = null
+
+    private var _binding: ChatFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = WalkThroughFragmentBinding.inflate(inflater, container, false)
+        _binding = ChatFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,4 +34,5 @@ class WalkThroughFragment : Fragment() {
     private fun initView() = with(binding) {
         // TODO: connect adapter
     }
+
 }

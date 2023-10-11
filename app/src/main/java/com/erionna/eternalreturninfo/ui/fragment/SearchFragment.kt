@@ -1,27 +1,25 @@
-package com.erionna.eternalreturninfo.ui.fragment.main
+package com.erionna.eternalreturninfo.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.erionna.eternalreturninfo.databinding.BoardFragmentBinding
-import com.erionna.eternalreturninfo.ui.fragment.board.BoardFragment
+import com.erionna.eternalreturninfo.databinding.ChatFragmentBinding
+import com.erionna.eternalreturninfo.ui.fragment.ChatFragment
 
-class MainFragment : Fragment() {
+class SearchFragment : Fragment() {
     companion object {
-        fun newInstance() = BoardFragment()
+        fun newInstance() = ChatFragment()
     }
 
-    private var _binding: BoardFragmentBinding? = null
+    private var _binding: ChatFragmentBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BoardFragmentBinding.inflate(inflater, container, false)
+        _binding = ChatFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,12 +27,13 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
-
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
     }
-    private fun initView() = with(binding) {
 
+    private fun initView() = with(binding) {
+        // TODO: connect adapter
     }
+
 }
