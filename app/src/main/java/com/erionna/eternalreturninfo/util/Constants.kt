@@ -1,4 +1,4 @@
-package com.example.loltube.util
+package com.erionna.eternalreturninfo.util
 
 class Constants {
     companion object {
