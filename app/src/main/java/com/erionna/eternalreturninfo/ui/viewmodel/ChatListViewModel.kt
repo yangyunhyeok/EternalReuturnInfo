@@ -21,7 +21,7 @@ class ChatListViewModel(
                     ERModel(
                         id = idGenerate.getAndIncrement(),
                         userName = "choco5732",
-                        msg = "테스트 메시지!!",
+                        msg = "근태님 버스 감사합니다.. 저도 나딘만 팔까봐요 ㅎㅎ..",
                         profilePicture = R.drawable.ic_jaekie
                     )
                 )

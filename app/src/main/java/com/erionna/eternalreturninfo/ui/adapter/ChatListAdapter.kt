@@ -49,7 +49,7 @@ class ChatListAdapter(
             chatListName.text = item.userName
             chatListProfilePicture.setImageResource(item.profilePicture)
 
-            container.setOnClickListener {
+            chatListContainer.setOnClickListener {
                 onClickItem(
                     adapterPosition,
                     item
