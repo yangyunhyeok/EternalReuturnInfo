@@ -5,5 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ERModel (
-    val userName: String
+    val id: Long? = null,
+    val userName: String,
+    val msg: String,
+    val profilePicture: Int
 ) : Parcelable
