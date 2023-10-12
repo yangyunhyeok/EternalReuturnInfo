@@ -6,4 +6,8 @@
     <string name="main_tab_board_title">게시판</string>
     <string name="main_tab_chat_title">채팅</string>
     <string name="main_tab_search_title">전적검색</string>
+    <string name="News">새소식</string>
+    <string name="Announcement">공지사항</string>
+    <string name="Patch_notes">패치노트</string>
+    <string name="Event">이벤트</string>
 </resources>
