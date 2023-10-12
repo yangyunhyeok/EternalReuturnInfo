@@ -6,4 +6,11 @@
     <string name="main_tab_board_title">게시판</string>
     <string name="main_tab_chat_title">채팅</string>
     <string name="main_tab_search_title">전적검색</string>
+    <string name="board_save">등록</string>
+    <string name="board_comment">댓글</string>
+    <string name="board_title_message">제목을 입력해주세요</string>
+    <string name="board_content_message">내용을 입력해주세요</string>
+    <string name="board_post_add">게시글 작성</string>
+    <string name="board_post_finish">작성 완료</string>
+    <string name="board_post">게시글</string>
 </resources>
