@@ -16,6 +16,12 @@
             android:name=".ui.activity.ChatActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.SignUpPage"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.LoginPage"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>

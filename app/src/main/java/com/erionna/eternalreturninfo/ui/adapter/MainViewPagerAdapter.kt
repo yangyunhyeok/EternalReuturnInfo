@@ -9,6 +9,7 @@ import com.erionna.eternalreturninfo.ui.fragment.BoardFragment
 import com.erionna.eternalreturninfo.ui.fragment.ChatListFragment
 import com.erionna.eternalreturninfo.ui.fragment.MainFragment
 import com.erionna.eternalreturninfo.ui.fragment.SearchFragment
+import com.erionna.eternalreturninfo.ui.fragment.WalkThroughFragment
 
 class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
@@ -18,7 +19,7 @@ class MainViewPagerAdapter(
 
     private val fragments = listOf(
         MainTabs(MainFragment.newInstance(), R.string.main_tab_main_title),
-        MainTabs(MainFragment.newInstance(), R.string.main_tab_walkthrough_title),
+        MainTabs(WalkThroughFragment.newInstance(), R.string.main_tab_walkthrough_title),
         MainTabs(BoardFragment.newInstance(), R.string.main_tab_board_title),
         MainTabs(ChatListFragment.newInstance(), R.string.main_tab_chat_title),
         MainTabs(SearchFragment.newInstance(), R.string.main_tab_search_title)

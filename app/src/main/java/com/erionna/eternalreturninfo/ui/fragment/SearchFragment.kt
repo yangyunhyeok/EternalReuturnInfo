@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.erionna.eternalreturninfo.databinding.SearchFragmentBinding
+import com.erionna.eternalreturninfo.ui.fragment.SearchFragment
 
 class SearchFragment : Fragment() {
     companion object {
