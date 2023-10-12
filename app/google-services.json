@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "292538224573",
+    "project_id": "eternalreturninfo",
+    "storage_bucket": "eternalreturninfo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292538224573:android:9f7cab9562d3aeb8864cd4",
+        "android_client_info": {
+          "package_name": "com.erionna.eternalreturninfo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAyx3KkitSZzqoMOKhnlhYjD4dViiW5io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

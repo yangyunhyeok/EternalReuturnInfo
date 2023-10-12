@@ -6,6 +6,13 @@
     <string name="main_tab_board_title">게시판</string>
     <string name="main_tab_chat_title">채팅</string>
     <string name="main_tab_search_title">전적검색</string>
+    <string name="chat_enter_msg">메시지를 입력하세요.</string>
+    <string name="chat_send">전송</string>
+    <string name="chatlist_user_name">장재용</string>
+    <string name="chat_list_chat_tv">채팅</string>
+    <string name="chat_list_item_msg">근태님 버스 감사합니다.. 저도 나딘만 팔까봐요 ㅎㅎ..</string>
+    <string name="chat_list_item_date">하루 전</string>
+    <string name="chat_list_item_name">장재용</string>
     <string name="News">새소식</string>
     <string name="Announcement">공지사항</string>
     <string name="Patch_notes">패치노트</string>
