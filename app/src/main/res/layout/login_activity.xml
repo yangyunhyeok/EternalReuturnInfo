@@ -8,7 +8,7 @@
     tools:context=".ui.activity.LoginPage">
 
     <ImageView
-        android:id="@+id/img_logo"
+        android:id="@+id/login_logo_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="10dp"
@@ -17,7 +17,7 @@
         app:srcCompat="@drawable/ic_white_logo" />
 
     <TextView
-        android:id="@+id/tv_ID"
+        android:id="@+id/login_ID_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_ID"
+        android:id="@+id/login_ID_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -40,10 +40,10 @@
         android:inputType="textEmailAddress"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ID" />
+        app:layout_constraintTop_toBottomOf="@+id/login_ID_tv" />
 
     <TextView
-        android:id="@+id/tv_PW"
+        android:id="@+id/login_PW_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -53,10 +53,10 @@
         android:textStyle="bold"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_ID" />
+        app:layout_constraintTop_toBottomOf="@+id/login_ID_et" />
 
     <EditText
-        android:id="@+id/et_PW"
+        android:id="@+id/login_PW_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -66,10 +66,10 @@
         android:textColor="@color/white"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_PW" />
+        app:layout_constraintTop_toBottomOf="@+id/login_PW_tv" />
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/login_login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -80,10 +80,10 @@
         android:textSize="16dp"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_PW" />
+        app:layout_constraintTop_toBottomOf="@+id/login_PW_et" />
 
     <Button
-        android:id="@+id/btn_singup"
+        android:id="@+id/login_signup_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -94,10 +94,10 @@
         android:textSize="16dp"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+        app:layout_constraintTop_toBottomOf="@+id/login_login_btn" />
 
     <Button
-        android:id="@+id/btn_lost"
+        android:id="@+id/login_lost_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -108,21 +108,21 @@
         android:textSize="16dp"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_singup" />
+        app:layout_constraintTop_toBottomOf="@+id/login_signup_btn" />
 
     <Button
-        android:id="@+id/btn_snsLogin"
+        android:id="@+id/login_snsLogin_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
-        android:text="소셜 로그인"
+        android:text="구글 로그인"
         android:textColor="#00E2FF"
         android:textStyle="bold"
         android:textSize="16dp"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_lost" />
+        app:layout_constraintTop_toBottomOf="@+id/login_lost_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
