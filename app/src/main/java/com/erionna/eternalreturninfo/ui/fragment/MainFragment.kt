@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.erionna.eternalreturninfo.databinding.BoardFragmentBinding
+import com.erionna.eternalreturninfo.databinding.MainFragmentBinding
 import com.erionna.eternalreturninfo.ui.fragment.BoardFragment
 
 class MainFragment : Fragment() {
     companion object {
-        fun newInstance() = BoardFragment()
+        fun newInstance() = MainFragment()
     }
 
-    private var _binding: BoardFragmentBinding? = null
+    private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -21,7 +22,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BoardFragmentBinding.inflate(inflater, container, false)
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
