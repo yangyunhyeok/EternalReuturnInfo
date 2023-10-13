@@ -6,21 +6,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.BoardPostRvCommentItemBinding
-import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.model.CommentModel
 
-class BoardCommentRecyclerViewAdpater() : ListAdapter<BoardModel, BoardCommentRecyclerViewAdpater.ViewHolder>(
+class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardCommentRecyclerViewAdpater.ViewHolder>(
 
-    object : DiffUtil.ItemCallback<BoardModel>() {
+    object : DiffUtil.ItemCallback<CommentModel>() {
         override fun areItemsTheSame(
-            oldItem: BoardModel,
-            newItem: BoardModel
+            oldItem: CommentModel,
+            newItem: CommentModel
         ): Boolean {
-            return oldItem.title == newItem.title
+            return oldItem.author == newItem.author
         }
 
         override fun areContentsTheSame(
-            oldItem: BoardModel,
-            newItem: BoardModel
+            oldItem: CommentModel,
+            newItem: CommentModel
         ): Boolean {
             return oldItem == newItem
         }
@@ -42,11 +42,11 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<BoardModel, BoardCommentRe
         private val binding: BoardPostRvCommentItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: BoardModel) = with(binding) {
+        fun bind(item: CommentModel) = with(binding) {
 
-            boardCommentTvUser.text = item.comment.user
-            boardCommentTvContent.text = item.comment.content
-            boardCommentTvDate.text = item.comment.date
+            boardCommentTvUser.text = item.author
+            boardCommentTvContent.text = item.content
+            boardCommentTvDate.text = item.date
 
         }
     }

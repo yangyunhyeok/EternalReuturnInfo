@@ -1,16 +1,17 @@
 package com.erionna.eternalreturninfo.model
 
-data class BoardModel (
-    val title: String,
-    val content: String,
-    val user: String,
-    val date: String,
-    val comment: Comment,
-    val commentSize: Int
-)
+import org.w3c.dom.Comment
 
-data class Comment(
-    val user: String,
-    val content: String,
-    val date: String,
+data class BoardModel (
+    val id: String = "",
+    val title: String = "",
+    val content: String = "",
+    val author: String = "",
+    val date: String = "",
+    val comment: MutableList<CommentModel> = mutableListOf()
+)
+data class CommentModel(
+    val author: String = "",
+    val content: String = "",
+    val date: String = "",
 )

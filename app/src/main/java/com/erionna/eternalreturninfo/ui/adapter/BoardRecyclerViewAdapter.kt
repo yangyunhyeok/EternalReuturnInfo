@@ -16,7 +16,7 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
             oldItem: BoardModel,
             newItem: BoardModel
         ): Boolean {
-            return oldItem.title == newItem.title
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
@@ -54,14 +54,15 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoardModel) = with(binding) {
-            boardPostTvTitle.text = item.title
-            boardPostTvUser.text = item.user
+            //작성자가 관리자 아이디면 title [공지]로 바꾸는 코드 추가 + 공지 고정하기..?
+            boardPostTvTitle.text = "[일반]  " + item.title
+            boardPostTvUser.text = item.author
             boardPostTvDate.text = item.date
 
-            if(item.commentSize == 0){
+            if(item.comment.size == 0){
                 boardPostBtnComment.visibility = View.INVISIBLE
             }
-            boardPostBtnComment.text = item.commentSize.toString()
+            boardPostBtnComment.text = item.comment.size.toString()
 
             itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(item)
