@@ -5,21 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.erionna.eternalreturninfo.databinding.ChatFragmentBinding
-import com.erionna.eternalreturninfo.ui.fragment.ChatFragment
+import com.erionna.eternalreturninfo.databinding.SearchFragmentBinding
+import com.erionna.eternalreturninfo.ui.fragment.SearchFragment
 
 class SearchFragment : Fragment() {
     companion object {
-        fun newInstance() = ChatFragment()
+        fun newInstance() = SearchFragment()
     }
 
-    private var _binding: ChatFragmentBinding? = null
+    private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ChatFragmentBinding.inflate(inflater, container, false)
+        _binding = SearchFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 

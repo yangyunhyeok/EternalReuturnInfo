@@ -2,6 +2,7 @@ package com.erionna.eternalreturninfo.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.FragmentTransaction
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MainActivityBinding
 import com.erionna.eternalreturninfo.ui.adapter.MainViewPagerAdapter
