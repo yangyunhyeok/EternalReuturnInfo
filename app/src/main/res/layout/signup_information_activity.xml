@@ -129,7 +129,7 @@
         app:layout_constraintTop_toBottomOf="@+id/singup_NickName_tv" />
 
     <TextView
-        android:id="@+id/singup_likeExperiment_tv"
+        android:id="@+id/singup_character_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -142,7 +142,7 @@
         app:layout_constraintTop_toBottomOf="@+id/singup_NickName_et" />
 
     <EditText
-        android:id="@+id/singup_likeExperiment_et"
+        android:id="@+id/singup_character_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -152,7 +152,7 @@
         android:inputType="textEmailAddress"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singup_likeExperiment_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/singup_character_tv" />
 
     <Button
         android:id="@+id/singup_signup_btn"
@@ -166,7 +166,7 @@
         android:textSize="16dp"
         android:background="@drawable/shape_login_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singup_likeExperiment_et" />
+        app:layout_constraintTop_toBottomOf="@+id/singup_character_et" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
