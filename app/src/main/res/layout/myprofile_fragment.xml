@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.MyProfileFragment"
+    android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/myprofile_logo_img"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_white_logo" />
+
+    <View
+        android:id="@+id/myprofile_line_view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#717171"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_logo_img"></View>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/myprofile_profile_img"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ic_character"
+        app:civ_border_color="#00E2FF"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_line_view" />
+
+    <View
+        android:id="@+id/myprofile_line_view2"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="125dp"
+        android:background="#00E2FF"
+        app:layout_constraintEnd_toStartOf="@+id/myprofile_profile_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_logo_img"></View>
+
+    <View
+        android:id="@+id/myprofile_line_view3"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="125dp"
+        android:background="#00E2FF"
+        app:layout_constraintStart_toEndOf="@+id/myprofile_profile_img"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_logo_img"></View>
+
+    <TextView
+        android:id="@+id/myprofile_Email_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="ikx1030@gmail.com"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/myprofile_nickname_tv"
+        app:layout_constraintStart_toEndOf="@+id/myprofile_profile_img" />
+
+    <TextView
+        android:id="@+id/myprofile_nickname_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="10dp"
+        android:text="이터널리턴 닉네임"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/myprofile_line_view3"
+        app:layout_constraintStart_toEndOf="@+id/myprofile_profile_img" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/myprofile_character_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="50dp"
+        android:background="#717171"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_profile_img">
+
+        <TextView
+            android:id="@+id/myprofile_character_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="선호 실험체"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/myprofile_myboard_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="200dp"
+        android:background="#717171"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_character_layout">
+
+        <TextView
+            android:id="@+id/myprofile_myboard_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="내가 쓴 글"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
