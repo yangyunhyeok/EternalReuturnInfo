@@ -184,7 +184,7 @@ class ChatListFragment : Fragment() {
                             for(postSnapshot in snapshot.children) {
                                 val currentUser = postSnapshot.getValue(ERModel::class.java)
 
-                                if(auth.currentUser?.uid != currentUser?.uId) {
+                                if(auth.currentUser?.uid != currentUser?.uid) {
 
                                     val imageResources = arrayOf(R.drawable.ic_alonso, R.drawable.ic_aya, R.drawable.ic_daniel, R.drawable.ic_felix, R.drawable.ic_mai)
 
@@ -193,7 +193,7 @@ class ChatListFragment : Fragment() {
 
                                     val randomImageResource = imageResources[randomIndex]
 
-                                    viewModel.addUser(currentUser?.copy(profilePicture = randomImageResource, msg = "서버로부터 회원정보 불러오기 성공"))
+                                    viewModel.addUser(currentUser?.copy(profilePicture = randomImageResource, msg = "서버로부터 회원정보 불러오기 성공", uid = currentUser?.uid))
                                 }
                             }
                         }

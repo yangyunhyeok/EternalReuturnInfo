@@ -9,7 +9,7 @@ data class ERModel (
     val email: String? = null,
     val name: String? = null,
     val password: String? = null,
-    val uId: String? = null,
+    val uid: String? = null,
     val msg: String? = null,
     val profilePicture: Int? = null
 ) : Parcelable
