@@ -14,21 +14,6 @@ class ChatListViewModel(
     private val _list: MutableLiveData<List<ERModel>> = MutableLiveData()
     val list: LiveData<List<ERModel>> get() = _list
 
-//    init {
-//        _list.value = arrayListOf<ERModel>().apply {
-//            for (i in 0 .. 1) {
-//                add(
-//                    ERModel(
-//                        id = idGenerate.getAndIncrement(),
-//                        name = "choco5732",
-//                        msg = "근태님 버스 감사합니다.. 저도 나딘만 팔까봐요 ㅎㅎ..",
-//                        profilePicture = R.drawable.ic_jaekie
-//                    )
-//                )
-//            }
-//        }
-//    }
-
     fun addUser(
         item: ERModel?
     ) {

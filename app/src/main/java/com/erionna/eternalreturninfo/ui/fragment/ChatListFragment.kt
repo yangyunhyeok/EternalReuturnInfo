@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.util.Random
 
 class ChatListFragment : Fragment() {
 
@@ -184,7 +185,15 @@ class ChatListFragment : Fragment() {
                                 val currentUser = postSnapshot.getValue(ERModel::class.java)
 
                                 if(auth.currentUser?.uid != currentUser?.uId) {
-                                    viewModel.addUser(currentUser?.copy(profilePicture = R.drawable.ic_logo, msg = "서버로부터 회원정보 불러오기 성공"))
+
+                                    val imageResources = arrayOf(R.drawable.ic_alonso, R.drawable.ic_aya, R.drawable.ic_daniel, R.drawable.ic_felix, R.drawable.ic_mai)
+
+                                    val random = Random()
+                                    val randomIndex = random.nextInt(imageResources.size)
+
+                                    val randomImageResource = imageResources[randomIndex]
+
+                                    viewModel.addUser(currentUser?.copy(profilePicture = randomImageResource, msg = "서버로부터 회원정보 불러오기 성공"))
                                 }
                             }
                         }
