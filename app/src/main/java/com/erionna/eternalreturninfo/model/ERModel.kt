@@ -1,5 +1,9 @@
 package com.erionna.eternalreturninfo.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class ERModel (
     val id: Long? = null,
     val email: String? = null,
@@ -8,6 +12,7 @@ data class ERModel (
     val uId: String? = null,
     val msg: String? = null,
     val profilePicture: Int? = null
-) {
-    constructor() : this(null,"","","","","",null)
-}
+) : Parcelable
+//{
+//    constructor() : this(null,"","","","","",null)
+//}

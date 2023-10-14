@@ -22,7 +22,6 @@ class ChatActivity : AppCompatActivity() {
 //        ) = Intent(context, ChatActivity::class.java).apply{
 //            putExtra(EXTRA_ER_MODEL, erModel)
 //        }
-
     }
 
     private lateinit var binding: ChatActivityBinding
@@ -36,6 +35,8 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mDbRef = FirebaseDatabase.getInstance().reference
-        binding.chatToolbar.title = "재용"
+
+        val user = intent.getParcelableExtra<ERModel>("testParse")
+        binding.chatToolbarTitle.text = user?.name
     }
 }

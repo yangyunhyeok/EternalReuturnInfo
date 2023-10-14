@@ -46,6 +46,7 @@ class ChatListFragment : Fragment() {
         ChatListAdapter(
             onClickItem = { position, item ->
                 val intent = Intent(activity, ChatActivity::class.java)
+                intent.putExtra("testParse",item)
                 startActivity(intent)
 
             }
@@ -86,24 +87,6 @@ class ChatListFragment : Fragment() {
         // 데이터베이스 초기화
         database = Firebase.database.reference
 
-        // 회원 정보 가져오기
-        database.child("user").addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for(postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(ERModel::class.java)
-
-                    if(auth.currentUser?.uid != currentUser?.uId) {
-                        viewModel.addUser(currentUser?.copy(profilePicture = R.drawable.ic_logo, msg = "서버로부터 회원정보 불러오기 성공"))
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // 가져오기 실패 시
-            }
-
-        })
-
         chatListToolbar.setOnMenuItemClickListener { menu ->
             when (menu.itemId) {
 
@@ -126,7 +109,6 @@ class ChatListFragment : Fragment() {
                         val password = edit3?.text.toString()
 
                         signUp(email, name, password)
-                        viewModel.addUser(ERModel(name = name, msg = "테스트 viewmodel메시지!", profilePicture = R.drawable.ic_logo))
                     }
 
                     builder.setPositiveButton("확인", listener)
@@ -165,6 +147,7 @@ class ChatListFragment : Fragment() {
                 else -> {
                     auth.signOut()
                     Toast.makeText(requireContext(), "로그아웃", Toast.LENGTH_SHORT).show()
+                    viewModel.clearList()
                     true
                 }
             }
@@ -193,6 +176,26 @@ class ChatListFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+
+                    // 회원 정보 가져오기
+                    database.child("user").addValueEventListener(object: ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for(postSnapshot in snapshot.children) {
+                                val currentUser = postSnapshot.getValue(ERModel::class.java)
+
+                                if(auth.currentUser?.uid != currentUser?.uId) {
+                                    viewModel.addUser(currentUser?.copy(profilePicture = R.drawable.ic_logo, msg = "서버로부터 회원정보 불러오기 성공"))
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // 가져오기 실패 시
+                            Toast.makeText(requireContext(),"가져오기 실패",Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(requireContext(), "비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show()
