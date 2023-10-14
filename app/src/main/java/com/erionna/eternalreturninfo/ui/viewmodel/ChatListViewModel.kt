@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.User
 import java.util.concurrent.atomic.AtomicLong
 
 class ChatListViewModel(
@@ -16,7 +17,7 @@ class ChatListViewModel(
 
     init {
         _list.value = arrayListOf<ERModel>().apply {
-            for (i in 0 .. 10) {
+            for (i in 0 .. 3) {
                 add(
                     ERModel(
                         id = idGenerate.getAndIncrement(),
@@ -26,6 +27,23 @@ class ChatListViewModel(
                     )
                 )
             }
+        }
+    }
+
+    fun addUser(
+        item: ERModel?
+    ) {
+        if (item == null) {
+            return
+        }
+
+        val currentList = list.value.orEmpty().toMutableList()
+        _list.value = currentList.apply {
+            add(
+                item.copy(
+                    id = idGenerate.getAndIncrement()
+                )
+            )
         }
     }
 }
