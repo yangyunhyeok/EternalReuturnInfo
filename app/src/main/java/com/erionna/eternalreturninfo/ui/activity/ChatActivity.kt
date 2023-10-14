@@ -16,12 +16,12 @@ import com.google.firebase.ktx.Firebase
 class ChatActivity : AppCompatActivity() {
 
     companion object {
-        fun newIntent(
-            context: Context,
-            erModel: ERModel
-        ) = Intent(context, ChatActivity::class.java).apply{
-            putExtra(EXTRA_ER_MODEL, erModel)
-        }
+//        fun newIntent(
+//            context: Context,
+//            erModel: ERModel
+//        ) = Intent(context, ChatActivity::class.java).apply{
+//            putExtra(EXTRA_ER_MODEL, erModel)
+//        }
 
     }
 

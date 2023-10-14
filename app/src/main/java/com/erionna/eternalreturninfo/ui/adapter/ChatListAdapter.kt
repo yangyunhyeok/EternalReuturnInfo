@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.ChatListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 
@@ -46,8 +47,8 @@ class ChatListAdapter(
 
         fun bind(item: ERModel) = with(binding) {
             chatListMsg.text = item.msg
-            chatListName.text = item.userName
-            chatListProfilePicture.setImageResource(item.profilePicture)
+            chatListName.text = item.name
+            chatListProfilePicture.setImageResource(item.profilePicture!!)
 
             chatListContainer.setOnClickListener {
                 onClickItem(

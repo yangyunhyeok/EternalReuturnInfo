@@ -2,8 +2,6 @@ package com.erionna.eternalreturninfo.ui.fragment
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,7 +23,10 @@ import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -80,16 +81,30 @@ class ChatListFragment : Fragment() {
         chatListRecyclerview.adapter = chatListAdapter
         chatListRecyclerview.layoutManager = LinearLayoutManager(context)
 
+        // 인증 초기화
+        auth = Firebase.auth
+        // 데이터베이스 초기화
+        database = Firebase.database.reference
+
+        // 회원 정보 가져오기
+        database.child("user").addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(postSnapshot in snapshot.children) {
+                    val currentUser = postSnapshot.getValue(ERModel::class.java)
+
+                    if(auth.currentUser?.uid != currentUser?.uId) {
+                        viewModel.addUser(currentUser?.copy(profilePicture = R.drawable.ic_logo, msg = "서버로부터 회원정보 불러오기 성공"))
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 가져오기 실패 시
+            }
+
+        })
 
         chatListToolbar.setOnMenuItemClickListener { menu ->
-
-            // 인증 초기화
-            auth = Firebase.auth
-            // 데이터베이스 초기화
-            database = Firebase.database.reference
-
-
-
             when (menu.itemId) {
 
                 R.id.sign_up -> {
@@ -111,7 +126,7 @@ class ChatListFragment : Fragment() {
                         val password = edit3?.text.toString()
 
                         signUp(email, name, password)
-                        viewModel.addUser(ERModel(userName = name, msg = "테스트 viewmodel메시지!", profilePicture = R.drawable.ic_logo))
+                        viewModel.addUser(ERModel(name = name, msg = "테스트 viewmodel메시지!", profilePicture = R.drawable.ic_logo))
                     }
 
                     builder.setPositiveButton("확인", listener)
