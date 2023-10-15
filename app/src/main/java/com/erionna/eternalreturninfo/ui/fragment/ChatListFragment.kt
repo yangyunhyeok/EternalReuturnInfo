@@ -149,6 +149,7 @@ class ChatListFragment : Fragment() {
                     auth.signOut()
                     Toast.makeText(requireContext(), "로그아웃", Toast.LENGTH_SHORT).show()
                     viewModel.clearList()
+                    binding.chatListTitle.text = "채팅"
                     true
                 }
             }
@@ -156,7 +157,7 @@ class ChatListFragment : Fragment() {
 
     }
 
-
+    // 회원가입
     private fun signUp(email: String, name: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
@@ -164,6 +165,9 @@ class ChatListFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(requireContext(), "회원가입 성공", Toast.LENGTH_SHORT).show()
                     addUserToDatabase(email, name, password, auth.currentUser!!.uid)
+//                    auth.signOut()
+                    viewModel.clearList()
+//                    viewModel.deleteUser(name)
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(requireContext(), "회원가입 실패", Toast.LENGTH_SHORT).show()
@@ -171,30 +175,22 @@ class ChatListFragment : Fragment() {
             }
     }
 
+    // 로그인
     private fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
+                    viewModel.clearList() // 새로 로그인 했을 시 기존 리스트 초기화
                     Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
-//
 
                     // 회원 정보 가져오기
                     database.child("user").addValueEventListener(object: ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
+                            // 가져오기 성공 시
                             for(postSnapshot in snapshot.children) {
                                 val currentUser = postSnapshot.getValue(ERModel::class.java)
-
                                 if(auth.currentUser?.uid != currentUser?.uid) {
-
-                                    val imageResources = arrayOf(R.drawable.ic_alonso, R.drawable.ic_aya, R.drawable.ic_daniel, R.drawable.ic_felix, R.drawable.ic_mai)
-
-                                    val random = Random()
-                                    val randomIndex = random.nextInt(imageResources.size)
-
-                                    val randomImageResource = imageResources[randomIndex]
-
-                                    viewModel.addUser(currentUser?.copy(profilePicture = randomImageResource, msg = "서버로부터 회원정보 불러오기 성공", uid = currentUser?.uid))
+                                    viewModel.addUser(currentUser?.copy(msg = "서버로부터 회원정보 불러오기 성공!"))
                                 } else {
                                     binding.chatListTitle.text = "채팅" + " 접속자 : (${currentUser?.name}) "
                                 }
@@ -209,18 +205,26 @@ class ChatListFragment : Fragment() {
                     })
 
                 } else {
-                    // If sign in fails, display a message to the user.
                     Toast.makeText(requireContext(), "비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show()
                     Log.d("#choco5732", "${task.exception}")
                 }
             }
     }
 
+    // 데이터베이스에 유저정보 저장
     private fun addUserToDatabase(email: String, name: String, password: String, uId: String) {
+        // 랜덤 이미지
+        val imageResources = arrayOf(R.drawable.ic_alonso, R.drawable.ic_aya, R.drawable.ic_daniel, R.drawable.ic_felix, R.drawable.ic_mai)
+        val random = Random()
+        val randomIndex = random.nextInt(imageResources.size)
+        val randomImageResource = imageResources[randomIndex]
+        Log.d("#choco5732", "$randomImageResource")
+
         database.child("user").child(uId)
-            .setValue(User(email = email, password = password, name = name, uId = uId))
+            .setValue(ERModel(profilePicture = randomImageResource, email = email, password = password, name = name, uid = uId))
     }
 
+    // 뷰모델
     private fun initModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
             chatListAdapter.submitList(it)

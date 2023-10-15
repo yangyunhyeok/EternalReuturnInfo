@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.User
 import java.util.concurrent.atomic.AtomicLong
 
 class ChatListViewModel(
@@ -34,6 +35,12 @@ class ChatListViewModel(
     fun clearList() {
         val currentList = list.value.orEmpty().toMutableList()
         currentList.clear()
+        _list.value = currentList
+    }
+
+    fun deleteUser(user: String) {
+        val currentList = list.value.orEmpty().toMutableList()
+        currentList.remove(ERModel(name=user))
         _list.value = currentList
     }
 }
