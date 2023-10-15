@@ -99,8 +99,6 @@ class ChatActivity : AppCompatActivity() {
             // db에 메시지 저장 ( 송수신 방 둘 다 저장)
             database.child("chats").child(senderRoom).child("messages").push()
                 .setValue(messageObject).addOnSuccessListener {
-                    // 저장 성공시
-                    // 수신자 공간에도 저장
                     database.child("chats").child(receiverRoom).child("messages").push()
                         .setValue(messageObject)
                 }
@@ -110,10 +108,11 @@ class ChatActivity : AppCompatActivity() {
         // 메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
+                override fun onDataChange(snapShot: DataSnapshot) {
+                    binding.chatRecycler.scrollToPosition(messageList.size - 1) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                     messageList.clear()
 
-                    for(postSnapshot in snapshot.children) {
+                    for(postSnapshot in snapShot.children) {
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
                     }
