@@ -177,6 +177,7 @@ class ChatListFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+//
 
                     // 회원 정보 가져오기
                     database.child("user").addValueEventListener(object: ValueEventListener{
@@ -194,6 +195,8 @@ class ChatListFragment : Fragment() {
                                     val randomImageResource = imageResources[randomIndex]
 
                                     viewModel.addUser(currentUser?.copy(profilePicture = randomImageResource, msg = "서버로부터 회원정보 불러오기 성공", uid = currentUser?.uid))
+                                } else {
+                                    binding.chatListTitle.text = "채팅" + " 접속자 : (${currentUser?.name}) "
                                 }
                             }
                         }
