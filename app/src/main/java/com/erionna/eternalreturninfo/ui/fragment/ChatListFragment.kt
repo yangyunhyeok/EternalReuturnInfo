@@ -94,7 +94,7 @@ class ChatListFragment : Fragment() {
                 R.id.sign_up -> {
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setTitle("회원가입")
-                    builder.setIcon(R.mipmap.ic_launcher)
+                    builder.setIcon(R.drawable.ic_xiuk)
 
                     val v1 = layoutInflater.inflate(R.layout.dialog_sign_up, null)
                     builder.setView(v1)
@@ -122,7 +122,7 @@ class ChatListFragment : Fragment() {
                 R.id.sign_in -> {
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setTitle("로그인")
-                    builder.setIcon(R.mipmap.ic_launcher)
+                    builder.setIcon(R.drawable.ic_xiuk)
 
                     val v1 = layoutInflater.inflate(R.layout.dialog_sign_in, null)
                     builder.setView(v1)
