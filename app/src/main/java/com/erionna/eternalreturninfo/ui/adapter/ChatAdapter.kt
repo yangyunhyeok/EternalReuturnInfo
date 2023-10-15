@@ -32,8 +32,6 @@ class ChatAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        val item = getItem(position)
-//        holder.bind(item)
         val currentMessage = messageList[position]
 
         if(holder.javaClass == SenderViewHolder::class.java) {
