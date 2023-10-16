@@ -1,5 +1,6 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdapter.ViewHolder>(
 
@@ -57,18 +62,44 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
             //작성자가 관리자 아이디면 title [공지]로 바꾸는 코드 추가 + 공지 고정하기..?
             boardPostTvTitle.text = "[일반]  " + item.title
             boardPostTvUser.text = item.author
-            boardPostTvDate.text = item.date
 
-            if(item.comment.size == 0){
+            boardPostTvDate.text = formatTimeOrDate(item.date)
+
+            if(item.comments.size == 0){
                 boardPostBtnComment.visibility = View.INVISIBLE
             }
-            boardPostBtnComment.text = item.comment.size.toString()
+            boardPostBtnComment.text = item.comments.size.toString()
 
             itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(item)
             }
 
         }
+    }
+
+    fun formatTimeOrDate(postTime: Long): String {
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+
+        val calendar2 = Calendar.getInstance()
+        calendar2.set(Calendar.HOUR_OF_DAY, 23)
+        calendar2.set(Calendar.MINUTE, 59)
+        calendar2.set(Calendar.SECOND, 59)
+
+        val date1 = calendar.time
+        val date2 = calendar2.time
+
+        if(date1 <= Date(postTime) && Date(postTime) <= date2){
+            val simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            return simpleDateFormat.format(Date(postTime))
+        }else{
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            return simpleDateFormat.format(Date(postTime))
+        }
+
     }
 
 }
