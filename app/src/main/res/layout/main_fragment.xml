@@ -13,7 +13,7 @@
         android:layout_height="79dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_white_Logo"
+        android:src="@drawable/ic_white_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
