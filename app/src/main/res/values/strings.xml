@@ -17,4 +17,6 @@
     <string name="Announcement">공지사항</string>
     <string name="Patch_notes">패치노트</string>
     <string name="Event">이벤트</string>
+    <string name="menu_sign_up">회원가입</string>
+    <string name="log_out_toast">로그아웃</string>
 </resources>

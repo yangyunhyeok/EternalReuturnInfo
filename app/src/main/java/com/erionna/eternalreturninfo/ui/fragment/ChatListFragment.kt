@@ -91,7 +91,7 @@ class ChatListFragment : Fragment() {
 
                 R.id.sign_up -> {
                     val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("회원가입")
+                    builder.setTitle(getString(R.string.menu_sign_up))
                     builder.setIcon(R.drawable.ic_xiuk)
 
                     val v1 = layoutInflater.inflate(R.layout.dialog_sign_up, null)
@@ -145,7 +145,8 @@ class ChatListFragment : Fragment() {
 
                 else -> {
                     auth.signOut()
-                    Toast.makeText(requireContext(), "로그아웃", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.log_out_toast), Toast.LENGTH_SHORT).show()
                     viewModel.clearList()
                     binding.chatListTitle.text = "채팅"
                     true

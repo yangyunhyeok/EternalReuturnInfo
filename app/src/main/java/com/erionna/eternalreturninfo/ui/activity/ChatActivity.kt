@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatActivityBinding
@@ -105,7 +106,13 @@ class ChatActivity : AppCompatActivity() {
                     database.child("chats").child(receiverRoom).child("messages").push()
                         .setValue(messageObject)
                 }
+            // 메시지 전송 후 EditText 공백 처리
             binding.chatMsgEt.setText("")
+
+            // 키보드 숨기기
+            val imm =
+                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
         }
 
         // 메시지 가져오기
