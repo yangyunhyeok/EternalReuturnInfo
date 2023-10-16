@@ -100,19 +100,23 @@ class ChatActivity : AppCompatActivity() {
             val message = binding.chatMsgEt.text.toString()
             val messageObject = Message(message, senderUid)
 
-            // db에 메시지 저장 ( 송수신 방 둘 다 저장)
-            database.child("chats").child(senderRoom).child("messages").push()
-                .setValue(messageObject).addOnSuccessListener {
-                    database.child("chats").child(receiverRoom).child("messages").push()
-                        .setValue(messageObject)
-                }
-            // 메시지 전송 후 EditText 공백 처리
-            binding.chatMsgEt.setText("")
+            if (message != "") {
+                // db에 메시지 저장 ( 송수신 방 둘 다 저장)
+                database.child("chats").child(senderRoom).child("messages").push()
+                    .setValue(messageObject).addOnSuccessListener {
+                        database.child("chats").child(receiverRoom).child("messages").push()
+                            .setValue(messageObject)
+                    }
 
-            // 키보드 숨기기
-            val imm =
-                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+                // 메시지 전송 후 EditText 공백 처리
+                binding.chatMsgEt.setText("")
+
+                // 키보드 숨기기
+                val imm =
+                    this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+
+            }
         }
 
         // 메시지 가져오기
