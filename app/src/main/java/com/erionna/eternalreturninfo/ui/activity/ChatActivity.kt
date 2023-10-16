@@ -25,12 +25,15 @@ import com.google.firebase.ktx.Firebase
 class ChatActivity : AppCompatActivity() {
 
     companion object {
-//        fun newIntent(
-//            context: Context,
-//            erModel: ERModel
-//        ) = Intent(context, ChatActivity::class.java).apply{
-//            putExtra(EXTRA_ER_MODEL, erModel)
-//        }
+        fun newIntent(
+            context: Context,
+            erModel: ERModel
+        ): Intent {
+            val intent = Intent(context, ChatActivity::class.java).apply {
+                putExtra(EXTRA_ER_MODEL, erModel)
+            }
+            return intent
+        }
     }
 
     private lateinit var binding: ChatActivityBinding
@@ -66,7 +69,7 @@ class ChatActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // 채팅목록에서 전달받은 상대방 데이터 저장
-        val data = intent.getParcelableExtra<ERModel>("testParse")
+        val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
         Log.d("#choco5732", "$data")
 
         // 툴바에 채팅상대 이름 출력하기

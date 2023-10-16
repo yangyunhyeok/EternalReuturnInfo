@@ -21,6 +21,7 @@ import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -46,10 +47,7 @@ class ChatListFragment : Fragment() {
     private val chatListAdapter by lazy {
         ChatListAdapter(
             onClickItem = { position, item ->
-                val intent = Intent(activity, ChatActivity::class.java)
-                intent.putExtra("testParse",item)
-                startActivity(intent)
-
+                startActivity(ChatActivity.newIntent(requireContext(), item))
             }
         )
     }
