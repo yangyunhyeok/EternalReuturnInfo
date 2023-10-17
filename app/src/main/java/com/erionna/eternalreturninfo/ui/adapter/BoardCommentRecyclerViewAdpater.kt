@@ -4,12 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostRvCommentItemBinding
 import com.erionna.eternalreturninfo.model.CommentModel
+import com.erionna.eternalreturninfo.ui.activity.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.DialogListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -90,6 +94,16 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
                 }
             } else {
                 boardCommentIbMenu.visibility = View.INVISIBLE
+
+                boardCommentIbProfile.setOnClickListener {
+                    val customDialog = BoardDialog(binding.root.context, item.author, object : DialogListener {
+                        override fun onOKButtonClicked() {
+                            Toast.makeText(binding.root.context, "채팅창 이동", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+
+                    customDialog.show()
+                }
             }
 
         }

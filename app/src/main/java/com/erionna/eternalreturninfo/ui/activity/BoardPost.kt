@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -95,6 +96,17 @@ class BoardPost : AppCompatActivity() {
                         }
                     }else{
                         boardPostIbMenu.visibility = View.INVISIBLE
+
+                        boardPostIbProfile.setOnClickListener {
+                            val customDialog = BoardDialog(this@BoardPost, board?.author ?: "", object : DialogListener {
+                                override fun onOKButtonClicked() {
+                                    Toast.makeText(this@BoardPost, "채팅창 이동", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+
+                            customDialog.show()
+                        }
+
                     }
 
                     if (board != null) {
