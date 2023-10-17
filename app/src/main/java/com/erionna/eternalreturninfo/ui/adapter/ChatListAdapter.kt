@@ -33,8 +33,6 @@ class ChatListAdapter(
     }
 ) {
 
-    private val auth = FirebaseAuth.getInstance()
-    private val database = FirebaseDatabase.getInstance().reference
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListAdapter.ViewHolder {
         return ViewHolder(
             ChatListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
@@ -52,25 +50,36 @@ class ChatListAdapter(
         private val onClickItem: (Int, ERModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
+       private val auth = FirebaseAuth.getInstance()
+       private val database = FirebaseDatabase.getInstance().reference
+
         fun bind(item: ERModel) = with(binding) {
             chatListName.text = item.name
             chatListProfilePicture.setImageResource(item.profilePicture!!)
+            chatListMsg.text = item.msg
+            chatListDate.text = item.time
 
-            val senderRoom = auth.currentUser?.uid + item.uid
-            var message = Message()
-            database.child("chats").child(senderRoom).child("messages")
-                .get().addOnSuccessListener {
-                    for(child in it.children) {
-                        message = child.getValue(Message::class.java)!!
-                    }
-                    Log.d("adapter", "message: ${message}")
+//            val senderRoom = auth.currentUser?.uid + item.uid
+//            var message = Message()
 
-                    if (message.message == "") {
-                         chatListMsg.text = "대화한 내용이 없습니다."
-                    } else {
-                    chatListMsg.text = "${message.message}"
-                    }
-                }
+//            database.child("chats").child(senderRoom).child("messages")
+//                .get().addOnSuccessListener {
+//
+//                    for(child in it.children) {
+//                        message = child.getValue(Message::class.java)!!
+//                    }
+
+//                        chatListMsg.text = "${message.message}"
+//                        chatListDate.text = "${message.time}"
+
+//                    if (message.message == "") {
+//                        chatListMsg.text = "최근에 대화한 내용이 없습니다."
+////                        chatListDate.text = ""
+//                    } else {
+////                        chatListDate.text = "${message.time}"
+//                    }
+
+//        }
 
             chatListContainer.setOnClickListener {
                 onClickItem(

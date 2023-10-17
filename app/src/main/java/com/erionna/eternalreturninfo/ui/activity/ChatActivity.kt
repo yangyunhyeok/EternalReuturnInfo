@@ -2,6 +2,7 @@ package com.erionna.eternalreturninfo.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ChatActivity : AppCompatActivity() {
 
@@ -87,6 +90,12 @@ class ChatActivity : AppCompatActivity() {
         binding.chatRecycler.layoutManager = LinearLayoutManager(this)
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
+        // 시간
+        val time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH : mm"))
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
 
         // 보낸이 방
         senderRoom = receiverUid + senderUid
@@ -94,14 +103,14 @@ class ChatActivity : AppCompatActivity() {
         receiverRoom = senderUid + receiverUid
         Log.d("#choco5732", "senderRoom : $senderRoom")
 
-        // 전송버튼 클릭 시 -> et의 내용은 db에 저장되고 입력한 값이 화면에 출력
+        // db에 메시지 저장
         binding.chatSendBtn.setOnClickListener {
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(message, senderUid)
+            val messageObject = Message(message, senderUid, time)
 
             if (message != "") {
-                // db에 메시지 저장 ( 송수신 방 둘 다 저장)
+                // 송수신 방 둘 다 저장
                 database.child("chats").child(senderRoom).child("messages").push()
                     .setValue(messageObject).addOnSuccessListener {
                         database.child("chats").child(receiverRoom).child("messages").push()
@@ -111,13 +120,13 @@ class ChatActivity : AppCompatActivity() {
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
 
+                // 키보드 숨기기
                 val imm =
                     this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
-
             }
         }
-//
+
 //        binding.chatRecycler.setOnClickListener{
 //            val imm =
 //                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

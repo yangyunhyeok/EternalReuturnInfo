@@ -33,13 +33,13 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.github.muddz.styleabletoast.StyleableToast
+import kotlinx.coroutines.tasks.await
 import java.util.Random
 
 class ChatListFragment : Fragment() {
 
     companion object {
         fun newInstance() = ChatListFragment()
-        val messageSet = mutableSetOf<Message>()
     }
 
     private var _binding: ChatListFragmentBinding? = null
@@ -53,9 +53,7 @@ class ChatListFragment : Fragment() {
         ChatListAdapter(
             onClickItem = { position, item ->
                 startActivity(ChatActivity.newIntent(requireContext(), item))
-
                 findReceiverUid(item)
-
             }
         )
     }
@@ -173,7 +171,6 @@ class ChatListFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(requireContext(), "회원가입 성공", Toast.LENGTH_SHORT).show()
                     addUserToDatabase(email, name, password, auth.currentUser!!.uid)
-//                    auth.signOut()
                     viewModel.clearList()
                 } else {
                     // If sign in fails, display a message to the user.
@@ -200,14 +197,27 @@ class ChatListFragment : Fragment() {
                     database.child("user").addValueEventListener(object: ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
 
+                            val receiveUid = ""
+                            var senderRoom = auth.currentUser?.uid + receiveUid
+
                             for(postSnapshot in snapshot.children) {
                                 val currentUser = postSnapshot.getValue(ERModel::class.java)
+                                senderRoom =  auth.currentUser?.uid + currentUser?.uid
 
-                                if(auth.currentUser?.uid != currentUser?.uid) {
-                                    viewModel.addUser(currentUser)
-                                } else {
-                                    binding.chatListTitle.text = "채팅" + " 접속자 : (${currentUser?.name}) "
-                                }
+                                var message = Message()
+
+                                database.child("chats").child(senderRoom).child("messages")
+                                    .get().addOnSuccessListener {
+                                        for(child in it.children) {
+                                            message = child.getValue(Message::class.java)!!
+                                        }
+                                        Log.d("choco5733 in msg", "$message")
+//                                        viewModel.addUser(currentUser?.copy(msg = "${message.message}"))
+
+                                        if(auth.currentUser?.uid != currentUser?.uid) {
+                                        viewModel.addUser(currentUser?.copy(msg = "${message.message}", time = "${message.time}"))
+                                        }
+                                    }
                             }
                         }
 

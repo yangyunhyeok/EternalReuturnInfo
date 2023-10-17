@@ -19,4 +19,5 @@
     <string name="Event">이벤트</string>
     <string name="menu_sign_up">회원가입</string>
     <string name="log_out_toast">로그아웃</string>
+    <string name="chat_list_msg">최근에 대화한 내용이 없습니다.</string>
 </resources>

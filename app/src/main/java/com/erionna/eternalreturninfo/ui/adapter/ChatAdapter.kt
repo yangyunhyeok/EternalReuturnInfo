@@ -36,10 +36,12 @@ class ChatAdapter(
 
         if(holder.javaClass == SenderViewHolder::class.java) {
             val viewHolder = holder as SenderViewHolder
-            viewHolder.sendMessage.text = currentMessage.message
+            viewHolder.binding.chatItemSenderText.text = currentMessage.message
+            viewHolder.binding.chatItemSenderDate.text = currentMessage.time
         } else {
             val viewHolder = holder as ReceiverViewHolder
-            viewHolder.receiveMessage.text = currentMessage.message
+            viewHolder.binding.chatItemReceiverText.text = currentMessage.message
+            viewHolder.binding.chatItemRecevierDate.text = currentMessage.time
         }
     }
 
@@ -60,12 +62,10 @@ class ChatAdapter(
     class SenderViewHolder (
         val binding: ChatItemSenderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        val sendMessage = binding.chatItemSenderText
     }
 
     class ReceiverViewHolder (
         val binding: ChatItemReceiverBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        val receiveMessage = binding.chatItemReceiverText
     }
 }

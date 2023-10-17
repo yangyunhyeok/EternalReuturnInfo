@@ -67,4 +67,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation("io.github.muddz:styleabletoast:2.4.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
 }
