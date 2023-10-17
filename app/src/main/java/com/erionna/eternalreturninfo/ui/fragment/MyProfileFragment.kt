@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import com.erionna.eternalreturninfo.R
 
 class MyProfileFragment : Fragment() {
-
+    companion object {
+        fun newInstance() = MyProfileFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
