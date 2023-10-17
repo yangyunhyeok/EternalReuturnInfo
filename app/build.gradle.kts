@@ -65,4 +65,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    implementation("io.github.muddz:styleabletoast:2.4.0")
 }

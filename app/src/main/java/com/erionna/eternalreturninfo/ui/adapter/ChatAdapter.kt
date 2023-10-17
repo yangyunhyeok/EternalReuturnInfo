@@ -58,13 +58,13 @@ class ChatAdapter(
     }
 
     class SenderViewHolder (
-        private val binding: ChatItemSenderBinding
+        val binding: ChatItemSenderBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         val sendMessage = binding.chatItemSenderText
     }
 
     class ReceiverViewHolder (
-        private val binding: ChatItemReceiverBinding
+        val binding: ChatItemReceiverBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         val receiveMessage = binding.chatItemReceiverText
     }

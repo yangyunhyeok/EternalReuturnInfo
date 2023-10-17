@@ -3,6 +3,7 @@ package com.erionna.eternalreturninfo.ui.fragment
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.renderscript.Sampler.Value
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.model.User
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
@@ -30,26 +32,36 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import io.github.muddz.styleabletoast.StyleableToast
 import java.util.Random
 
 class ChatListFragment : Fragment() {
 
     companion object {
         fun newInstance() = ChatListFragment()
+        val messageSet = mutableSetOf<Message>()
     }
 
     private var _binding: ChatListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var auth: FirebaseAuth
+    private var auth = Firebase.auth
     private lateinit var database: DatabaseReference
+
 
     private val chatListAdapter by lazy {
         ChatListAdapter(
             onClickItem = { position, item ->
                 startActivity(ChatActivity.newIntent(requireContext(), item))
+
+                findReceiverUid(item)
+
             }
         )
+    }
+
+    private fun findReceiverUid(item: ERModel) : String {
+        return item.uid.toString()
     }
 
     private val viewModel: ChatListViewModel by lazy {
@@ -76,13 +88,10 @@ class ChatListFragment : Fragment() {
         super.onDestroyView()
     }
 
-
     private fun initView() = with(binding) {
         chatListRecyclerview.adapter = chatListAdapter
         chatListRecyclerview.layoutManager = LinearLayoutManager(context)
 
-        // 인증 초기화
-        auth = Firebase.auth
         // 데이터베이스 초기화
         database = Firebase.database.reference
 
@@ -166,7 +175,6 @@ class ChatListFragment : Fragment() {
                     addUserToDatabase(email, name, password, auth.currentUser!!.uid)
 //                    auth.signOut()
                     viewModel.clearList()
-//                    viewModel.deleteUser(name)
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(requireContext(), "회원가입 실패", Toast.LENGTH_SHORT).show()
@@ -180,16 +188,23 @@ class ChatListFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     viewModel.clearList() // 새로 로그인 했을 시 기존 리스트 초기화
-                    Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+                    requireContext().let {
+                        StyleableToast.makeText(
+                            it,
+                            "로그인 성공",
+                            R.style.loginToast
+                        ).show()
+                    }
 
                     // 회원 정보 가져오기
                     database.child("user").addValueEventListener(object: ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            // 가져오기 성공 시
+
                             for(postSnapshot in snapshot.children) {
                                 val currentUser = postSnapshot.getValue(ERModel::class.java)
+
                                 if(auth.currentUser?.uid != currentUser?.uid) {
-                                    viewModel.addUser(currentUser?.copy(msg = "서버로부터 회원정보 불러오기 성공!"))
+                                    viewModel.addUser(currentUser)
                                 } else {
                                     binding.chatListTitle.text = "채팅" + " 접속자 : (${currentUser?.name}) "
                                 }
@@ -200,7 +215,6 @@ class ChatListFragment : Fragment() {
                             // 가져오기 실패 시
                             Toast.makeText(requireContext(),"가져오기 실패",Toast.LENGTH_SHORT).show()
                         }
-
                     })
 
                 } else {
@@ -213,7 +227,9 @@ class ChatListFragment : Fragment() {
     // 데이터베이스에 유저정보 저장
     private fun addUserToDatabase(email: String, name: String, password: String, uId: String) {
         // 랜덤 이미지
-        val imageResources = arrayOf(R.drawable.ic_alonso, R.drawable.ic_aya, R.drawable.ic_daniel, R.drawable.ic_felix, R.drawable.ic_mai)
+        val imageResources = arrayOf(
+            R.drawable.ic_alonso, R.drawable.ic_aya, R.drawable.ic_felix, R.drawable.ic_daniel, R.drawable.ic_mai
+        )
         val random = Random()
         val randomIndex = random.nextInt(imageResources.size)
         val randomImageResource = imageResources[randomIndex]

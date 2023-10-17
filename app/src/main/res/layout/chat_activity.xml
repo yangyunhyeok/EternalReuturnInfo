@@ -27,14 +27,27 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_recycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_toolbar"
-        app:layout_constraintBottom_toTopOf="@+id/chat_layout"/>
+<!--    <LinearLayout-->
+<!--        android:id="@+id/chat_activity_recycler_container"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/chat_layout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/chat_toolbar">-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/chat_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chat_toolbar">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/chat_layout"

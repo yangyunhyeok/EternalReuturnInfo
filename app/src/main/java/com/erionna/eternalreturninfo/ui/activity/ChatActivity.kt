@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -76,7 +77,6 @@ class ChatActivity : AppCompatActivity() {
         // 툴바에 채팅상대 이름 출력하기
         binding.chatToolbarTitle.text = data?.name
 
-
         receiverName = data?.name.toString()
         receiverUid = data?.uid.toString()
         Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
@@ -111,22 +111,40 @@ class ChatActivity : AppCompatActivity() {
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
 
-                // 키보드 숨기기
                 val imm =
                     this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
 
             }
         }
+//
+//        binding.chatRecycler.setOnClickListener{
+//            val imm =
+//                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+//        }
 
-        // 메시지 가져오기
+//        binding.chatActivityRecyclerContainer.setOnClickListener {
+//            val imm =
+//                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+//        }
+//
+//        binding.chatToolbar.setOnClickListener {
+//            val imm =
+//                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+//        }
+
+
+//         메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
-            .addValueEventListener(object: ValueEventListener{
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
                     binding.chatRecycler.scrollToPosition(messageList.size - 1) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                     messageList.clear()
 
-                    for(postSnapshot in snapShot.children) {
+                    for (postSnapshot in snapShot.children) {
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
                     }
@@ -139,4 +157,12 @@ class ChatActivity : AppCompatActivity() {
             })
 
     }
+
+//    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+//        // 키보드 숨기기
+//        val imm =
+//            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+//        return super.dispatchTouchEvent(ev)
+//    }
 }
