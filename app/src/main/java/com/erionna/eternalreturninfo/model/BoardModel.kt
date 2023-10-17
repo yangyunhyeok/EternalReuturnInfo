@@ -13,13 +13,13 @@ data class BoardModel (
     val content: String = "",
     val author: String = "",
     val date: Long = 0,
-    @field:JvmField
-    val comments: Map<String, @RawValue CommentModel> = mapOf()
+    val comments: Map<String, CommentModel> = mapOf()
 ) : Parcelable
 
+@Parcelize
 data class CommentModel(
     val id: String = "",
     val author: String = "",
     val content: String = "",
-    val date: Long = 0,
-)
+    val date: Long = 0
+) : Parcelable

@@ -1,11 +1,16 @@
 package com.erionna.eternalreturninfo.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.CommentModel
@@ -34,6 +39,8 @@ class BoardPost : AppCompatActivity() {
         ViewModelProvider(this, BoardListViewModelFactory()).get(BoardListViewModel::class.java)
     }
 
+    private var board: BoardModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BoardPostActivityBinding.inflate(layoutInflater)
@@ -50,15 +57,45 @@ class BoardPost : AppCompatActivity() {
 
         val id = intent.getStringExtra("ID") ?: ""
 
-        FBRef.postRef.child(id).addListenerForSingleValueEvent(object : ValueEventListener {
+        FBRef.postRef.child(id).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 if(snapshot.exists()){
-                    val board = snapshot.getValue<BoardModel>()
+                    board = snapshot.getValue<BoardModel>()
 
                     boardPostTvTitle.text = "[일반]  " + board?.title
                     boardPostTvContent.text = board?.content
                     boardPostTvUser.text = board?.author
+
+                    //수정 : 로그인 한 사용자 일 때
+                    if(board?.author == "user2"){
+                        boardPostIbMenu.visibility = View.VISIBLE
+
+                        boardPostIbMenu.setOnClickListener {
+                            val popup = PopupMenu(binding.root.context, boardPostIbMenu) // View 변경
+                            popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
+                            popup.setOnMenuItemClickListener { menu ->
+                                when (menu.itemId) {
+                                    R.id.menu_comment_update -> {
+                                        val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
+                                        Log.d("updateBoard", board.toString())
+                                        updateIntent.putExtra("updateBoard", board)
+                                        startActivity(updateIntent)
+                                    }
+                                    R.id.menu_comment_delete -> {
+                                        //firebase에서도 삭제 기능 추가
+                                        intent.putExtra("deleteBoard", board)
+                                        setResult(RESULT_OK, intent)
+                                        finish()
+                                    }
+                                }
+                                false
+                            }
+                            popup.show()
+                        }
+                    }else{
+                        boardPostIbMenu.visibility = View.INVISIBLE
+                    }
 
                     if (board != null) {
                         boardPostTvDate.text =
@@ -84,23 +121,51 @@ class BoardPost : AppCompatActivity() {
 
         })
 
-        boardPostBtnSave.setOnClickListener {
 
+        listAdapter.setOnItemClickListener(object :
+            BoardCommentRecyclerViewAdpater.OnItemClickListener {
+            override fun onDeleteItemClick(commentItem: CommentModel, position: Int) {
+                FBRef.postRef.child(id).child("comments").child(commentItem.id).removeValue()
+            }
+
+            override fun onUpdateItemClick(commentItem: CommentModel, position: Int) {
+                boardPostEtComment.setText(commentItem.content)
+                boardPostBtnSave.visibility = View.INVISIBLE
+                boardPostBtnUpdate.visibility = View.VISIBLE
+
+                boardPostBtnUpdate.setOnClickListener {
+
+                    val content = boardPostEtComment.text.toString()
+                    val newComment = CommentModel(commentItem.id, commentItem.author, content, Calendar.getInstance().timeInMillis)
+
+                    FBRef.postRef.child(id).child("comments").child(commentItem.id).setValue(newComment)
+
+                    boardPostEtComment.setText("")
+
+                    boardPostBtnUpdate.visibility = View.INVISIBLE
+                    boardPostBtnSave.visibility = View.VISIBLE
+                }
+
+            }
+        })
+
+        boardPostBtnSave.setOnClickListener {
             val content = boardPostEtComment.text.toString()
             val date = Calendar.getInstance().timeInMillis
 
             val commentkey = FBRef.postRef.child(id).child("comments").push().key.toString()
 
-            //로그인한 사용자 닉네임 불러오기
+            //수정 : 로그인한 사용자 닉네임 불러오기
             val newComment = CommentModel(commentkey, "user2", content, date)
 
             FBRef.postRef.child(id).child("comments").child(commentkey).setValue(newComment)
-            boardViewModel.addComment(newComment)
 
             boardPostEtComment.setText("")
         }
 
         boardPostIbBack.setOnClickListener {
+            intent.putExtra("updateBoard", board)
+            setResult(RESULT_OK, intent)
             finish()
         }
 
@@ -109,32 +174,26 @@ class BoardPost : AppCompatActivity() {
     private fun initModel() = with(binding) {
         boardViewModel.commentList.observe(this@BoardPost){ commentList ->
             listAdapter.submitList(commentList)
+            boardPostBtnComment.text = commentList.size.toString()
         }
     }
 
     fun formatTimeOrDate(postTime: Long): String {
-
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
 
-        val calendar2 = Calendar.getInstance()
-        calendar2.set(Calendar.HOUR_OF_DAY, 23)
-        calendar2.set(Calendar.MINUTE, 59)
-        calendar2.set(Calendar.SECOND, 59)
-
         val date1 = calendar.time
-        val date2 = calendar2.time
 
-        if(date1 <= Date(postTime) && Date(postTime) <= date2){
-            val simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            return simpleDateFormat.format(Date(postTime))
-        }else{
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            return simpleDateFormat.format(Date(postTime))
+        val simpleDateFormat: SimpleDateFormat
+        if (Date(postTime) > date1) {
+            simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        } else {
+            simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         }
 
+        return simpleDateFormat.format(Date(postTime))
     }
 
 }

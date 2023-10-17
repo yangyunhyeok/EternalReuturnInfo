@@ -78,28 +78,21 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     }
 
     fun formatTimeOrDate(postTime: Long): String {
-
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
 
-        val calendar2 = Calendar.getInstance()
-        calendar2.set(Calendar.HOUR_OF_DAY, 23)
-        calendar2.set(Calendar.MINUTE, 59)
-        calendar2.set(Calendar.SECOND, 59)
-
         val date1 = calendar.time
-        val date2 = calendar2.time
 
-        if(date1 <= Date(postTime) && Date(postTime) <= date2){
-            val simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            return simpleDateFormat.format(Date(postTime))
-        }else{
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            return simpleDateFormat.format(Date(postTime))
+        val simpleDateFormat: SimpleDateFormat
+        if (Date(postTime) > date1) {
+            simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        } else {
+            simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         }
 
+        return simpleDateFormat.format(Date(postTime))
     }
 
 }

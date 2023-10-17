@@ -46,7 +46,7 @@ class BoardAdd : AppCompatActivity() {
 
             val key = FBRef.postRef.push().key.toString()
 
-            val newBoard = BoardModel(key, title, content, "user1", date, mapOf())
+            val newBoard = BoardModel(key, title, content, "user2", date, mapOf())
 
             FBRef.postRef.child(key).setValue(newBoard).addOnSuccessListener {
                 Toast.makeText(this@BoardAdd, "게시글 추가!", Toast.LENGTH_SHORT).show()

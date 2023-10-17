@@ -1,12 +1,13 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostRvCommentItemBinding
 import com.erionna.eternalreturninfo.model.CommentModel
 import java.text.SimpleDateFormat
@@ -33,6 +34,20 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
     }
 ) {
 
+    interface OnItemClickListener {
+        fun onDeleteItemClick(commentItem: CommentModel, position:Int)
+        fun onUpdateItemClick(commentItem: CommentModel, position:Int)
+    }
+
+    private var onDeleteItemClickListener: OnItemClickListener? = null
+    private var onUpdateItemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onDeleteItemClickListener = listener
+        this.onUpdateItemClickListener = listener
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             BoardPostRvCommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -52,49 +67,49 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
 
             boardCommentTvUser.text = item.author
             boardCommentTvContent.text = item.content
-
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-            calendar.set(Calendar.HOUR_OF_DAY, 0)
-            calendar.set(Calendar.MINUTE, 0)
-            calendar.set(Calendar.SECOND, 0)
-
-            val standardTime = calendar.time
-
             boardCommentTvDate.text = formatTimeOrDate(item.date)
 
             //로그인한 사용자면 ibMenu 보여주기
-            if(item.author == "user2"){
+            if (item.author == "user2") {
                 boardCommentIbMenu.visibility = View.VISIBLE
-            }else{
+                boardCommentIbMenu.setOnClickListener {
+                    val popup = PopupMenu(binding.root.context, boardCommentIbMenu) // View 변경
+                    popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
+                    popup.setOnMenuItemClickListener { menu ->
+                        when (menu.itemId) {
+                            R.id.menu_comment_update -> {
+                                onUpdateItemClickListener?.onUpdateItemClick(item, adapterPosition)
+                            }
+                            R.id.menu_comment_delete -> {
+                                onDeleteItemClickListener?.onDeleteItemClick(item, adapterPosition)
+                            }
+                        }
+                        false
+                    }
+                    popup.show()
+                }
+            } else {
                 boardCommentIbMenu.visibility = View.INVISIBLE
             }
 
         }
 
         fun formatTimeOrDate(postTime: Long): String {
-
             val calendar = Calendar.getInstance()
             calendar.set(Calendar.HOUR_OF_DAY, 0)
             calendar.set(Calendar.MINUTE, 0)
             calendar.set(Calendar.SECOND, 0)
 
-            val calendar2 = Calendar.getInstance()
-            calendar2.set(Calendar.HOUR_OF_DAY, 23)
-            calendar2.set(Calendar.MINUTE, 59)
-            calendar2.set(Calendar.SECOND, 59)
-
             val date1 = calendar.time
-            val date2 = calendar2.time
 
-            if(date1 <= Date(postTime) && Date(postTime) <= date2){
-                val simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                return simpleDateFormat.format(Date(postTime))
-            }else{
-                val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                return simpleDateFormat.format(Date(postTime))
+            val simpleDateFormat: SimpleDateFormat
+            if (Date(postTime) > date1) {
+                simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            } else {
+                simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             }
 
+            return simpleDateFormat.format(Date(postTime))
         }
     }
 

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.BoardFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.activity.BoardAdd
 import com.erionna.eternalreturninfo.ui.activity.BoardPost
@@ -44,7 +45,7 @@ class BoardFragment : Fragment() {
 
     private val boardViewModel: BoardListViewModel by activityViewModels()
 
-    private val addTodoLauncher =
+    private val addBoardLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val board = result.data?.getParcelableExtra<BoardModel>("board")
@@ -52,6 +53,26 @@ class BoardFragment : Fragment() {
                 if (board != null) {
                     boardViewModel.addBoard(board)
                 }
+            }
+        }
+
+
+    private val loadBoardLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val deleteBoard = result.data?.getParcelableExtra<BoardModel>("deleteBoard")
+                val updateBoard = result.data?.getParcelableExtra<BoardModel>("updateBoard")
+
+                if(deleteBoard != null){
+                    boardViewModel.removeBoard(deleteBoard)
+                    FBRef.postRef.child(deleteBoard.id).removeValue()
+                }
+
+                if(updateBoard != null){
+                    boardViewModel.updateBoard(updateBoard)
+                }
+
             }
         }
 
@@ -83,14 +104,39 @@ class BoardFragment : Fragment() {
             override fun onItemClick(boardItem: BoardModel) {
                 val intent = Intent(requireContext(), BoardPost::class.java)
                 intent.putExtra("ID", boardItem.id)
-                startActivity(intent)
+                loadBoardLauncher.launch(intent)
             }
         })
 
         boardFab.setOnClickListener {
             val intent = Intent(requireContext(), BoardAdd::class.java)
-            addTodoLauncher.launch(intent)
+            addBoardLauncher.launch(intent)
         }
+
+        boardSwipeRefreshLayout.setDistanceToTriggerSync(600)
+
+        boardSwipeRefreshLayout.setOnRefreshListener {
+
+            FBRef.postRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val unsortedBoardList = mutableListOf<BoardModel>()
+                    for (data in snapshot.children) {
+                        val board = data.getValue<BoardModel>()
+                        if (board != null) {
+                            unsortedBoardList.add(board)
+                        }
+                    }
+                    boardViewModel.initBoard(unsortedBoardList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // 에러 처리
+                }
+            })
+
+            boardSwipeRefreshLayout.isRefreshing = false
+        }
+
     }
 
     private fun initModel() = with(binding) {

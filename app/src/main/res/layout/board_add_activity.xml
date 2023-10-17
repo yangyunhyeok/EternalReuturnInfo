@@ -7,7 +7,7 @@
     android:background="@color/dark_navy"
     tools:context=".ui.activity.BoardAdd">
 
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="67dp"
@@ -31,7 +31,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-    </Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <View
         android:id="@+id/view"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="67dp"
@@ -29,7 +29,19 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-    </Toolbar>
+        <ImageButton
+            android:id="@+id/board_post_ib_menu"
+            android:layout_gravity="right"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_board_baseline_more_horiz_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -61,9 +73,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:text="[공지] 게시판 공지!!"
+                    android:text="[일반]"
                     android:textColor="@color/white"
-                    android:textSize="18.5sp"
+                    android:textSize="21sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -181,7 +193,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="24dp"
-                    android:text="1. 예쁜 말로 소통하기 \n\n 2. 채팅하고 싶으면 프로필 클릭 후 1:1 채팅 가능 \n\n 3. 사용자간 싸우기 금지\n"
+                    android:text="1. 예쁜 말로 소통하기"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -282,6 +294,20 @@
                 android:textSize="12sp"
                 android:text="@string/board_save"
                 android:textColor="@color/blue"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/board_post_btn_update"
+                android:background="@null"
+                android:layout_gravity="right|center_vertical"
+                android:gravity="center"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:visibility="invisible"
+                android:textSize="12sp"
+                android:text="수정"
+                android:textColor="@color/highlight_color2"
                 android:textStyle="bold"/>
 
             <EditText
