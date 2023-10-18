@@ -67,14 +67,14 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/board_fab"
-        android:backgroundTint= "@color/blue"
+        android:backgroundTint= "@color/white"
         app:borderWidth="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
-        android:src="@drawable/ic_board_baseline_add_24"
+        android:src="@drawable/ic_board_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

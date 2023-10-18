@@ -66,7 +66,9 @@ dependencies {
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
-
+    //Coil
+    implementation("io.coil-kt:coil:0.10.0")
+    //ViewModel
     implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
 }

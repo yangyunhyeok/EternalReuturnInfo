@@ -13,6 +13,7 @@
     <string name="board_post_add">게시글 작성</string>
     <string name="board_post_finish">작성 완료</string>
     <string name="board_post">게시글</string>
+    <string name="board_search">검색</string>
     <string name="chat_enter_msg">메시지를 입력하세요.</string>
     <string name="chat_send">전송</string>
     <string name="chatlist_user_name">장재용</string>

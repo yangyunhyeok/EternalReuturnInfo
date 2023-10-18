@@ -2,22 +2,12 @@ package com.erionna.eternalreturninfo.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.erionna.eternalreturninfo.databinding.BoardAddActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
-import com.erionna.eternalreturninfo.model.CommentModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
-import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModelFactory
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 class BoardAdd : AppCompatActivity() {
 
@@ -44,20 +34,28 @@ class BoardAdd : AppCompatActivity() {
             val content = boardAddEtContent.text.toString()
             val date = Calendar.getInstance().timeInMillis
 
-            val key = FBRef.postRef.push().key.toString()
+            if(title.isEmpty()){
+                Toast.makeText(this@BoardAdd, "제목을 입력해주세요!", Toast.LENGTH_SHORT).show()
+            }else if(content.isEmpty()) {
+                Toast.makeText(this@BoardAdd, "내용을 입력해주세요!", Toast.LENGTH_SHORT).show()
+            }else if(title.isNotEmpty() && content.isNotEmpty()){
 
-            val newBoard = BoardModel(key, title, content, "user2", date, mapOf())
+                val key = FBRef.postRef.push().key.toString()
 
-            FBRef.postRef.child(key).setValue(newBoard).addOnSuccessListener {
-                Toast.makeText(this@BoardAdd, "게시글 추가!", Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener { e ->
-                Toast.makeText(this@BoardAdd, "게시글 추가 실패!" + e.message, Toast.LENGTH_SHORT).show()
+                //로그인한 유저 UserModel 정보 가져오기!
+                val newBoard = BoardModel(key, title, content, BoardSingletone.LoginUser(), date, mapOf(), 0)
+
+                FBRef.postRef.child(key).setValue(newBoard).addOnSuccessListener {
+                    Toast.makeText(this@BoardAdd, "게시글 추가!", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener { e ->
+                    Toast.makeText(this@BoardAdd, "게시글 추가 실패!" + e.message, Toast.LENGTH_SHORT).show()
+                }
+
+                intent.putExtra("board", newBoard)
+                setResult(RESULT_OK, intent)
+
+                finish()
             }
-
-            intent.putExtra("board", newBoard)
-            setResult(RESULT_OK, intent)
-
-            finish()
         }
 
     }

@@ -5,13 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostRvCommentItemBinding
 import com.erionna.eternalreturninfo.model.CommentModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.ui.activity.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.DialogListener
 import java.text.SimpleDateFormat
@@ -69,12 +70,18 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
 
         fun bind(item: CommentModel) = with(binding) {
 
-            boardCommentTvUser.text = item.author
+            boardCommentTvUser.text = item.author?.user
             boardCommentTvContent.text = item.content
             boardCommentTvDate.text = formatTimeOrDate(item.date)
 
+            if(item?.author?.userImage?.isEmpty() == true){
+                boardCommentIbProfile.setImageResource(R.drawable.ic_xiuk)
+            }else{
+                boardCommentIbProfile.load(item?.author?.userImage)
+            }
+
             //로그인한 사용자면 ibMenu 보여주기
-            if (item.author == "user2") {
+            if (item.author?.user == BoardSingletone.LoginUser().user) {
                 boardCommentIbMenu.visibility = View.VISIBLE
                 boardCommentIbMenu.setOnClickListener {
                     val popup = PopupMenu(binding.root.context, boardCommentIbMenu) // View 변경
@@ -96,7 +103,7 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
                 boardCommentIbMenu.visibility = View.INVISIBLE
 
                 boardCommentIbProfile.setOnClickListener {
-                    val customDialog = BoardDialog(binding.root.context, item.author, object : DialogListener {
+                    val customDialog = BoardDialog(binding.root.context, item.author?.user.toString(), object : DialogListener {
                         override fun onOKButtonClicked() {
                             Toast.makeText(binding.root.context, "채팅창 이동", Toast.LENGTH_SHORT).show()
                         }

@@ -1,20 +1,21 @@
 package com.erionna.eternalreturninfo.ui.activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.api.load
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.CommentModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.adapter.BoardCommentRecyclerViewAdpater
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
@@ -66,10 +67,17 @@ class BoardPost : AppCompatActivity() {
 
                     boardPostTvTitle.text = "[일반]  " + board?.title
                     boardPostTvContent.text = board?.content
-                    boardPostTvUser.text = board?.author
+                    boardPostTvUser.text = board?.author?.user
+                    boardPostTvVisit.text = board?.views.toString()
+
+                    if(board?.author?.userImage?.isEmpty() == true){
+                        boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
+                    }else{
+                        boardPostIbProfile.load(board?.author?.userImage)
+                    }
 
                     //수정 : 로그인 한 사용자 일 때
-                    if(board?.author == "user2"){
+                    if(board?.author?.user == BoardSingletone.LoginUser().user){
                         boardPostIbMenu.visibility = View.VISIBLE
 
                         boardPostIbMenu.setOnClickListener {
@@ -79,14 +87,14 @@ class BoardPost : AppCompatActivity() {
                                 when (menu.itemId) {
                                     R.id.menu_comment_update -> {
                                         val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
-                                        Log.d("updateBoard", board.toString())
                                         updateIntent.putExtra("updateBoard", board)
                                         startActivity(updateIntent)
                                     }
                                     R.id.menu_comment_delete -> {
-                                        //firebase에서도 삭제 기능 추가
                                         intent.putExtra("deleteBoard", board)
                                         setResult(RESULT_OK, intent)
+
+                                        FBRef.postRef.child(board?.id.toString()).removeValue()
                                         finish()
                                     }
                                 }
@@ -98,7 +106,7 @@ class BoardPost : AppCompatActivity() {
                         boardPostIbMenu.visibility = View.INVISIBLE
 
                         boardPostIbProfile.setOnClickListener {
-                            val customDialog = BoardDialog(this@BoardPost, board?.author ?: "", object : DialogListener {
+                            val customDialog = BoardDialog(this@BoardPost, board?.author?.user ?: "", object : DialogListener {
                                 override fun onOKButtonClicked() {
                                     Toast.makeText(this@BoardPost, "채팅창 이동", Toast.LENGTH_SHORT).show()
                                 }
@@ -132,6 +140,13 @@ class BoardPost : AppCompatActivity() {
             }
 
         })
+
+        //수정 : 로그인한 유저 정보 가져와서 프로필 사진 띄우기
+        if(BoardSingletone.LoginUser().userImage == null){
+            boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
+        }else{
+            boardPostIbCommentProfile.load(BoardSingletone.LoginUser().userImage)
+        }
 
 
         listAdapter.setOnItemClickListener(object :
@@ -167,8 +182,8 @@ class BoardPost : AppCompatActivity() {
 
             val commentkey = FBRef.postRef.child(id).child("comments").push().key.toString()
 
-            //수정 : 로그인한 사용자 닉네임 불러오기
-            val newComment = CommentModel(commentkey, "user2", content, date)
+            //수정 : 로그인한 사용자 닉네임, 프로필 사진 불러오기
+            val newComment = CommentModel(commentkey, BoardSingletone.LoginUser(), content, date)
 
             FBRef.postRef.child(id).child("comments").child(commentkey).setValue(newComment)
 
@@ -206,6 +221,10 @@ class BoardPost : AppCompatActivity() {
         }
 
         return simpleDateFormat.format(Date(postTime))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 }

@@ -11,15 +11,22 @@ data class BoardModel (
     val id: String = "",
     val title: String = "",
     val content: String = "",
-    val author: String = "",
+    val author: UserModel? = UserModel("user1", ""),
     val date: Long = 0,
-    val comments: Map<String, CommentModel> = mapOf()
+    val comments: Map<String, CommentModel> = mapOf(),
+    val views: Int = 0
 ) : Parcelable
 
 @Parcelize
 data class CommentModel(
     val id: String = "",
-    val author: String = "",
+    val author: UserModel? = UserModel("user1", ""),
     val content: String = "",
     val date: Long = 0
+) : Parcelable
+
+@Parcelize
+data class UserModel(
+    val user: String = "",
+    val userImage: String = "",
 ) : Parcelable

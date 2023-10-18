@@ -32,6 +32,10 @@ class BoardListViewModel() : ViewModel(){
     val commentList: LiveData<MutableList<CommentModel>>
         get() = _commentList
 
+    private val _searchBoardList = MutableLiveData<MutableList<BoardModel>>()
+    val searchBoardList: LiveData<MutableList<BoardModel>>
+        get() = _searchBoardList
+
 
     init {
         FBRef.postRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -74,6 +78,20 @@ class BoardListViewModel() : ViewModel(){
         val currentList = boardList.value.orEmpty().toMutableList()
         currentList.add(item)
         _boardList.value = currentList
+    }
+
+    fun addSearchBoard(item: BoardModel) {
+        if (item == null) {
+            return
+        }
+
+        val currentList = searchBoardList.value.orEmpty().toMutableList()
+        currentList.add(item)
+        _searchBoardList.value = currentList
+    }
+
+    fun clearSearchBoard(){
+        _searchBoardList.value = mutableListOf()
     }
 
     fun updateBoard(item: BoardModel) {

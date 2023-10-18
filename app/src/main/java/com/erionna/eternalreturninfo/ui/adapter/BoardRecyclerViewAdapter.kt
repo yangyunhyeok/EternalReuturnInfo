@@ -1,6 +1,5 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,14 +60,16 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
         fun bind(item: BoardModel) = with(binding) {
             //작성자가 관리자 아이디면 title [공지]로 바꾸는 코드 추가 + 공지 고정하기..?
             boardPostTvTitle.text = "[일반]  " + item.title
-            boardPostTvUser.text = item.author
+            boardPostTvUser.text = item.author?.user
 
             boardPostTvDate.text = formatTimeOrDate(item.date)
 
             if(item.comments.size == 0){
                 boardPostBtnComment.visibility = View.INVISIBLE
+            }else{
+                boardPostBtnComment.visibility = View.VISIBLE
+                boardPostBtnComment.text = item.comments.size.toString()
             }
-            boardPostBtnComment.text = item.comments.size.toString()
 
             itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(item)
