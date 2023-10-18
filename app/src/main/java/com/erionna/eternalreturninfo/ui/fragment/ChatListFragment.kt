@@ -1,7 +1,9 @@
 package com.erionna.eternalreturninfo.ui.fragment
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.renderscript.Sampler.Value
 import android.util.Log
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +27,9 @@ import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_TIME
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -34,6 +40,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.tasks.await
+import okhttp3.internal.notify
 import java.util.Random
 
 class ChatListFragment : Fragment() {
@@ -52,19 +59,32 @@ class ChatListFragment : Fragment() {
     private val chatListAdapter by lazy {
         ChatListAdapter(
             onClickItem = { position, item ->
-                startActivity(ChatActivity.newIntent(requireContext(), item))
-                findReceiverUid(item)
+                chatLauncher.launch(
+                    ChatActivity.newIntentForModify(
+                        requireContext(),
+                        position,
+                        item
+                    )
+                )
             }
         )
-    }
-
-    private fun findReceiverUid(item: ERModel) : String {
-        return item.uid.toString()
     }
 
     private val viewModel: ChatListViewModel by lazy {
         ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
     }
+
+    private val chatLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val position = result.data?.getIntExtra(EXTRA_ER_POSITION, -1)
+                val message = result.data?.getStringExtra(EXTRA_MESSAGE)
+                val time =result.data?.getStringExtra(EXTRA_TIME)
+
+                Log.d("choco5733 : 돌아왔을때", "$message $time $position")
+                viewModel.modifyItem(position!!, message!!, time!!)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -207,6 +227,8 @@ class ChatListFragment : Fragment() {
                                 senderRoom =  auth.currentUser?.uid + currentUser?.uid
 
                                 var message = Message()
+                                var convertTime = ""
+                                var sb = StringBuilder()
 
                                 database.child("chats").child(senderRoom).child("messages")
                                     .get().addOnSuccessListener {
@@ -217,7 +239,15 @@ class ChatListFragment : Fragment() {
 //                                        viewModel.addUser(currentUser?.copy(msg = "${message.message}"))
 
                                         if(auth.currentUser?.uid != currentUser?.uid) {
-                                        viewModel.addUser(currentUser?.copy(msg = "${message.message}", time = "${message.time}"))
+//                                            yyyy년 MM월 dd일 a hh시 mm분
+                                            if (message.time != "") {
+                                                sb.append(message.time)
+                                                convertTime = sb.substring(0,13)
+                                            } else {
+                                                convertTime = message.time!!
+                                            }
+
+                                            viewModel.addUser(currentUser?.copy(msg = "${message.message}", time = convertTime))
                                         } else {
                                             // 현재 접속자 상단에 표시
                                             binding.chatListTitle.setText(" ${currentUser?.name} 님 반갑습니다!")
@@ -254,10 +284,15 @@ class ChatListFragment : Fragment() {
             .setValue(ERModel(profilePicture = randomImageResource, email = email, password = password, name = name, uid = uId))
     }
 
-    // 뷰모델
+    // 라이브데이터 관측
     private fun initModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
             chatListAdapter.submitList(it)
         }
+    }
+
+    override fun onResume() {
+        chatListAdapter.notifyDataSetChanged()
+        super.onResume()
     }
 }

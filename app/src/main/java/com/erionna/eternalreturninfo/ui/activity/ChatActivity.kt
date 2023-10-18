@@ -1,5 +1,6 @@
 package com.erionna.eternalreturninfo.ui.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -15,6 +16,9 @@ import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.ui.adapter.ChatAdapter
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_TIME
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -30,14 +34,14 @@ import java.time.format.DateTimeFormatter
 class ChatActivity : AppCompatActivity() {
 
     companion object {
-        fun newIntent(
+        fun newIntentForModify(
             context: Context,
+            position: Int,
             erModel: ERModel
-        ): Intent {
-            val intent = Intent(context, ChatActivity::class.java).apply {
-                putExtra(EXTRA_ER_MODEL, erModel)
-            }
-            return intent
+        ) = Intent(context, ChatActivity::class.java).apply{
+            putExtra(EXTRA_ER_MODEL, erModel)
+            putExtra(EXTRA_ER_POSITION, position)
+
         }
     }
 
@@ -56,6 +60,10 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var senderRoom: String
 
     private lateinit var messageList : ArrayList<Message>
+
+    private val position by lazy {
+        intent.getIntExtra(EXTRA_ER_POSITION, -1)
+    }
 
     private val chatAdapter by lazy {
         ChatAdapter(
@@ -89,10 +97,12 @@ class ChatActivity : AppCompatActivity() {
         receiverUid = data?.uid.toString()
         Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
 
-        // 초기화
+        // 리사이클러뷰 초기화
         messageList = ArrayList()
         binding.chatRecycler.adapter = chatAdapter
         binding.chatRecycler.layoutManager = LinearLayoutManager(this)
+//        binding.chatRecycler.scrollToPosition(messageList.size -1)
+
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
 
@@ -105,11 +115,10 @@ class ChatActivity : AppCompatActivity() {
         // db에 메시지 저장
         binding.chatSendBtn.setOnClickListener {
             var time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH : mm"))
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh시 mm분"))
             } else {
                 TODO("VERSION.SDK_INT < O")
             }
-
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
@@ -128,18 +137,42 @@ class ChatActivity : AppCompatActivity() {
 
             }
         }
+        var finalMessage = ""
+        var finalTime = ""
 
         // 메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
                     binding.chatRecycler.scrollToPosition(messageList.size - 1) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+
                     messageList.clear()
+
 
                     for (postSnapshot in snapShot.children) {
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
+                        finalMessage = messageList.last().message.toString()
+                        finalTime = messageList.last().time.toString()
+
                     }
+                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
+
+                    val intent = Intent().apply{
+                        putExtra(
+                            EXTRA_MESSAGE,
+                            finalMessage
+                        )
+                        putExtra(
+                            EXTRA_TIME,
+                            finalTime
+                        )
+                        putExtra(
+                            EXTRA_ER_POSITION,
+                            position
+                        )
+                    }
+                    setResult(Activity.RESULT_OK, intent)
                     chatAdapter.notifyDataSetChanged()
                 }
 
@@ -147,5 +180,11 @@ class ChatActivity : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             })
+//        binding.chatRecycler.scrollToPosition(messageList.size - 1)
+    }
+
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
     }
 }

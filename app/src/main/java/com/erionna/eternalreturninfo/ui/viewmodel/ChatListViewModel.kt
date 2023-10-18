@@ -1,5 +1,6 @@
 package com.erionna.eternalreturninfo.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +43,25 @@ class ChatListViewModel(
         val currentList = list.value.orEmpty().toMutableList()
         currentList.remove(ERModel(name=user))
         _list.value = currentList
+    }
+
+    fun modifyItem(position: Int, message: String, time: String) {
+        val currentList = list.value.orEmpty().toMutableList()
+
+        currentList[position].msg = message
+
+        val sb = StringBuilder()
+        if (time != "") {
+            sb.append(time)
+            currentList[position].time = sb.substring(0,13)
+        } else {
+            currentList[position].time = ""
+        }
+
+        Log.d("choco5733 : 뷰모델 ", "${currentList[position]}")
+
+        _list.value = currentList
+
     }
 }
 

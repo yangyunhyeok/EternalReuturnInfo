@@ -56,13 +56,7 @@ class ChatListAdapter(
             chatListName.text = item.name
             chatListProfilePicture.setImageResource(item.profilePicture!!)
             chatListMsg.text = item.msg
-
-            if (item.time != "") {
-                sb.append(item.time)
-                chatListDate.text = sb.substring(0,10)
-            } else {
-                chatListDate.text = item.time
-            }
+            chatListDate.text = item.time
 
 
             chatListContainer.setOnClickListener {

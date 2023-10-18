@@ -8,10 +8,10 @@
     <TextView
         android:id="@+id/chat_item_receiver_text"
         android:layout_width="wrap_content"
-        android:maxWidth="250dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/receiver_background"
+        android:maxWidth="250dp"
         android:padding="10dp"
         android:text="@string/chat_item_receiver_msg"
         android:textColor="@color/white"
@@ -19,8 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/chat_item_recevier_date"
         android:layout_width="wrap_content"

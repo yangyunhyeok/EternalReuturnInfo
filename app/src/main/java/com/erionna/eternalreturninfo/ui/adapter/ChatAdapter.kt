@@ -43,7 +43,12 @@ class ChatAdapter(
         if(holder.javaClass == SenderViewHolder::class.java) {
             val viewHolder = holder as SenderViewHolder
             viewHolder.binding.chatItemSenderText.text = currentMessage.message
-            viewHolder.binding.chatItemSenderDate.text = currentMessage.time
+
+            val sb = StringBuilder()
+            sb.append(currentMessage.time)
+            val time = sb.substring(14,24)
+
+            viewHolder.binding.chatItemSenderDate.text = time
 
             viewHolder.binding.chatItemSenderContainer.setOnClickListener {
                 onClickItem(
@@ -53,7 +58,13 @@ class ChatAdapter(
         } else {
             val viewHolder = holder as ReceiverViewHolder
             viewHolder.binding.chatItemReceiverText.text = currentMessage.message
-            viewHolder.binding.chatItemRecevierDate.text = currentMessage.time
+
+            val sb = StringBuilder()
+            sb.append(currentMessage.time)
+            val time = sb.substring(14,24)
+
+            viewHolder.binding.chatItemRecevierDate.text = time
+
             viewHolder.binding.chatItemReceiverContainer.setOnClickListener {
                 onClickItem(
                     position

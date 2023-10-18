@@ -45,12 +45,14 @@
 
     <TextView
         android:id="@+id/chat_list_msg"
-        android:layout_width="290dp"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:singleLine="true"
         android:text="@string/chat_list_msg"
         android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.14"
         app:layout_constraintStart_toEndOf="@+id/chat_list_profile_picture"
         app:layout_constraintTop_toBottomOf="@+id/chat_list_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

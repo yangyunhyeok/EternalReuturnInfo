@@ -14,8 +14,9 @@
             android:id="@+id/dialog_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/dialog_sign_in_for_text_id"
             android:ems="10"
-            android:hint="email"
+            android:hint="@string/dialog_sign_in_email_hint"
             android:inputType="textPersonName" />
 
         <EditText
@@ -23,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="password"
+            android:hint="@string/dialog_sign_in_password_hint"
             android:inputType="textPassword" />
 
     </LinearLayout>
