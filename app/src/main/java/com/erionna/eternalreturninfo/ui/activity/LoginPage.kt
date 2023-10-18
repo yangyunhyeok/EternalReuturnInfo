@@ -62,6 +62,7 @@ class LoginPage : AppCompatActivity() {
         googlebinding = GoogleDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
@@ -70,6 +71,7 @@ class LoginPage : AppCompatActivity() {
 
         //로그인 버튼
         binding.loginLoginBtn.setOnClickListener {
+
             Login(binding.loginIDEt.text.toString(), binding.loginPWEt.text.toString())
         }
 
@@ -108,7 +110,6 @@ class LoginPage : AppCompatActivity() {
 
         //구글로그인 다이얼로그 버튼
         binding.loginSnsLoginBtn.setOnClickListener {
-
             Firebase.auth.signOut()
             googleLogin()
         }
@@ -125,15 +126,15 @@ class LoginPage : AppCompatActivity() {
                     docRef.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
-                                var fragment = MyProfileFragment()
-                                var bundle = Bundle()
-                                bundle.putString("email", document["email"].toString())
-                                bundle.putString("pw", document["pw"].toString())
-                                bundle.putString("nickName", document["nickName"].toString())
-                                bundle.putString("character", document["character"].toString())
-                                bundle.putString("profile", document["profile"].toString())
-                                fragment.arguments = bundle
+                                Log.d("마이페이지 송신", "${document["email"]}")
                                 Log.d("데이터", "${document.data}")
+                                Toast.makeText(this, "로그인 완료", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.putExtra("email",document["email"].toString())
+                                intent.putExtra("nickName",document["nickName"].toString())
+                                intent.putExtra("character",document["character"].toString())
+                                intent.putExtra("profile",document["profile"].toString())
+                                startActivity(intent)
                             } else {
                                 Log.d(TAG, "No such document")
                             }
@@ -141,9 +142,6 @@ class LoginPage : AppCompatActivity() {
                         .addOnFailureListener { exception ->
                             Log.d(TAG, "get failed with ", exception)
                         }
-                    Toast.makeText(this, "로그인 완료", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
                 } else {
                     Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }
@@ -179,6 +177,10 @@ class LoginPage : AppCompatActivity() {
             Log.d(TAG, account.givenName!!)
             Log.d(TAG, account.email!!)
             intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("email",account.email)
+            intent.putExtra("nickName",account.displayName)
+            intent.putExtra("character","없음")
+            intent.putExtra("profile",account.photoUrl)
             startActivity(intent)
         } catch (e: ApiException) {
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)

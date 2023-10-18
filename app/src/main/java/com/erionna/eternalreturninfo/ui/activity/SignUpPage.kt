@@ -1,6 +1,7 @@
 package com.erionna.eternalreturninfo.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Nickname
 import android.view.View
@@ -83,6 +84,8 @@ class SignUpPage : AppCompatActivity() {
                             )
                             Toast.makeText(this, "$character", Toast.LENGTH_SHORT).show()
                             finish()
+                            var intent = Intent(this,MainActivity::class.java)
+                            startActivity(intent)
                         } else {
                             Toast.makeText(
                                 this, "계정 생성 실패",
@@ -101,7 +104,7 @@ class SignUpPage : AppCompatActivity() {
     private fun setDocument(data: SignUpData) {
         FirebaseFirestore.getInstance()
             .collection("EternalReturnInfo")
-            .document(data.Email)
+            .document(auth.uid!!)
             .set(data)
             .addOnSuccessListener {
                 Toast.makeText(this, "닉네임 값 저장 성공", Toast.LENGTH_SHORT).show()
