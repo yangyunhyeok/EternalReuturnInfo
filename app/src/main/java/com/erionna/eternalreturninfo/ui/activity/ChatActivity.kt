@@ -126,27 +126,10 @@ class ChatActivity : AppCompatActivity() {
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
 
-                // 키보드 숨기기
-//                val imm =
-//                    this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
             }
         }
 
-//        binding.chatRecycler.setOnClickListener{
-//            val imm =
-//                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
-//        }
-
-//        binding.chatToolbar.setOnClickListener {
-//            val imm =
-//                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
-//        }
-
-
-//         메시지 가져오기
+        // 메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
@@ -164,15 +147,5 @@ class ChatActivity : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             })
-
     }
-
-//    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-//        // 키보드 숨기기
-//        val imm =
-//            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-//        return super.dispatchTouchEvent(ev)
-//    }
-
 }
