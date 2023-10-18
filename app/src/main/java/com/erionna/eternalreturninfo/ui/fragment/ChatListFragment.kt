@@ -80,7 +80,6 @@ class ChatListFragment : Fragment() {
         initModel()
     }
 
-
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
@@ -170,7 +169,7 @@ class ChatListFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(requireContext(), "회원가입 성공", Toast.LENGTH_SHORT).show()
-                    addUserToDatabase(email, name, password, auth.currentUser!!.uid)
+                    addUserToDatabase(email, name, password, auth.uid!!)
                     viewModel.clearList()
                 } else {
                     // If sign in fails, display a message to the user.
@@ -184,7 +183,9 @@ class ChatListFragment : Fragment() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    viewModel.clearList() // 새로 로그인 했을 시 기존 리스트 초기화
+                    // 새로 로그인 했을 시 기존 리스트 초기화
+                    viewModel.clearList()
+                    // 커스텀 토스트 메시지 : 로그인 성공!
                     requireContext().let {
                         StyleableToast.makeText(
                             it,
@@ -192,6 +193,7 @@ class ChatListFragment : Fragment() {
                             R.style.loginToast
                         ).show()
                     }
+
 
                     // 회원 정보 가져오기
                     database.child("user").addValueEventListener(object: ValueEventListener{
@@ -216,6 +218,9 @@ class ChatListFragment : Fragment() {
 
                                         if(auth.currentUser?.uid != currentUser?.uid) {
                                         viewModel.addUser(currentUser?.copy(msg = "${message.message}", time = "${message.time}"))
+                                        } else {
+                                            // 현재 접속자 상단에 표시
+                                            binding.chatListTitle.setText(" ${currentUser?.name} 님 반갑습니다!")
                                         }
                                     }
                             }

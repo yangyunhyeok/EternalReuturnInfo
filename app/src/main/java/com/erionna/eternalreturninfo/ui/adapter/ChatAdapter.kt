@@ -17,7 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ChatAdapter(
     private val context: Context,
-    private val messageList: ArrayList<Message>
+    private val messageList: ArrayList<Message>,
+    private val onClickItem: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 ) {
 
@@ -25,9 +26,14 @@ class ChatAdapter(
     private val receiver = 2
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == sender) {
-            SenderViewHolder(ChatItemSenderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            SenderViewHolder(ChatItemSenderBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                onClickItem
+                )
+
         } else {
-            ReceiverViewHolder(ChatItemReceiverBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            ReceiverViewHolder(ChatItemReceiverBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                onClickItem
+            )
         }
     }
 
@@ -38,10 +44,21 @@ class ChatAdapter(
             val viewHolder = holder as SenderViewHolder
             viewHolder.binding.chatItemSenderText.text = currentMessage.message
             viewHolder.binding.chatItemSenderDate.text = currentMessage.time
+
+            viewHolder.binding.chatItemSenderContainer.setOnClickListener {
+                onClickItem(
+                    position
+                )
+            }
         } else {
             val viewHolder = holder as ReceiverViewHolder
             viewHolder.binding.chatItemReceiverText.text = currentMessage.message
             viewHolder.binding.chatItemRecevierDate.text = currentMessage.time
+            viewHolder.binding.chatItemReceiverContainer.setOnClickListener {
+                onClickItem(
+                    position
+                )
+            }
         }
     }
 
@@ -60,12 +77,14 @@ class ChatAdapter(
     }
 
     class SenderViewHolder (
-        val binding: ChatItemSenderBinding
+        val binding: ChatItemSenderBinding,
+        private val onClickItem: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
     }
 
     class ReceiverViewHolder (
-        val binding: ChatItemReceiverBinding
+        val binding: ChatItemReceiverBinding,
+        private val onClickItem: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
     }
 }

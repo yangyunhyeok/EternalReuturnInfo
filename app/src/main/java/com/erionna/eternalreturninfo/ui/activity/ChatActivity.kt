@@ -60,7 +60,12 @@ class ChatActivity : AppCompatActivity() {
     private val chatAdapter by lazy {
         ChatAdapter(
             this,
-            messageList
+            messageList,
+            onClickItem = { position ->
+                val imm =
+                    this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+            }
         )
     }
 
@@ -90,12 +95,6 @@ class ChatActivity : AppCompatActivity() {
         binding.chatRecycler.layoutManager = LinearLayoutManager(this)
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
-        // 시간
-        val time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH : mm"))
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
 
         // 보낸이 방
         senderRoom = receiverUid + senderUid
@@ -105,6 +104,13 @@ class ChatActivity : AppCompatActivity() {
 
         // db에 메시지 저장
         binding.chatSendBtn.setOnClickListener {
+            var time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd  HH : mm"))
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+
+
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
             val messageObject = Message(message, senderUid, time)
@@ -121,9 +127,9 @@ class ChatActivity : AppCompatActivity() {
                 binding.chatMsgEt.setText("")
 
                 // 키보드 숨기기
-                val imm =
-                    this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
+//                val imm =
+//                    this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
             }
         }
 
@@ -133,12 +139,6 @@ class ChatActivity : AppCompatActivity() {
 //            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
 //        }
 
-//        binding.chatActivityRecyclerContainer.setOnClickListener {
-//            val imm =
-//                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
-//        }
-//
 //        binding.chatToolbar.setOnClickListener {
 //            val imm =
 //                this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -174,4 +174,5 @@ class ChatActivity : AppCompatActivity() {
 //        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
 //        return super.dispatchTouchEvent(ev)
 //    }
+
 }

@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class ChatListAdapter(
-    private val onClickItem: (Int, ERModel) -> Unit,
+    private val onClickItem: (Int, ERModel) -> Unit
 ) : ListAdapter<ERModel, ChatListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<ERModel>() {
         override fun areItemsTheSame(
@@ -50,36 +50,20 @@ class ChatListAdapter(
         private val onClickItem: (Int, ERModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-       private val auth = FirebaseAuth.getInstance()
-       private val database = FirebaseDatabase.getInstance().reference
+       private var sb = StringBuilder()
 
         fun bind(item: ERModel) = with(binding) {
             chatListName.text = item.name
             chatListProfilePicture.setImageResource(item.profilePicture!!)
             chatListMsg.text = item.msg
-            chatListDate.text = item.time
 
-//            val senderRoom = auth.currentUser?.uid + item.uid
-//            var message = Message()
+            if (item.time != "") {
+                sb.append(item.time)
+                chatListDate.text = sb.substring(0,10)
+            } else {
+                chatListDate.text = item.time
+            }
 
-//            database.child("chats").child(senderRoom).child("messages")
-//                .get().addOnSuccessListener {
-//
-//                    for(child in it.children) {
-//                        message = child.getValue(Message::class.java)!!
-//                    }
-
-//                        chatListMsg.text = "${message.message}"
-//                        chatListDate.text = "${message.time}"
-
-//                    if (message.message == "") {
-//                        chatListMsg.text = "최근에 대화한 내용이 없습니다."
-////                        chatListDate.text = ""
-//                    } else {
-////                        chatListDate.text = "${message.time}"
-//                    }
-
-//        }
 
             chatListContainer.setOnClickListener {
                 onClickItem(
