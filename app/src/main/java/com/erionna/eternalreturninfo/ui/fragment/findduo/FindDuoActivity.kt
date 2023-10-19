@@ -1,24 +1,24 @@
-package com.erionna.eternalreturninfo.ui.fragment.walkthrough
+package com.erionna.eternalreturninfo.ui.fragment.findduo
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.erionna.eternalreturninfo.databinding.WalkThroughFragmentBinding
+import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 
-class WalkThroughFragment : Fragment() {
+class FindDuoActivity : Fragment() {
     companion object {
-        fun newInstance() = WalkThroughFragment()
+        fun newInstance() = FindDuoActivity()
 
     }
-    private var _binding: WalkThroughFragmentBinding? = null
+    private var _binding: FindDuoFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = WalkThroughFragmentBinding.inflate(inflater, container, false)
+        _binding = FindDuoFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 

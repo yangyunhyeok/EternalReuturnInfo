@@ -58,4 +58,16 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // okhttp3
     implementation("com.squareup.okhttp3:logging-interceptor:4.5.0")
+
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+
+    // Add the dependency for the Realtime Database library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-database-ktx")
+
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.skydoves:powerspinner:1.2.7")
+    // PowerSpinner
 }
