@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -100,11 +101,26 @@ class BoardSearch : AppCompatActivity() {
 
         listAdapter.setOnItemClickListener(object : BoardRecyclerViewAdapter.OnItemClickListener{
             override fun onItemClick(boardItem: BoardModel) {
-                val views = boardItem.views + 1
-                FBRef.postRef.child(boardItem.id).child("views").setValue(views)
-                val intent = Intent(this@BoardSearch, BoardPost::class.java)
-                intent.putExtra("ID", boardItem.id)
-                startActivity(intent)
+
+                FBRef.postRef.child(boardItem.id).addListenerForSingleValueEvent(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (!dataSnapshot.exists()) {
+                            val intent = Intent(this@BoardSearch, BoardDeleted::class.java)
+                            startActivity(intent)
+                        } else {
+                            val views = boardItem.views + 1
+                            FBRef.postRef.child(boardItem.id).child("views").setValue(views)
+                            val intent = Intent(this@BoardSearch, BoardPost::class.java)
+                            intent.putExtra("ID", boardItem.id)
+                            startActivity(intent)
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        // 데이터 읽기 실패 처리
+                    }
+                })
             }
         })
 

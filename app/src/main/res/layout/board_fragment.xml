@@ -22,21 +22,15 @@
             android:layout_marginLeft="24dp"
             android:background="@drawable/ic_white_logo" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:cardCornerRadius="20dp"
+        <ImageButton
+            android:layout_marginRight="32dp"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:scaleType="fitCenter"
-            android:layout_gravity="right"
-            android:layout_marginRight="32dp">
-
-            <ImageButton
-                android:id="@+id/board_ib_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_foreground"/>
-
-        </androidx.cardview.widget.CardView>
+            android:id="@+id/board_ib_profile"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_board_search"/>
 
 
 

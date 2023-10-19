@@ -91,11 +91,10 @@ class BoardPost : AppCompatActivity() {
                                         startActivity(updateIntent)
                                     }
                                     R.id.menu_comment_delete -> {
-                                        intent.putExtra("deleteBoard", board)
-                                        setResult(RESULT_OK, intent)
-
-                                        FBRef.postRef.child(board?.id.toString()).removeValue()
                                         finish()
+
+                                        Log.d("board.id", board?.id.toString())
+                                        FBRef.postRef.child(board?.id.toString()).removeValue()
                                     }
                                 }
                                 false
@@ -223,8 +222,5 @@ class BoardPost : AppCompatActivity() {
         return simpleDateFormat.format(Date(postTime))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
 }
