@@ -14,14 +14,21 @@ class ChatAdapter(
     private val onClickItem: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 ) {
+    enum class ItemViewType {
+        SENDER, RECEIVER
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(viewType == ItemViewType.SENDER.ordinal) {
-            SenderViewHolder(ChatItemSenderBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        return if (
+            viewType == ItemViewType.SENDER.ordinal
+        ) {
+            SenderViewHolder(
+                ChatItemSenderBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 onClickItem
-                )
+            )
         } else {
-            ReceiverViewHolder(ChatItemReceiverBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            ReceiverViewHolder(
+                ChatItemReceiverBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 onClickItem
             )
         }
@@ -31,43 +38,15 @@ class ChatAdapter(
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int
     ) {
-        val currentMessage = messageList[position]
+        val item = messageList[position]
 
-        if(holder.javaClass == SenderViewHolder::class.java) {
-            val viewHolder = holder as SenderViewHolder
-            viewHolder.binding.chatItemSenderText.text = currentMessage.message
-
-            val sb = StringBuilder()
-            sb.append(currentMessage.time)
-            val time = sb.substring(14,24)
-
-            viewHolder.binding.chatItemSenderDate.text = time
-
-            viewHolder.binding.chatItemSenderContainer.setOnClickListener {
-                onClickItem(
-                    position
-                )
-            }
+        if (holder.javaClass == SenderViewHolder::class.java) {
+            holder as SenderViewHolder
+            holder.bind(item)
         } else {
-            val viewHolder = holder as ReceiverViewHolder
-            viewHolder.binding.chatItemReceiverText.text = currentMessage.message
-
-            val sb = StringBuilder()
-            sb.append(currentMessage.time)
-            val time = sb.substring(14,24)
-
-            viewHolder.binding.chatItemRecevierDate.text = time
-
-            viewHolder.binding.chatItemReceiverContainer.setOnClickListener {
-                onClickItem(
-                    position
-                )
-            }
+            holder as ReceiverViewHolder
+            holder.bind(item)
         }
-    }
-
-    enum class ItemViewType {
-        SENDER, RECEIVER
     }
 
     override fun getItemViewType(
@@ -86,15 +65,43 @@ class ChatAdapter(
         return messageList.size
     }
 
-    class SenderViewHolder (
+    class SenderViewHolder(
         val binding: ChatItemSenderBinding,
         private val onClickItem: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Message) = with(binding) {
+            val sb = StringBuilder()
+            sb.append(item.time)
+            val time = sb.substring(14, 24)
+
+            chatItemSenderDate.text = time
+            chatItemSenderText.text = item.message
+
+            chatItemSenderContainer.setOnClickListener {
+                onClickItem(
+                    position
+                )
+            }
+        }
     }
 
     class ReceiverViewHolder (
         val binding: ChatItemReceiverBinding,
         private val onClickItem: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Message) = with(binding) {
+            val sb = StringBuilder()
+            sb.append(item.time)
+            val time = sb.substring(14,24)
+
+            chatItemRecevierDate.text = time
+            chatItemReceiverText.text = item.message
+
+            chatItemReceiverContainer.setOnClickListener {
+                onClickItem(
+                    position
+                )
+            }
+        }
     }
 }

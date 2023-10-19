@@ -36,8 +36,8 @@ class ChatActivity : AppCompatActivity() {
         ) = Intent(context, ChatActivity::class.java).apply{
             putExtra(EXTRA_ER_MODEL, erModel)
             putExtra(EXTRA_ER_POSITION, position)
-
         }
+
     }
 
     private lateinit var binding: ChatActivityBinding
