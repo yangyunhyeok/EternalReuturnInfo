@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 
-class FindDuoActivity : Fragment() {
+class FindDuoFragment : Fragment() {
     companion object {
-        fun newInstance() = FindDuoActivity()
+        fun newInstance() = FindDuoFragment()
 
     }
     private var _binding: FindDuoFragmentBinding? = null

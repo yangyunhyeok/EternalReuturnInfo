@@ -89,8 +89,7 @@
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-
+        android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
 
         android:layout_marginStart="20dp"
