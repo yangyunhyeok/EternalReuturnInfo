@@ -36,12 +36,18 @@ class FindDuoFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        val dialogBtn : Button = findduoRegisterBtn
+        val dialogServerBtn : Button = findduoServerBtn
+        val dialogGenderBtn : Button = findduoGenderBtn
+        val dialogTierBtn : Button = findduoTierBtn
+        val dialogMostBtn : Button = findduoMostBtn
 
-        dialogBtn.setOnClickListener { showDialog() }
+        dialogServerBtn.setOnClickListener { showServerDialog() }
+        dialogGenderBtn.setOnClickListener { showGenderDialog() }
+        dialogTierBtn.setOnClickListener { showTierDialog() }
+        dialogMostBtn.setOnClickListener { showMostDialog() }
     }
 
-    private fun showDialog() {
+    private fun showServerDialog() {
         val mSelectedServer:ArrayList<String> = arrayListOf()
 
         val builder:AlertDialog.Builder =AlertDialog.Builder(requireContext())
@@ -68,7 +74,118 @@ class FindDuoFragment : Fragment() {
                 finalSelection = finalSelection +"\n" + item
             }
 
-            Toast.makeText(requireContext(),"선택된 아이템은 ${finalSelection}",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"${finalSelection}",Toast.LENGTH_SHORT).show()
+        }
+
+        builder.setNegativeButton("취소"){
+            dialog,p1->dialog.cancel()
+        }
+
+        val alertDialog:AlertDialog = builder.create()
+        alertDialog.show()
+    }
+    private fun showGenderDialog() {
+        val mSelectedServer:ArrayList<String> = arrayListOf()
+
+        val builder:AlertDialog.Builder =AlertDialog.Builder(requireContext())
+
+        builder.setTitle("해당 사항을 선택해 주세요")
+
+        builder.setMultiChoiceItems(R.array.gender,null){
+                _, which, isChecked->
+
+            val server:Array<String> = resources.getStringArray(R.array.gender)
+
+            if(isChecked){
+                mSelectedServer.add(server[which])
+            }else{
+                mSelectedServer.remove(server[which])
+            }
+        }
+
+        builder.setPositiveButton("완료"){
+            p0,p1 ->
+            var finalSelection = ""
+
+            for(item: String in mSelectedServer){
+                finalSelection = finalSelection +"\n" + item
+            }
+
+            Toast.makeText(requireContext(),"${finalSelection}",Toast.LENGTH_SHORT).show()
+        }
+
+        builder.setNegativeButton("취소"){
+            dialog,p1->dialog.cancel()
+        }
+
+        val alertDialog:AlertDialog = builder.create()
+        alertDialog.show()
+    }
+    private fun showTierDialog() {
+        val mSelectedServer:ArrayList<String> = arrayListOf()
+
+        val builder:AlertDialog.Builder =AlertDialog.Builder(requireContext())
+
+        builder.setTitle("해당 사항을 선택해 주세요")
+
+        builder.setMultiChoiceItems(R.array.tier,null){
+                _, which, isChecked->
+
+            val server:Array<String> = resources.getStringArray(R.array.tier)
+
+            if(isChecked){
+                mSelectedServer.add(server[which])
+            }else{
+                mSelectedServer.remove(server[which])
+            }
+        }
+
+        builder.setPositiveButton("완료"){
+            p0,p1 ->
+            var finalSelection = ""
+
+            for(item: String in mSelectedServer){
+                finalSelection = finalSelection +"\n" + item
+            }
+
+            Toast.makeText(requireContext(),"${finalSelection}",Toast.LENGTH_SHORT).show()
+        }
+
+        builder.setNegativeButton("취소"){
+            dialog,p1->dialog.cancel()
+        }
+
+        val alertDialog:AlertDialog = builder.create()
+        alertDialog.show()
+    }
+    private fun showMostDialog() {
+        val mSelectedServer:ArrayList<String> = arrayListOf()
+
+        val builder:AlertDialog.Builder =AlertDialog.Builder(requireContext())
+
+        builder.setTitle("해당 사항을 선택해 주세요")
+
+        builder.setMultiChoiceItems(R.array.most,null){
+                _, which, isChecked->
+
+            val server:Array<String> = resources.getStringArray(R.array.most)
+
+            if(isChecked){
+                mSelectedServer.add(server[which])
+            }else{
+                mSelectedServer.remove(server[which])
+            }
+        }
+
+        builder.setPositiveButton("완료"){
+            p0,p1 ->
+            var finalSelection = ""
+
+            for(item: String in mSelectedServer){
+                finalSelection = finalSelection +"\n" + item
+            }
+
+            Toast.makeText(requireContext(),"${finalSelection}",Toast.LENGTH_SHORT).show()
         }
 
         builder.setNegativeButton("취소"){

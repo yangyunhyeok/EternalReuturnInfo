@@ -1,4 +1,4 @@
-package com.erionna.eternalreturninfo.ui.activity.Intro
+package com.erionna.eternalreturninfo.ui.activity.intro
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,8 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.splash_activity)
 
         Handler().postDelayed({
-            val intent = Intent(baseContext, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
             finish()
         },2000)

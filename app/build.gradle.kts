@@ -52,12 +52,17 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+    // Coroutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Converter ( JSON 타입 결과를 객체로 매핑 )
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // okhttp3
-    implementation("com.squareup.okhttp3:logging-interceptor:4.5.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
