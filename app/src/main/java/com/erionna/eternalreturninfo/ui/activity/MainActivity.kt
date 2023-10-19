@@ -2,6 +2,7 @@ package com.erionna.eternalreturninfo.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MainActivityBinding
 import com.erionna.eternalreturninfo.ui.adapter.MainViewPagerAdapter
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.EternalReturnInfo)
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)

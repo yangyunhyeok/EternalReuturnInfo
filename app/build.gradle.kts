@@ -66,8 +66,12 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-database-ktx")
 
+    // PowerSpinner
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.github.skydoves:powerspinner:1.2.7")
-    // PowerSpinner
+
+    //SplashScreen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 }

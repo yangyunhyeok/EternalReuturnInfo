@@ -12,4 +12,28 @@
     <string name="Announcement">공지사항</string>
     <string name="Patch_notes">패치노트</string>
     <string name="Event">이벤트</string>
+    서버 티어 성별 선호실험체
+    <string-array name="server">
+        <item>KR</item>
+        <item>EU</item>
+    </string-array>
+    
+    <string-array name="tier">
+        <item>Bronze</item>
+        <item>Silver</item>
+        <item>Gold</item>
+        <item>Platinum</item>
+        <item>Diamond</item>
+    </string-array>
+
+    <string-array name="sex">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="most">
+        <item>쇼우</item>
+        <item>쇼이치</item>
+        <item>헤이즈</item>
+    </string-array>
 </resources>
