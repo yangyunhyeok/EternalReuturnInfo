@@ -7,9 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
@@ -20,14 +18,11 @@ import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_TIME
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -67,7 +62,6 @@ class ChatActivity : AppCompatActivity() {
 
     private val chatAdapter by lazy {
         ChatAdapter(
-            this,
             messageList,
             onClickItem = { position ->
                 val imm =
@@ -144,7 +138,7 @@ class ChatActivity : AppCompatActivity() {
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
-                    binding.chatRecycler.scrollToPosition(messageList.size - 1) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
 
                     messageList.clear()
 
