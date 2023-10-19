@@ -77,7 +77,8 @@ class BoardListViewModel() : ViewModel(){
 
         val currentList = boardList.value.orEmpty().toMutableList()
         currentList.add(item)
-        _boardList.value = currentList
+        val sortedList = currentList.sortedBy { it.date }
+        _boardList.value = sortedList.toMutableList()
     }
 
     fun addSearchBoard(item: BoardModel) {
@@ -87,7 +88,8 @@ class BoardListViewModel() : ViewModel(){
 
         val currentList = searchBoardList.value.orEmpty().toMutableList()
         currentList.add(item)
-        _searchBoardList.value = currentList
+        val sortedList = currentList.sortedBy { it.date }
+        _searchBoardList.value = sortedList.toMutableList()
     }
 
     fun clearSearchBoard(){
@@ -148,7 +150,6 @@ class BoardListViewModel() : ViewModel(){
 
         val currentList =  boardList.value.orEmpty().toMutableList()
         currentList.removeAt(findIndex(item))
-        Log.d("currentList", currentList.toString())
         _boardList.value = currentList
     }
 

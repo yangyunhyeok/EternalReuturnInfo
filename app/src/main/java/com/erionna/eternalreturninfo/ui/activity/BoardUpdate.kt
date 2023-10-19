@@ -35,7 +35,7 @@ class BoardUpdate : AppCompatActivity() {
             val title = boardAddEtTitle.text.toString()
             val content = boardAddEtContent.text.toString()
 
-            val updateBoard = board?.let { it1 -> BoardModel(it1.id, title, content, board.author, board.date, board.comments) }
+            val updateBoard = board?.let { it1 -> BoardModel(it1.id, title, content, board.author, board.date, board.comments, board.views) }
 
             if (board != null) {
                 FBRef.postRef.child(board.id).setValue(updateBoard)

@@ -42,22 +42,25 @@ class BoardPost : AppCompatActivity() {
     }
 
     private var board: BoardModel? = null
+    private var id: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BoardPostActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initDataload()
+
         initView()
         initModel()
     }
 
-    private fun initView() = with(binding) {
+    private fun initDataload() = with(binding){
 
         boardPostRvComment.adapter = listAdapter
         boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPost)
 
-        val id = intent.getStringExtra("ID") ?: ""
+        id = intent.getStringExtra("ID") ?: ""
 
         FBRef.postRef.child(id).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -146,7 +149,13 @@ class BoardPost : AppCompatActivity() {
         }else{
             boardPostIbCommentProfile.load(BoardSingletone.LoginUser().userImage)
         }
+    }
 
+    private fun initView() = with(binding) {
+
+        binding.boardPostProgressbar.visibility = View.GONE
+        binding.boardPostCommentLayout.visibility = View.VISIBLE
+        binding.nestedScrollView.visibility = View.VISIBLE
 
         listAdapter.setOnItemClickListener(object :
             BoardCommentRecyclerViewAdpater.OnItemClickListener {

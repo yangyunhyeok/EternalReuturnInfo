@@ -5,15 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.erionna.eternalreturninfo.R
-import com.erionna.eternalreturninfo.databinding.BoardPostActivityBinding
 import com.erionna.eternalreturninfo.databinding.BoardSearchActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.FBRef
@@ -22,6 +17,7 @@ import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModelFactory
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 
@@ -36,6 +32,8 @@ class BoardSearch : AppCompatActivity() {
     private val listAdapter by lazy {
         BoardRecyclerViewAdapter()
     }
+
+    private var postCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,35 +61,12 @@ class BoardSearch : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 if (event.action == KeyEvent.ACTION_DOWN) {
 
+                    postCount = 0
                     boardViewModel.clearSearchBoard()
 
                     val searchText = boardSearchEtSearch.text.toString()
-                    val query = FBRef.postRef.orderByChild("title").startAt(searchText).endAt(searchText + "\uf8ff")
+                    Search(searchText)
 
-                    query.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                            boardSearchTvPostCount.visibility = View.VISIBLE
-                            boardSearchTvPostCount.text = dataSnapshot.childrenCount.toString() + " Post"
-
-                            if(dataSnapshot.exists()){
-                                boardSearchTvResult.visibility = View.INVISIBLE
-
-                                for (snapshot in dataSnapshot.children) {
-                                    val searchBoard = snapshot.getValue<BoardModel>()
-                                    if (searchBoard != null) {
-                                        boardViewModel.addSearchBoard(searchBoard)
-                                    }
-                                }
-                            }else{
-                                boardSearchTvResult.visibility = View.VISIBLE
-                            }
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            // 검색이 실패한 경우
-                        }
-                    })
                 }
                 true
             } else {
@@ -105,14 +80,18 @@ class BoardSearch : AppCompatActivity() {
                 FBRef.postRef.child(boardItem.id).addListenerForSingleValueEvent(object :
                     ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            val intent = Intent(this@BoardSearch, BoardDeleted::class.java)
-                            startActivity(intent)
-                        } else {
-                            val views = boardItem.views + 1
+                        if (dataSnapshot.exists()) {
+
+                            val board = dataSnapshot.getValue<BoardModel>()
+
+                            val views = board?.views?.plus(1)
                             FBRef.postRef.child(boardItem.id).child("views").setValue(views)
                             val intent = Intent(this@BoardSearch, BoardPost::class.java)
                             intent.putExtra("ID", boardItem.id)
+                            startActivity(intent)
+
+                        } else {
+                            val intent = Intent(this@BoardSearch, BoardDeleted::class.java)
                             startActivity(intent)
                         }
                     }
@@ -132,4 +111,47 @@ class BoardSearch : AppCompatActivity() {
             listAdapter.submitList(newBoardList.toMutableList())
         }
     }
+
+    fun Search(searchText: String)= with(binding){
+
+        val query = FBRef.postRef.orderByChild("title").startAt(searchText).endAt(searchText + "\uf8ff")
+        val query2 = FBRef.postRef.orderByChild("content").startAt(searchText).endAt(searchText + "\uf8ff")
+
+        SearchFirebase(query)
+        SearchFirebase(query2)
+
+        if(postCount == 0){
+            boardSearchTvResult.visibility = View.VISIBLE
+        }else{
+            boardSearchTvResult.visibility = View.INVISIBLE
+        }
+    }
+
+    fun SearchFirebase(query: Query)= with(binding){
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                boardSearchTvPostCount.visibility = View.VISIBLE
+                postCount = postCount + dataSnapshot.childrenCount.toInt()
+                boardSearchTvPostCount.text = postCount.toString() + " Post"
+
+                if(dataSnapshot.exists()){
+                    boardSearchTvResult.visibility = View.INVISIBLE
+
+                    for (snapshot in dataSnapshot.children) {
+                        val searchBoard = snapshot.getValue<BoardModel>()
+                        if (searchBoard != null) {
+                            boardViewModel.addSearchBoard(searchBoard)
+                        }
+                    }
+                }else{
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // 검색이 실패한 경우
+            }
+        })
+    }
+
 }
