@@ -281,7 +281,7 @@ class ChatListFragment : Fragment() {
         Log.d("#choco5732", "$randomImageResource")
 
         database.child("user").child(uId)
-            .setValue(ERModel(profilePicture = randomImageResource, email = email, password = password, name = name, uid = uId))
+            .setValue(ERModel(email = email, password = password, name = name, uid = uId))
     }
 
     // 라이브데이터 Observing

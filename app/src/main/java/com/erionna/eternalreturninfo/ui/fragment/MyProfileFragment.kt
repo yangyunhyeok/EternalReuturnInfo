@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -72,5 +74,10 @@ class MyProfileFragment : Fragment() {
             "레온" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
         }
     }
+
+    fun GooglePatch(){
+
+    }
+
 
 }

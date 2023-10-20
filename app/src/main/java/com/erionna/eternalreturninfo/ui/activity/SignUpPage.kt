@@ -12,9 +12,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.SignupInformationActivityBinding
+import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.SignUpData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -26,6 +29,7 @@ class SignUpPage : AppCompatActivity() {
     private val db = Firebase.firestore
     private lateinit var selectedImageURI: Uri
     private val PICK_IMAGE = 1111
+    private lateinit var database: DatabaseReference
     val storage = Firebase.storage
 
     @SuppressLint("ResourceType")
@@ -33,8 +37,8 @@ class SignUpPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = SignupInformationActivityBinding.inflate(layoutInflater)
         auth = Firebase.auth
+        database = Firebase.database.reference
         setContentView(binding.root)
-
 
         binding.signupProfileImg.setOnClickListener {
             selectProfile()
@@ -96,6 +100,7 @@ class SignUpPage : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             upload(uri, email, password, nickname, character)
+
                             Toast.makeText(this, "$character", Toast.LENGTH_SHORT).show()
                             finish()
                             var intent = Intent(this, MainActivity::class.java)
@@ -167,10 +172,13 @@ class SignUpPage : AppCompatActivity() {
                             profile = uri.toString()
                         )
                     )
+                    database.child("user").child(auth.uid!!)
+                        .setValue(ERModel(profilePicture = uri.toString(), email = email, password = password, name = nickname, uid = auth.uid!!))
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
             .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
+
 }
 
