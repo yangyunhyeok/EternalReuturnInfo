@@ -41,19 +41,16 @@ class ChatListAdapter(
         holder.bind(item)
     }
 
-   inner class ViewHolder(
+   class ViewHolder(
         private val binding: ChatListItemBinding,
         private val onClickItem: (Int, ERModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-       private var sb = StringBuilder()
-
         fun bind(item: ERModel) = with(binding) {
             chatListName.text = item.name
-            chatListProfilePicture.load(item.profilePicture!!)
+            chatListProfilePicture.load(item.profilePicture.toString())
             chatListMsg.text = item.msg
             chatListDate.text = item.time
-
 
             chatListContainer.setOnClickListener {
                 onClickItem(
