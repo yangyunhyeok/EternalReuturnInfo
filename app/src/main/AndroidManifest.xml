@@ -13,10 +13,28 @@
         android:theme="@style/Theme.EternalReturnInfo"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.BoardDeleted"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.BoardSearch"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.BoardUpdate"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.BoardPost"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.BoardAdd"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.SignUpPage"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SignUpImagePage"
             android:exported="false" />
         <activity
             android:name=".ui.activity.LoginPage"

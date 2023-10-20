@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.erionna.eternalreturninfo"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.erionna.eternalreturninfo"
@@ -63,10 +63,16 @@ dependencies {
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
+    //Coil
+    implementation("io.coil-kt:coil:0.10.0")
+    //ViewModel
+    implementation("androidx.activity:activity-ktx:1.8.0")
+    implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation("io.github.muddz:styleabletoast:2.4.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }
