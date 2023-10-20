@@ -33,7 +33,7 @@ class ChatActivity : AppCompatActivity() {
             context: Context,
             position: Int,
             erModel: ERModel
-        ) = Intent(context, ChatActivity::class.java).apply{
+        ) = Intent(context, ChatActivity::class.java).apply {
             putExtra(EXTRA_ER_MODEL, erModel)
             putExtra(EXTRA_ER_POSITION, position)
         }
@@ -41,10 +41,12 @@ class ChatActivity : AppCompatActivity() {
         fun newIntent(
             context: Context,
             erModel: ERModel
-        ) : Intent {
-            Intent(context, ChatActivity::class.java)
+        ): Intent {
+            val intent = Intent(context, ChatActivity::class.java).apply {
+                putExtra(EXTRA_ER_MODEL, erModel)
+            }
+            return intent
         }
-
     }
 
     private lateinit var binding: ChatActivityBinding
@@ -102,7 +104,6 @@ class ChatActivity : AppCompatActivity() {
         messageList = ArrayList()
         binding.chatRecycler.adapter = chatAdapter
         binding.chatRecycler.layoutManager = LinearLayoutManager(this)
-//        binding.chatRecycler.scrollToPosition(messageList.size -1)
 
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
@@ -181,7 +182,6 @@ class ChatActivity : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             })
-//        binding.chatRecycler.scrollToPosition(messageList.size - 1)
     }
 
     override fun onBackPressed() {

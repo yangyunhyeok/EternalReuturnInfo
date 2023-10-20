@@ -20,6 +20,7 @@ import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.adapter.BoardCommentRecyclerViewAdpater
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModelFactory
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -81,6 +82,7 @@ class BoardPost : AppCompatActivity() {
 
                             if(snapshot.exists()){
                                 val user = snapshot.getValue<ERModel>()
+                                Log.d("choco5733" , "누구냐 넌 : {$user}")
                                 boardPostTvUser.text = user?.name
 
                                 if(user?.profilePicture?.isEmpty() == true){
@@ -113,19 +115,24 @@ class BoardPost : AppCompatActivity() {
                                         }
                                         popup.show()
                                     }
-                                }else{
+                                } else {
                                     boardPostIbMenu.visibility = View.INVISIBLE
 
                                     boardPostIbProfile.setOnClickListener {
                                         val customDialog = BoardDialog(this@BoardPost, user?.uid ?: "", user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
-                                                // TODO : 채팅창 이동되는 기능 구현(재용)
-                                                ChatActivity.newIntent()
-
-                                                Toast.makeText(this@BoardPost, "채팅창 이동", Toast.LENGTH_SHORT).show()
+                                                startActivity(
+                                                    ChatActivity.newIntent(
+                                                        this@BoardPost,
+                                                        ERModel(
+                                                            uid = user?.uid,
+                                                            profilePicture = user?.profilePicture,
+                                                            name = user?.name
+                                                        )
+                                                    )
+                                                )
                                             }
                                         })
-
                                         customDialog.show()
                                     }
 

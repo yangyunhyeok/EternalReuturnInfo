@@ -64,7 +64,7 @@ class ChatListFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val position = result.data?.getIntExtra(EXTRA_ER_POSITION, -1)
                 val message = result.data?.getStringExtra(EXTRA_MESSAGE)
-                val time =result.data?.getStringExtra(EXTRA_TIME)
+                val time = result.data?.getStringExtra(EXTRA_TIME)
 
                 Log.d("choco5733 : 돌아왔을때", "$message $time $position")
                 viewModel.modifyItem(position!!, message!!, time!!)
@@ -111,15 +111,14 @@ class ChatListFragment : Fragment() {
 
         database = Firebase.database.reference
         // 회원 정보 가져오기
-        database.child("user").addValueEventListener(object: ValueEventListener{
+        database.child("user").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                val receiveUid = ""
-                var senderRoom = auth.currentUser?.uid + receiveUid
+                var senderRoom : String
 
-                for(postSnapshot in snapshot.children) {
+                for (postSnapshot in snapshot.children) {
                     val currentUser = postSnapshot.getValue(ERModel::class.java)
-                    senderRoom =  auth.currentUser?.uid + currentUser?.uid
+                    senderRoom = auth.currentUser?.uid + currentUser?.uid
 
                     var message = Message()
                     var convertTime = ""
@@ -127,21 +126,26 @@ class ChatListFragment : Fragment() {
 
                     database.child("chats").child(senderRoom).child("messages")
                         .get().addOnSuccessListener {
-                            for(child in it.children) {
+                            for (child in it.children) {
                                 message = child.getValue(Message::class.java)!!
                             }
                             Log.d("choco5733 in msg", "$message")
 
-                            if(auth.currentUser?.uid != currentUser?.uid) {
+                            if (auth.currentUser?.uid != currentUser?.uid) {
 //                                            yyyy년 MM월 dd일 a hh시 mm분
                                 if (message.time != "") {
                                     sb.append(message.time)
-                                    convertTime = sb.substring(0,13)
+                                    convertTime = sb.substring(0, 13)
                                 } else {
                                     convertTime = message.time!!
                                 }
 
-                                viewModel.addUser(currentUser?.copy(msg = "${message.message}", time = convertTime))
+                                viewModel.addUser(
+                                    currentUser?.copy(
+                                        msg = "${message.message}",
+                                        time = convertTime
+                                    )
+                                )
                             } else {
                                 // 현재 접속자 상단에 표시
                                 binding.chatListTitle.setText(" ${currentUser?.name} 님 반갑습니다!")
@@ -152,7 +156,7 @@ class ChatListFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 // 가져오기 실패 시
-                Toast.makeText(requireContext(),"가져오기 실패",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "가져오기 실패", Toast.LENGTH_SHORT).show()
             }
         })
     }
