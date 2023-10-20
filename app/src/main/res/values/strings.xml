@@ -13,6 +13,9 @@
     <string name="board_post_add">게시글 작성</string>
     <string name="board_post_finish">작성 완료</string>
     <string name="board_post">게시글</string>
+    <string name="board_search">검색</string>
+    <string name="board_deleted_message">해당 게시글이 삭제되었습니다.</string>
+    <string name="board_ok">확인</string>
     <string name="chat_enter_msg">메시지를 입력하세요.</string>
     <string name="chat_send">전송</string>
     <string name="chatlist_user_name">장재용</string>
@@ -24,4 +27,12 @@
     <string name="Announcement">공지사항</string>
     <string name="Patch_notes">패치노트</string>
     <string name="Event">이벤트</string>
+    <string name="menu_sign_up">회원가입</string>
+    <string name="log_out_toast">로그아웃</string>
+    <string name="chat_list_msg">최근에 대화한 내용이 없습니다.</string>
+    <string name="chat_item_receiver_msg">받는 메시지</string>
+    <string name="chat_item_receiver_date">2023-01-12 14시 51분</string>
+    <string name="dialog_sign_in_email_hint">email</string>
+    <string name="dialog_sign_in_password_hint">password</string>
+    <string name="dialog_sign_in_for_text_id">jaeyong@gmail.com</string>
 </resources>

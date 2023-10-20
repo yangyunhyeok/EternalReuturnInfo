@@ -9,7 +9,7 @@ import com.erionna.eternalreturninfo.databinding.ChatListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 
 class ChatListAdapter(
-    private val onClickItem: (Int, ERModel) -> Unit,
+    private val onClickItem: (Int, ERModel) -> Unit
 ) : ListAdapter<ERModel, ChatListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<ERModel>() {
         override fun areItemsTheSame(
@@ -27,6 +27,7 @@ class ChatListAdapter(
         }
     }
 ) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListAdapter.ViewHolder {
         return ViewHolder(
             ChatListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
@@ -39,15 +40,19 @@ class ChatListAdapter(
         holder.bind(item)
     }
 
-    class ViewHolder(
+   inner class ViewHolder(
         private val binding: ChatListItemBinding,
         private val onClickItem: (Int, ERModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
+       private var sb = StringBuilder()
+
         fun bind(item: ERModel) = with(binding) {
+            chatListName.text = item.name
+            chatListProfilePicture.setImageResource(item.profilePicture!!)
             chatListMsg.text = item.msg
-            chatListName.text = item.userName
-            chatListProfilePicture.setImageResource(item.profilePicture)
+            chatListDate.text = item.time
+
 
             chatListContainer.setOnClickListener {
                 onClickItem(

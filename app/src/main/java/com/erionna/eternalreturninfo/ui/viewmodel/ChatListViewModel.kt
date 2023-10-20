@@ -1,11 +1,13 @@
 package com.erionna.eternalreturninfo.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.User
 import java.util.concurrent.atomic.AtomicLong
 
 class ChatListViewModel(
@@ -14,19 +16,52 @@ class ChatListViewModel(
     private val _list: MutableLiveData<List<ERModel>> = MutableLiveData()
     val list: LiveData<List<ERModel>> get() = _list
 
-    init {
-        _list.value = arrayListOf<ERModel>().apply {
-            for (i in 0 .. 10) {
-                add(
-                    ERModel(
-                        id = idGenerate.getAndIncrement(),
-                        userName = "choco5732",
-                        msg = "근태님 버스 감사합니다.. 저도 나딘만 팔까봐요 ㅎㅎ..",
-                        profilePicture = R.drawable.ic_jaekie
-                    )
-                )
-            }
+    fun addUser(
+        item: ERModel?
+    ) {
+        if (item == null) {
+            return
         }
+
+        val currentList = list.value.orEmpty().toMutableList()
+        _list.value = currentList.apply {
+            add(
+                item.copy(
+                    id = idGenerate.getAndIncrement()
+                )
+            )
+        }
+    }
+
+    fun clearList() {
+        val currentList = list.value.orEmpty().toMutableList()
+        currentList.clear()
+        _list.value = currentList
+    }
+
+    fun deleteUser(user: String) {
+        val currentList = list.value.orEmpty().toMutableList()
+        currentList.remove(ERModel(name=user))
+        _list.value = currentList
+    }
+
+    fun modifyItem(position: Int, message: String, time: String) {
+        val currentList = list.value.orEmpty().toMutableList()
+
+        currentList[position].msg = message
+
+        val sb = StringBuilder()
+        if (time != "") {
+            sb.append(time)
+            currentList[position].time = sb.substring(0,13)
+        } else {
+            currentList[position].time = ""
+        }
+
+        Log.d("choco5733 : 뷰모델 ", "${currentList[position]}")
+
+        _list.value = currentList
+
     }
 }
 

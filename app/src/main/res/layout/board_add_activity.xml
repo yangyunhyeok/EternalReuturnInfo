@@ -7,7 +7,7 @@
     android:background="@color/dark_navy"
     tools:context=".ui.activity.BoardAdd">
 
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="67dp"
@@ -31,7 +31,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-    </Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <View
         android:id="@+id/view"
@@ -101,6 +101,7 @@
                 android:hint="@string/board_content_message"
                 android:background="@android:color/transparent"
                 android:inputType="textMultiLine"
+                android:lineSpacingExtra="8dp"
                 android:textColorHint="@color/light_gray"
                 android:textSize="16sp"
                 android:textColor="@color/white"
