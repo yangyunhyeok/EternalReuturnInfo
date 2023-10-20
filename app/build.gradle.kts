@@ -75,6 +75,8 @@ dependencies {
 
     implementation("io.github.muddz:styleabletoast:2.4.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.1.2")
