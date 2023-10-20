@@ -1,19 +1,16 @@
 package com.erionna.eternalreturninfo.ui.fragment
 
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
+import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
-import com.erionna.eternalreturninfo.model.SignUpData
-import com.erionna.eternalreturninfo.ui.activity.LoginPage
-import com.erionna.eternalreturninfo.ui.activity.MainActivity
+
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,7 +21,6 @@ class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private var _binding: MyprofileFragmentBinding? = null
     private var auth: FirebaseAuth? = null
-    var firestore: FirebaseFirestore? = null
     var mGoogleSignInClient: GoogleSignInClient? = null
     var db = Firebase.firestore
 
@@ -40,9 +36,6 @@ class MyProfileFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         var uid = auth?.uid.toString()
         Patch(uid)
-        Log.d("UID", "${uid}")
-
-        // Inflate the layout for this fragment
         return binding.root
 
     }
@@ -52,9 +45,11 @@ class MyProfileFragment : Fragment() {
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
+                    var uri = Uri.parse(document["profile"].toString())
                     binding.myprofileEmailTv.text = document["email"].toString()
                     binding.myprofileNicknameTv.text = document["nickName"].toString()
                     binding.myprofileMycharacterTv.text = document["character"].toString()
+                    Glide.with(this).load(uri).into(binding.myprofileProfileImg);
                     ImgPacth(document["character"].toString())
                     Log.d("데이터", "${document.data}")
                 } else {
@@ -77,4 +72,5 @@ class MyProfileFragment : Fragment() {
             "레온" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
         }
     }
+
 }

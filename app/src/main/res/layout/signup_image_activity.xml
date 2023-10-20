@@ -10,7 +10,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/signupimg_profile_img"
+        app:layout_constraintBottom_toTopOf="@+id/signup_profile_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signupimg_line_view">
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/signupimg_profile_img"
+                android:id="@+id/signup_profile_img"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="100dp"
@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/signupimg_profile_tv"
+                android:id="@+id/signup_profile_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -42,7 +42,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signupimg_profile_img" />
+                app:layout_constraintTop_toBottomOf="@+id/signup_profile_img" />
 
             <Button
                 android:id="@+id/signupimg_next_btn"
@@ -58,7 +58,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signupimg_profile_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/signup_profile_tv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
