@@ -284,7 +284,7 @@ class ChatListFragment : Fragment() {
             .setValue(ERModel(profilePicture = randomImageResource, email = email, password = password, name = name, uid = uId))
     }
 
-    // 라이브데이터 관측
+    // 라이브데이터 Observing
     private fun initModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
             chatListAdapter.submitList(it)
