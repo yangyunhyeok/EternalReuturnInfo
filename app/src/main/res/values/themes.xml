@@ -6,4 +6,12 @@
     </style>
 
     <style name="Theme.EternalReturnInfo" parent="Base.Theme.EternalReturnInfo" />
+
+    <style name="ThemeToolbar" parent="Theme.AppCompat.Light">
+
+        <!-- color of the menu overflow icon -->
+        <item name="android:textColorSecondary">@color/white</item>
+
+    </style>
+
 </resources>
