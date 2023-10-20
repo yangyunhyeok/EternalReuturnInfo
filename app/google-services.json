@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "213803630371",
-    "firebase_url": "https://eternalreturninfo-c16bf-default-rtdb.firebaseio.com",
-    "project_id": "eternalreturninfo-c16bf",
-    "storage_bucket": "eternalreturninfo-c16bf.appspot.com"
+    "project_number": "292538224573",
+    "firebase_url": "https://eternalreturninfo-default-rtdb.firebaseio.com",
+    "project_id": "eternalreturninfo",
+    "storage_bucket": "eternalreturninfo.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:213803630371:android:4fc5839dd7508104449696",
+        "mobilesdk_app_id": "1:292538224573:android:9f7cab9562d3aeb8864cd4",
         "android_client_info": {
           "package_name": "com.erionna.eternalreturninfo"
         }
@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC6tV1bkESaPGV5-C47oLDQxCAgGuegtUw"
+          "current_key": "AIzaSyAAyx3KkitSZzqoMOKhnlhYjD4dViiW5io"
         }
       ],
       "services": {
