@@ -8,6 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.retrofit.FBRef
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -58,9 +64,27 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoardModel) = with(binding) {
+
+            FBRef.userRef.child(item?.author.toString()).addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    if(snapshot.exists()){
+                        val author = snapshot.getValue<ERModel>()
+
+                        boardPostTvUser.text = author?.name
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
             //작성자가 관리자 아이디면 title [공지]로 바꾸는 코드 추가 + 공지 고정하기..?
             boardPostTvTitle.text = "[일반]  " + item.title
-            boardPostTvUser.text = item.author?.user
+
 
             boardPostTvDate.text = formatTimeOrDate(item.date)
 

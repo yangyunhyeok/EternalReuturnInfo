@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.api.load
 import com.erionna.eternalreturninfo.databinding.ChatListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 
@@ -50,7 +50,7 @@ class ChatListAdapter(
 
         fun bind(item: ERModel) = with(binding) {
             chatListName.text = item.name
-//            chatListProfilePicture.setImageResource(item.profilePicture!!)
+            chatListProfilePicture.load(item.profilePicture!!)
             chatListMsg.text = item.msg
             chatListDate.text = item.time
 

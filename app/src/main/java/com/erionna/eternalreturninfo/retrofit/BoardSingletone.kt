@@ -1,52 +1,45 @@
 package com.erionna.eternalreturninfo.retrofit
 
+import android.util.Log
 import com.erionna.eternalreturninfo.model.BoardModel
-import com.erionna.eternalreturninfo.model.CommentModel
-import com.erionna.eternalreturninfo.model.UserModel
+import com.erionna.eternalreturninfo.model.ERModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import kotlin.math.log
 
 object BoardSingletone {
 
-    private val boardList: MutableList<BoardModel> = mutableListOf()
-    private val commentList: MutableList<CommentModel> = mutableListOf()
+    private var loginUser: ERModel = ERModel()
 
-
-    private val userList: MutableList<UserModel> = mutableListOf(
-        UserModel("user1", "https://mblogthumb-phinf.pstatic.net/MjAyMTAxMDZfMTcw/MDAxNjA5OTE2NjQ1NzM5.7KFfWIWTn0HQgLpwypBfk5OCsMuDNC_8dNAsRSBInpsg.3go5PasEPOgh9gwi71GuDB40b_yCOsjDYyTo5TjEdNMg.JPEG.miyampuzzy/EkDjSpXVgAIn_fJ.jpg?type=w800"),
-        UserModel("user2", "https://blog.kakaocdn.net/dn/cbiho5/btrqLUBuZ8T/QweFCSHv78KjZEG7lpx0Nk/img.jpg")
-    )
-
-    fun LoginUser(): UserModel {
-        return userList[0]
+    fun LoginUser(): ERModel {
+        return loginUser
     }
 
-    fun anotherUser(): UserModel {
-        return userList[1]
-    }
+    fun Login(){
 
-    fun addBoard(item: BoardModel){
-        boardList.add(item)
-    }
+        val uid = FirebaseAuth.getInstance().uid
 
-    fun initBoard(items: MutableList<BoardModel>){
-        boardList.addAll(items)
-    }
+        if (uid != null) {
+            FBRef.userRef.child(uid).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
 
-    fun removeBoard(item: BoardModel){
+                    if (snapshot.exists()) {
+                        val user = snapshot.getValue<ERModel>()
+                        if (user != null) {
+                            loginUser = user
+                        }
+                    }
+                }
 
-        fun findIndex(item: BoardModel?): Int {
-            val currentList = boardList.orEmpty().toMutableList()
-
-            val findTodo = currentList.find {
-                it.id == item?.id
-            }
-            return currentList.indexOf(findTodo)
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
         }
 
-        boardList.removeAt(findIndex(item))
-    }
-
-    fun removeBoard2(position: Int){
-        boardList.removeAt(position)
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import com.erionna.eternalreturninfo.databinding.BoardDialogBinding
 
@@ -13,7 +14,7 @@ interface DialogListener {
     fun onOKButtonClicked()
 }
 
-class BoardDialog(context: Context, private val user: String, private val dialogListener: DialogListener) : Dialog(context) {
+class BoardDialog(context: Context, val uid: String, val userName: String, private val dialogListener: DialogListener) : Dialog(context) {
 
     private lateinit var binding: BoardDialogBinding
 
@@ -25,9 +26,13 @@ class BoardDialog(context: Context, private val user: String, private val dialog
 
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.boardDialogMessage.text = "${user}님과 1:1 채팅을 하시겠습니까?"
+        binding.boardDialogMessage.text = "${userName}님과 1:1 채팅을 하시겠습니까?"
 
         binding.boardDialogBtnYes.setOnClickListener {
+
+            //uid 여기 있습니다!!
+            Log.d("uid", uid)
+
             dialogListener.onOKButtonClicked()
             dismiss()
         }

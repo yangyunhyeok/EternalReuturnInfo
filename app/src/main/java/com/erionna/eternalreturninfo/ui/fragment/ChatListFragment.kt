@@ -3,6 +3,7 @@ package com.erionna.eternalreturninfo.ui.fragment
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.renderscript.Sampler.Value
@@ -280,8 +281,11 @@ class ChatListFragment : Fragment() {
         val randomImageResource = imageResources[randomIndex]
         Log.d("#choco5732", "$randomImageResource")
 
+        val uri = Uri.parse("android.resource://" + "com.erionna.eternalreturninfo.ui.fragment" + "/" + randomImageResource)
+        val profilePicture = uri.toString()
+
         database.child("user").child(uId)
-            .setValue(ERModel(email = email, password = password, name = name, uid = uId))
+            .setValue(ERModel(profilePicture = profilePicture, email = email, password = password, name = name, uid = uId))
     }
 
     // 라이브데이터 Observing
