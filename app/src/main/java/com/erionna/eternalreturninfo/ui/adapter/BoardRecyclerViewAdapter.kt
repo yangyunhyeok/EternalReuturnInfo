@@ -8,6 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdapter.ViewHolder>(
 
@@ -16,7 +20,7 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
             oldItem: BoardModel,
             newItem: BoardModel
         ): Boolean {
-            return oldItem.title == newItem.title
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
@@ -54,20 +58,42 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoardModel) = with(binding) {
-            boardPostTvTitle.text = item.title
-            boardPostTvUser.text = item.user
-            boardPostTvDate.text = item.date
+            //작성자가 관리자 아이디면 title [공지]로 바꾸는 코드 추가 + 공지 고정하기..?
+            boardPostTvTitle.text = "[일반]  " + item.title
+            boardPostTvUser.text = item.author?.user
 
-            if(item.commentSize == 0){
+            boardPostTvDate.text = formatTimeOrDate(item.date)
+
+            if(item.comments.size == 0){
                 boardPostBtnComment.visibility = View.INVISIBLE
+            }else{
+                boardPostBtnComment.visibility = View.VISIBLE
+                boardPostBtnComment.text = item.comments.size.toString()
             }
-            boardPostBtnComment.text = item.commentSize.toString()
 
             itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(item)
             }
 
         }
+    }
+
+    fun formatTimeOrDate(postTime: Long): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+
+        val date1 = calendar.time
+
+        val simpleDateFormat: SimpleDateFormat
+        if (Date(postTime) > date1) {
+            simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        } else {
+            simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        }
+
+        return simpleDateFormat.format(Date(postTime))
     }
 
 }
