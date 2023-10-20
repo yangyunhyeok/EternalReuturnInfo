@@ -38,6 +38,13 @@ class ChatActivity : AppCompatActivity() {
             putExtra(EXTRA_ER_POSITION, position)
         }
 
+        fun newIntent(
+            context: Context,
+            erModel: ERModel
+        ) : Intent {
+            Intent(context, ChatActivity::class.java)
+        }
+
     }
 
     private lateinit var binding: ChatActivityBinding

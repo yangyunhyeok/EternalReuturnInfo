@@ -1,7 +1,6 @@
 package com.erionna.eternalreturninfo.ui.activity
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -120,6 +119,9 @@ class BoardPost : AppCompatActivity() {
                                     boardPostIbProfile.setOnClickListener {
                                         val customDialog = BoardDialog(this@BoardPost, user?.uid ?: "", user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
+                                                // TODO : 채팅창 이동되는 기능 구현(재용)
+                                                ChatActivity.newIntent()
+
                                                 Toast.makeText(this@BoardPost, "채팅창 이동", Toast.LENGTH_SHORT).show()
                                             }
                                         })
@@ -242,6 +244,4 @@ class BoardPost : AppCompatActivity() {
 
         return simpleDateFormat.format(Date(postTime))
     }
-
-
 }
