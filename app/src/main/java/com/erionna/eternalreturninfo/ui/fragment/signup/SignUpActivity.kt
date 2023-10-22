@@ -12,6 +12,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
 
 class SignUpActivity : AppCompatActivity() {
@@ -33,9 +34,9 @@ class SignUpActivity : AppCompatActivity() {
         binding = SignUpActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mAuth = Firebase.auth
+        mAuth = FirebaseAuth.getInstance()
         // db 초기화
-        mDbRef = Firebase.database.reference
+        mDbRef = FirebaseDatabase.getInstance().reference
         // mUID 초기화
         mUID = mAuth.currentUser?.uid ?: ""
 
@@ -63,7 +64,7 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(this@SignUpActivity, "회원가입 완료", Toast.LENGTH_SHORT).show()
                     val intent: Intent = Intent(this@SignUpActivity, LoginActivity::class.java)
                     startActivity(intent)
-                    addUserToDataBase(mServer, mGender, mTier, mMost, mUID)
+                 //   addUserToDataBase(mServer, mGender, mTier, mMost, mUID)
                     finish()
                 } else {
                     Toast.makeText(this@SignUpActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()

@@ -25,6 +25,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
@@ -57,9 +58,9 @@ class FindDuoFragment : Fragment() {
     ): View {
         _binding = FindDuoFragmentBinding.inflate(inflater, container, false)
 
-        mAuth = Firebase.auth
+        mAuth = FirebaseAuth.getInstance()
         // db 초기화
-        mDbRef = Firebase.database.reference
+        mDbRef = FirebaseDatabase.getInstance().reference
         // mUID 초기화
         mUID = mAuth.currentUser?.uid ?: ""
 
