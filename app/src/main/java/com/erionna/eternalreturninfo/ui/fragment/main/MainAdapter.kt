@@ -13,10 +13,11 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MainVideoItemBinding
 import com.erionna.eternalreturninfo.model.VideoModel
 
-class MainAdapter(private val context: Context) : RecyclerView.Adapter<MainAdapter.ItemViewHolder>() {
+class MainAdapter(private val context: Context) :
+    RecyclerView.Adapter<MainAdapter.ItemViewHolder>() {
     var items = ArrayList<VideoModel>()
 
-    fun itemClear(){
+    fun itemClear() {
         items.clear()
         notifyDataSetChanged()
     }
@@ -26,7 +27,8 @@ class MainAdapter(private val context: Context) : RecyclerView.Adapter<MainAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = MainVideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MainVideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(binding)
     }
 
@@ -43,7 +45,8 @@ class MainAdapter(private val context: Context) : RecyclerView.Adapter<MainAdapt
 
     }
 
-    inner class ItemViewHolder(var binding: MainVideoItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ItemViewHolder(var binding: MainVideoItemBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         var thumbNailImage: ImageView = binding.searchThumbnail
         var title: TextView = binding.searchTitle

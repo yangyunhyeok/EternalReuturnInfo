@@ -12,9 +12,12 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.User
+import com.erionna.eternalreturninfo.ui.fragment.main.MainAdapter
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -39,6 +42,14 @@ class FindDuoFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
 
     private var mUID = ""
+
+    private val linearManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private val adapter: FindduoAdapter by lazy {
+        FindduoAdapter(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +89,10 @@ class FindDuoFragment : Fragment() {
         findduoTierBtn.setOnClickListener { showTierDialog() }
         findduoMostBtn.setOnClickListener { showMostDialog() }
 
+        binding.findduoRecyclerview.layoutManager = linearManager
+        binding.findduoRecyclerview.adapter = adapter
 
+        loadAllUserDataFromFirebase()
     }
 
 
@@ -106,8 +120,8 @@ class FindDuoFragment : Fragment() {
             for (item: String in mSelectedServer) {
                 finalSelection = finalSelection + "\n" + item
             }
-            
-            updateUserInFirebase(finalSelection,"server")
+
+            updateUserInFirebase(finalSelection, "server")
 
             Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
         }
@@ -146,7 +160,7 @@ class FindDuoFragment : Fragment() {
                 finalSelection = finalSelection + "\n" + item
             }
 
-            updateUserInFirebase(finalSelection,"gender")
+            updateUserInFirebase(finalSelection, "gender")
 
             Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
         }
@@ -184,7 +198,7 @@ class FindDuoFragment : Fragment() {
                 finalSelection = finalSelection + "\n" + item
             }
 
-            updateUserInFirebase(finalSelection,"tier")
+            updateUserInFirebase(finalSelection, "tier")
 
             Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
         }
@@ -222,7 +236,7 @@ class FindDuoFragment : Fragment() {
                 finalSelection = finalSelection + "\n" + item
             }
 
-            updateUserInFirebase(finalSelection,"most")
+            updateUserInFirebase(finalSelection, "most")
 
             Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
         }
@@ -267,4 +281,43 @@ class FindDuoFragment : Fragment() {
                 }
             }
     }
+
+
+    private fun loadAllUserDataFromFirebase() {
+        // Firebase Realtime Database 경로
+        val databasePath = "userInfo"
+
+        // 데이터베이스에서 모든 사용자 정보 가져오기
+        mDbRef.child(databasePath).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val numberOfUsers = snapshot.childrenCount
+
+                binding.findduoTotalNumber.text = numberOfUsers.toString()
+
+                if (snapshot.exists()) {
+                    val usersList = ArrayList<User>()
+
+                    for (userSnapshot in snapshot.children) {
+                        val user = userSnapshot.getValue(User::class.java)
+                        user?.let { usersList.add(it) }
+                    }
+
+                    // RecyclerView 어댑터의 데이터 소스에 모든 사용자 정보 추가
+                    adapter.items.clear()
+                    adapter.items.addAll(usersList)
+                    // RecyclerView 갱신
+                    adapter.notifyDataSetChanged()
+                } else {
+                    // 데이터가 존재하지 않는 경우
+                    Log.d(TAG, "No user data found")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 데이터 가져오기가 실패한 경우
+                Log.e(TAG, "Data retrieval failed: $error")
+            }
+        })
+    }
+
 }

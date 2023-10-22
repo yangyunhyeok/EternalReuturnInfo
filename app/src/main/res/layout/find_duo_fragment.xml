@@ -29,15 +29,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/findduo_total_number"
-        android:layout_width="123dp"
-        android:layout_height="57dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="23dp"
-        android:ems="10"
-        android:hint="Total Number"
-        android:inputType="number"
+        android:text="111,111"
+        android:textSize="30dp"
         android:textColor="@color/highlight_color2"
         android:textColorHint="@color/highlight_color2"
         app:layout_constraintStart_toStartOf="parent"

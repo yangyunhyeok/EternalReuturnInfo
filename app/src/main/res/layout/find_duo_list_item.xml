@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/server"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="server"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            />
+            android:text="server"
+            android:textSize="20dp"
+            android:textColor="@color/text_color"
+            android:background="@color/gray"/>
 
         <TextView
             android:id="@+id/gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="gender"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            />
+            android:text="gender"
+            android:textSize="20dp"
+            android:textColor="@color/text_color"
+            android:background="@color/gray"/>
 
         <TextView
             android:id="@+id/tier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tier"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            />
+            android:text="tier"
+            android:textSize="20dp"
+            android:textColor="@color/text_color"
+            android:background="@color/gray"/>
 
         <TextView
             android:id="@+id/most"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="most"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            />
+            android:text="most"
+            android:textSize="20dp"
+            android:textColor="@color/text_color"
+            android:background="@color/gray"/>
 
     </LinearLayout>
 
