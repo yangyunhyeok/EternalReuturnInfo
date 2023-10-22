@@ -17,7 +17,7 @@
         <item>KR</item>
         <item>EU</item>
     </string-array>
-    
+
     <string-array name="tier">
         <item>Bronze</item>
         <item>Silver</item>

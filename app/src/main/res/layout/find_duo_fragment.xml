@@ -60,12 +60,12 @@
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="20dp"
         android:background="@color/highlight_color2"
         android:text="서버 선택"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/findduo_total_number" />
+        app:layout_constraintTop_toBottomOf="@+id/findduo_register_btn" />
 
     <Button
         android:id="@+id/findduo_gender_btn"
@@ -104,9 +104,22 @@
         app:layout_constraintStart_toEndOf="@+id/findduo_tier_btn"
         app:layout_constraintTop_toTopOf="@+id/findduo_tier_btn" />
 
+    <Button
+        android:id="@+id/findduo_register_btn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/highlight_color"
+        android:text="내 정보 등록"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findduo_total_number" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="409dp"
-        android:layout_height="487dp"
+        android:id="@+id/findduo_recyclerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
