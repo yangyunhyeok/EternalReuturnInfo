@@ -12,9 +12,15 @@ import coil.api.load
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostRvCommentItemBinding
 import com.erionna.eternalreturninfo.model.CommentModel
+import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
+import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.activity.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.DialogListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -70,48 +76,65 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
 
         fun bind(item: CommentModel) = with(binding) {
 
-            boardCommentTvUser.text = item.author?.user
+            FBRef.userRef.child(item?.author.toString()).addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    if(snapshot.exists()){
+                        val author = snapshot.getValue<ERModel>()
+
+                        boardCommentTvUser.text = author?.name
+
+                        if(author?.profilePicture?.isEmpty() == true){
+                            boardCommentIbProfile.setImageResource(R.drawable.ic_xiuk)
+                        }else{
+                            boardCommentIbProfile.load(author?.profilePicture)
+                        }
+
+                        //로그인한 사용자면 ibMenu 보여주기
+                        if (author?.uid == BoardSingletone.LoginUser().uid) {
+                            boardCommentIbMenu.visibility = View.VISIBLE
+                            boardCommentIbMenu.setOnClickListener {
+                                val popup = PopupMenu(binding.root.context, boardCommentIbMenu) // View 변경
+                                popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
+                                popup.setOnMenuItemClickListener { menu ->
+                                    when (menu.itemId) {
+                                        R.id.menu_comment_update -> {
+                                            onUpdateItemClickListener?.onUpdateItemClick(item, adapterPosition)
+                                        }
+                                        R.id.menu_comment_delete -> {
+                                            onDeleteItemClickListener?.onDeleteItemClick(item, adapterPosition)
+                                        }
+                                    }
+                                    false
+                                }
+                                popup.show()
+                            }
+                        } else {
+                            boardCommentIbMenu.visibility = View.INVISIBLE
+
+                            boardCommentIbProfile.setOnClickListener {
+                                val customDialog = BoardDialog(binding.root.context, author?.uid.toString(), author?.name.toString(), object : DialogListener {
+                                    override fun onOKButtonClicked() {
+                                        Toast.makeText(binding.root.context, "채팅창 이동", Toast.LENGTH_SHORT).show()
+                                    }
+                                })
+
+                                customDialog.show()
+                            }
+                        }
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
+
             boardCommentTvContent.text = item.content
             boardCommentTvDate.text = formatTimeOrDate(item.date)
-
-            if(item?.author?.userImage?.isEmpty() == true){
-                boardCommentIbProfile.setImageResource(R.drawable.ic_xiuk)
-            }else{
-                boardCommentIbProfile.load(item?.author?.userImage)
-            }
-
-            //로그인한 사용자면 ibMenu 보여주기
-            if (item.author?.user == BoardSingletone.LoginUser().user) {
-                boardCommentIbMenu.visibility = View.VISIBLE
-                boardCommentIbMenu.setOnClickListener {
-                    val popup = PopupMenu(binding.root.context, boardCommentIbMenu) // View 변경
-                    popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
-                    popup.setOnMenuItemClickListener { menu ->
-                        when (menu.itemId) {
-                            R.id.menu_comment_update -> {
-                                onUpdateItemClickListener?.onUpdateItemClick(item, adapterPosition)
-                            }
-                            R.id.menu_comment_delete -> {
-                                onDeleteItemClickListener?.onDeleteItemClick(item, adapterPosition)
-                            }
-                        }
-                        false
-                    }
-                    popup.show()
-                }
-            } else {
-                boardCommentIbMenu.visibility = View.INVISIBLE
-
-                boardCommentIbProfile.setOnClickListener {
-                    val customDialog = BoardDialog(binding.root.context, item.author?.user.toString(), object : DialogListener {
-                        override fun onOKButtonClicked() {
-                            Toast.makeText(binding.root.context, "채팅창 이동", Toast.LENGTH_SHORT).show()
-                        }
-                    })
-
-                    customDialog.show()
-                }
-            }
 
         }
 

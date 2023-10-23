@@ -13,6 +13,8 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindpwDialogBinding
 import com.erionna.eternalreturninfo.databinding.GoogleDialogBinding
 import com.erionna.eternalreturninfo.databinding.LoginActivityBinding
+import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -141,6 +143,8 @@ class LoginPage : AppCompatActivity() {
                         .addOnSuccessListener { document ->
                             if (document != null) {
                                 Toast.makeText(this, "로그인 완료", Toast.LENGTH_SHORT).show()
+
+                                BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             } else {

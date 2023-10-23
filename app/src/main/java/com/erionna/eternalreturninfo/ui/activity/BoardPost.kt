@@ -1,7 +1,6 @@
 package com.erionna.eternalreturninfo.ui.activity
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,11 +14,13 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardPostActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.CommentModel
+import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.adapter.BoardCommentRecyclerViewAdpater
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModelFactory
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -50,9 +51,12 @@ class BoardPost : AppCompatActivity() {
         setContentView(binding.root)
 
         initDataload()
-
         initView()
         initModel()
+
+        binding.boardPostProgressbar.visibility = View.GONE
+        binding.boardPostCommentLayout.visibility = View.VISIBLE
+        binding.nestedScrollView.visibility = View.VISIBLE
     }
 
     private fun initDataload() = with(binding){
@@ -70,54 +74,77 @@ class BoardPost : AppCompatActivity() {
 
                     boardPostTvTitle.text = "[일반]  " + board?.title
                     boardPostTvContent.text = board?.content
-                    boardPostTvUser.text = board?.author?.user
                     boardPostTvVisit.text = board?.views.toString()
 
-                    if(board?.author?.userImage?.isEmpty() == true){
-                        boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
-                    }else{
-                        boardPostIbProfile.load(board?.author?.userImage)
-                    }
 
-                    //수정 : 로그인 한 사용자 일 때
-                    if(board?.author?.user == BoardSingletone.LoginUser().user){
-                        boardPostIbMenu.visibility = View.VISIBLE
+                    FBRef.userRef.child(board?.author.toString()).addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
 
-                        boardPostIbMenu.setOnClickListener {
-                            val popup = PopupMenu(binding.root.context, boardPostIbMenu) // View 변경
-                            popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
-                            popup.setOnMenuItemClickListener { menu ->
-                                when (menu.itemId) {
-                                    R.id.menu_comment_update -> {
-                                        val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
-                                        updateIntent.putExtra("updateBoard", board)
-                                        startActivity(updateIntent)
-                                    }
-                                    R.id.menu_comment_delete -> {
-                                        finish()
+                            if(snapshot.exists()){
+                                val user = snapshot.getValue<ERModel>()
+                                Log.d("choco5733" , "누구냐 넌 : {$user}")
+                                boardPostTvUser.text = user?.name
 
-                                        Log.d("board.id", board?.id.toString())
-                                        FBRef.postRef.child(board?.id.toString()).removeValue()
-                                    }
+                                if(user?.profilePicture?.isEmpty() == true){
+                                    boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
+                                }else{
+                                    boardPostIbProfile.load(user?.profilePicture)
                                 }
-                                false
+
+                                if(user?.uid == BoardSingletone.LoginUser().uid){
+                                    boardPostIbMenu.visibility = View.VISIBLE
+
+                                    boardPostIbMenu.setOnClickListener {
+                                        val popup = PopupMenu(binding.root.context, boardPostIbMenu) // View 변경
+                                        popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
+                                        popup.setOnMenuItemClickListener { menu ->
+                                            when (menu.itemId) {
+                                                R.id.menu_comment_update -> {
+                                                    val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
+                                                    updateIntent.putExtra("updateBoard", board)
+                                                    startActivity(updateIntent)
+                                                }
+                                                R.id.menu_comment_delete -> {
+                                                    finish()
+
+                                                    Log.d("board.id", board?.id.toString())
+                                                    FBRef.postRef.child(board?.id.toString()).removeValue()
+                                                }
+                                            }
+                                            false
+                                        }
+                                        popup.show()
+                                    }
+                                } else {
+                                    boardPostIbMenu.visibility = View.INVISIBLE
+
+                                    boardPostIbProfile.setOnClickListener {
+                                        val customDialog = BoardDialog(this@BoardPost, user?.uid ?: "", user?.name ?: "",object : DialogListener {
+                                            override fun onOKButtonClicked() {
+                                                startActivity(
+                                                    ChatActivity.newIntent(
+                                                        this@BoardPost,
+                                                        ERModel(
+                                                            uid = user?.uid,
+                                                            profilePicture = user?.profilePicture,
+                                                            name = user?.name
+                                                        )
+                                                    )
+                                                )
+                                            }
+                                        })
+                                        customDialog.show()
+                                    }
+
+                                }
                             }
-                            popup.show()
-                        }
-                    }else{
-                        boardPostIbMenu.visibility = View.INVISIBLE
 
-                        boardPostIbProfile.setOnClickListener {
-                            val customDialog = BoardDialog(this@BoardPost, board?.author?.user ?: "", object : DialogListener {
-                                override fun onOKButtonClicked() {
-                                    Toast.makeText(this@BoardPost, "채팅창 이동", Toast.LENGTH_SHORT).show()
-                                }
-                            })
-
-                            customDialog.show()
                         }
 
-                    }
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+
+                    })
 
                     if (board != null) {
                         boardPostTvDate.text =
@@ -143,19 +170,14 @@ class BoardPost : AppCompatActivity() {
 
         })
 
-        //수정 : 로그인한 유저 정보 가져와서 프로필 사진 띄우기
-        if(BoardSingletone.LoginUser().userImage == null){
+        if(BoardSingletone.LoginUser().profilePicture == null){
             boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
         }else{
-            boardPostIbCommentProfile.load(BoardSingletone.LoginUser().userImage)
+            boardPostIbCommentProfile.load(BoardSingletone.LoginUser().profilePicture)
         }
     }
 
     private fun initView() = with(binding) {
-
-        binding.boardPostProgressbar.visibility = View.GONE
-        binding.boardPostCommentLayout.visibility = View.VISIBLE
-        binding.nestedScrollView.visibility = View.VISIBLE
 
         listAdapter.setOnItemClickListener(object :
             BoardCommentRecyclerViewAdpater.OnItemClickListener {
@@ -190,8 +212,7 @@ class BoardPost : AppCompatActivity() {
 
             val commentkey = FBRef.postRef.child(id).child("comments").push().key.toString()
 
-            //수정 : 로그인한 사용자 닉네임, 프로필 사진 불러오기
-            val newComment = CommentModel(commentkey, BoardSingletone.LoginUser(), content, date)
+            val newComment = CommentModel(commentkey, BoardSingletone.LoginUser().uid, content, date)
 
             FBRef.postRef.child(id).child("comments").child(commentkey).setValue(newComment)
 
@@ -230,6 +251,4 @@ class BoardPost : AppCompatActivity() {
 
         return simpleDateFormat.format(Date(postTime))
     }
-
-
 }

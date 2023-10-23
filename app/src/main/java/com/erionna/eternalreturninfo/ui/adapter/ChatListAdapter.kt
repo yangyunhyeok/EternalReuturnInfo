@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.api.load
 import com.erionna.eternalreturninfo.databinding.ChatListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 
@@ -41,19 +41,16 @@ class ChatListAdapter(
         holder.bind(item)
     }
 
-   inner class ViewHolder(
+   class ViewHolder(
         private val binding: ChatListItemBinding,
         private val onClickItem: (Int, ERModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-       private var sb = StringBuilder()
-
         fun bind(item: ERModel) = with(binding) {
             chatListName.text = item.name
-//            chatListProfilePicture.setImageResource(item.profilePicture!!)
+            chatListProfilePicture.load(item.profilePicture.toString())
             chatListMsg.text = item.msg
             chatListDate.text = item.time
-
 
             chatListContainer.setOnClickListener {
                 onClickItem(

@@ -43,7 +43,7 @@ class BoardAdd : AppCompatActivity() {
                 val key = FBRef.postRef.push().key.toString()
 
                 //로그인한 유저 UserModel 정보 가져오기!
-                val newBoard = BoardModel(key, title, content, BoardSingletone.LoginUser(), date, mapOf(), 0)
+                val newBoard = BoardModel(key, title, content, BoardSingletone.LoginUser().uid, date, mapOf(), 0)
 
                 FBRef.postRef.child(key).setValue(newBoard).addOnSuccessListener {
                     Toast.makeText(this@BoardAdd, "게시글 추가!", Toast.LENGTH_SHORT).show()

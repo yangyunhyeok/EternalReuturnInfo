@@ -31,7 +31,6 @@ class ChatAdapter(
                 onClickItem
             )
         }
-
     }
 
     override fun onBindViewHolder(

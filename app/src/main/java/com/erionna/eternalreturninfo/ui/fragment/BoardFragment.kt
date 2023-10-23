@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -150,12 +149,11 @@ class BoardFragment : Fragment() {
         }
 
     }
-
-    private fun initModel() = with(binding) {
-        boardViewModel.boardList.observe(viewLifecycleOwner){ boardList ->
-            val newBoardList = boardList.reversed()
-            listAdapter.submitList(newBoardList.toMutableList())
+    private fun initModel() = with(boardViewModel) {
+        boardList.observe(viewLifecycleOwner) {
+            listAdapter.submitList(
+                it.toMutableList().reversed()
+            )
         }
     }
-
 }
