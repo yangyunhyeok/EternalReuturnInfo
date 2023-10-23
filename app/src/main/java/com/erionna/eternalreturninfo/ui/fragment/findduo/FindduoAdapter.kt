@@ -22,6 +22,7 @@ class FindduoAdapter(private val context: Context) :
     ): FindduoAdapter.ItemViewHolder {
         val binding =
             FindDuoListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
         return ItemViewHolder(binding)
     }
 
@@ -33,6 +34,7 @@ class FindduoAdapter(private val context: Context) :
         holder.gender.text = currentItem.gender
         holder.tier.text = currentItem.tier
         holder.most.text = currentItem.most
+
 
     }
 

@@ -5,22 +5,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.erionna.eternalreturninfo.R
-import com.erionna.eternalreturninfo.databinding.LoginActivityBinding
-import com.erionna.eternalreturninfo.ui.fragment.findduo.FindDuoFragment
+import com.erionna.eternalreturninfo.databinding.LoginActivity2Binding
 import com.erionna.eternalreturninfo.ui.fragment.signup.SignUpActivity
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
+
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: LoginActivityBinding
+    private lateinit var binding: LoginActivity2Binding
     private lateinit var mAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = LoginActivityBinding.inflate(layoutInflater)
+        binding = LoginActivity2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initView()
@@ -28,8 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initView() = with(binding) {
 
-        mAuth = Firebase.auth
-
+        mAuth = FirebaseAuth.getInstance()
 
         //회원가입버튼
         signupBtn.setOnClickListener {

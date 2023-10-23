@@ -43,6 +43,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView()
     }
 
@@ -51,6 +52,7 @@ class MainFragment : Fragment() {
         super.onDestroyView()
     }
     private fun initView() {
+
         binding.mainRecyclerview.layoutManager = gridmanager
         binding.mainRecyclerview.adapter = adapter
 

@@ -8,26 +8,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.User
-import com.erionna.eternalreturninfo.ui.fragment.main.MainAdapter
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
 
 class FindDuoFragment : Fragment() {
     companion object {
@@ -71,6 +64,7 @@ class FindDuoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
+
     }
 
     override fun onDestroyView() {
@@ -92,6 +86,8 @@ class FindDuoFragment : Fragment() {
 
         binding.findduoRecyclerview.layoutManager = linearManager
         binding.findduoRecyclerview.adapter = adapter
+
+        adapter.notifyDataSetChanged()
 
         loadAllUserDataFromFirebase()
     }

@@ -8,28 +8,22 @@
         <item name="windowNoTitle">true</item>
         <!-- white status bar -->
         <item name="android:windowLightStatusBar">true</item>
+
     </style>
 
-    <style name="Theme.EternalReturnInfo" parent="Base.Theme.EternalReturnInfo">
-        <!-- Customize your theme here. -->
-        <!-- No Title Bar-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <!-- white status bar -->
-        <item name="android:windowLightStatusBar">true</item>
-        <!-- background -->
+    <style name="ThemeToolbar" parent="Theme.AppCompat.Light">
+        <!-- color of the menu overflow icon -->
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
+
 
     <style name="Round" parent="">
         <item name="cornerSize">10%</item>
     </style>
+
+
     <style name="Theme.EternalReturnInfo" parent="Base.Theme.EternalReturnInfo" />
 
-    <style name="ThemeToolbar" parent="Theme.AppCompat.Light">
 
-        <!-- color of the menu overflow icon -->
-        <item name="android:textColorSecondary">@color/white</item>
-
-    </style>
 
 </resources>

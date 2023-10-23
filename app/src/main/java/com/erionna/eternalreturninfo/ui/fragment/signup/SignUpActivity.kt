@@ -4,20 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.erionna.eternalreturninfo.R
-import com.erionna.eternalreturninfo.databinding.SignUpActivityBinding
+import com.erionna.eternalreturninfo.databinding.SignUpActivity2Binding
 import com.erionna.eternalreturninfo.model.User
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.database
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var binding: SignUpActivityBinding
+    private lateinit var binding: SignUpActivity2Binding
     private lateinit var mAuth: FirebaseAuth
 
     private lateinit var mDbRef: DatabaseReference
@@ -31,7 +27,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = SignUpActivityBinding.inflate(layoutInflater)
+        binding = SignUpActivity2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
         mAuth = FirebaseAuth.getInstance()
