@@ -32,27 +32,31 @@
 
     <Button
         android:id="@+id/main_news_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
 
+        android:layout_marginStart="24dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/shape_gray_btn"
 
+        android:background="@drawable/shape_gray_btn"
         android:text="@string/News"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/main_announcement_btn"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_logo" />
 
     <Button
         android:id="@+id/main_announcement_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
 
         android:layout_marginTop="30dp"
         android:background="@drawable/shape_highlight_btn"
 
         android:text="@string/Announcement"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/main_patch_notes_btn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/main_news_btn"
@@ -60,13 +64,14 @@
 
     <Button
         android:id="@+id/main_patch_notes_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
 
         android:layout_marginTop="30dp"
         android:background="@drawable/shape_gray_btn"
 
         android:text="@string/Patch_notes"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/main_event_btn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/main_announcement_btn"
@@ -74,13 +79,15 @@
 
     <Button
         android:id="@+id/main_event_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
 
         android:layout_marginTop="29dp"
-        android:background="@drawable/shape_gray_btn"
+        android:layout_marginEnd="24dp"
 
+        android:background="@drawable/shape_gray_btn"
         android:text="@string/Event"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/main_patch_notes_btn"

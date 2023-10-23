@@ -21,8 +21,8 @@ class MainViewPagerAdapter(
         MainTabs(MainFragment.newInstance(), R.string.main_tab_main_title),
         MainTabs(FindDuoFragment.newInstance(), R.string.main_tab_walkthrough_title),
         MainTabs(BoardFragment.newInstance(), R.string.main_tab_board_title),
-        MainTabs(ChatFragment.newInstance(), R.string.main_tab_chat_title),
-        MainTabs(SearchFragment.newInstance(), R.string.main_tab_search_title)
+        MainTabs(ChatListFragment.newInstance(), R.string.main_tab_chat_title),
+        MainTabs(MyProfileFragment.newInstance(), R.string.main_tab_search_title)
     )
 
     fun getFragment(position: Int): Fragment {
