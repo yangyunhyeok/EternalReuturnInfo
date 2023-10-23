@@ -43,7 +43,7 @@ class MyProfileFragment : Fragment() {
 
     // 마이페이지 생성
     fun Patch(uid: String) {
-        val docRef = db.collection(R.string.DB_collection.toString()).document("$uid")
+        val docRef = db.collection("EternalReturnInfo").document("$uid")
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {

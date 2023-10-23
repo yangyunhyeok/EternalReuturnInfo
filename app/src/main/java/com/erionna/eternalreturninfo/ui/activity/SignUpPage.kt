@@ -31,6 +31,7 @@ class SignUpPage : AppCompatActivity() {
     private val PICK_IMAGE = 1111
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
+    var uriCheck = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,14 +69,18 @@ class SignUpPage : AppCompatActivity() {
 
         // 회원가입 버튼
         binding.signupSignupBtn.setOnClickListener {
-            createAccount(
-                binding.signupIDEt.text.toString(),
-                binding.signupPWEt.text.toString(),
-                binding.signupPWCheckEt.text.toString(),
-                binding.signupNickNameEt.text.toString(),
-                selectCharacter,
-                selectedImageURI
-            )
+            if (uriCheck == 1) {
+                createAccount(
+                    binding.signupIDEt.text.toString(),
+                    binding.signupPWEt.text.toString(),
+                    binding.signupPWCheckEt.text.toString(),
+                    binding.signupNickNameEt.text.toString(),
+                    selectCharacter,
+                    selectedImageURI
+                )
+            }else{
+                Toast.makeText(this, R.string.signup_fail_profile, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -88,7 +93,8 @@ class SignUpPage : AppCompatActivity() {
         character: String,
         uri: Uri
     ) {
-        if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty() && uri != null) {
+        val uriCheck = uri.toString()
+        if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty() && uriCheck.isNotEmpty()) {
             if (password == passwordCheck) {
                 auth?.createUserWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener(this) { task ->
@@ -98,7 +104,6 @@ class SignUpPage : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             upload(uri, email, password, nickname, character)
-
                             Toast.makeText(this, "$character", Toast.LENGTH_SHORT).show()
                             finish()
                             var intent = Intent(this, MainActivity::class.java)
@@ -146,6 +151,7 @@ class SignUpPage : AppCompatActivity() {
             if (uri != null) {
                 selectedImageURI = uri
                 binding.signupProfileImg.setImageURI(uri)
+                uriCheck = 1
             }
         }
     }

@@ -59,7 +59,7 @@ class LoginPage : AppCompatActivity() {
 
         //구글로그인 기본 설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(R.string.login_googlelogin_serverid.toString())
+            .requestIdToken("48907367773-37le51fs370ruk8eirjkmi11k6qmg30k.apps.googleusercontent.com")
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -86,23 +86,27 @@ class LoginPage : AppCompatActivity() {
 
             // 비밀번호찾기 이메일 전송 버튼
             button.setOnClickListener {
-                FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                this,
-                                Email.toString() + R.string.login_lostpw_success,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                this,
-                                Email.toString() + R.string.login_lostpw_fail,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                if(Email.isNotEmpty()) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    Email.toString() + R.string.login_lostpw_success,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    R.string.login_lostpw_fail,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                    }
-                alertDialog.dismiss()
+                    alertDialog.dismiss()
+                }else{
+                    Toast.makeText(this, R.string.login_lostpw_null, Toast.LENGTH_SHORT).show()
+                }
             }
             alertDialog.show()
         }
@@ -138,7 +142,7 @@ class LoginPage : AppCompatActivity() {
         if (email.isNotEmpty() && pw.isNotEmpty()) {
             auth?.signInWithEmailAndPassword(email, pw)?.addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val docRef = db.collection(R.string.DB_collection.toString()).document("$email")
+                    val docRef = db.collection("EternalReturnInfo").document("$email")
                     docRef.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
@@ -154,8 +158,7 @@ class LoginPage : AppCompatActivity() {
                         }
                 } else {
                     Toast.makeText(
-                        this,
-                        email.toString() + R.string.login_lostpw_fail,
+                        this, R.string.login_fail,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
