@@ -29,15 +29,6 @@ import java.time.format.DateTimeFormatter
 class ChatActivity : AppCompatActivity() {
 
     companion object {
-        fun newIntentForModify(
-            context: Context,
-            position: Int,
-            erModel: ERModel
-        ) = Intent(context, ChatActivity::class.java).apply {
-            putExtra(EXTRA_ER_MODEL, erModel)
-            putExtra(EXTRA_ER_POSITION, position)
-        }
-
         fun newIntent(
             context: Context,
             erModel: ERModel
@@ -47,6 +38,15 @@ class ChatActivity : AppCompatActivity() {
             }
             return intent
         }
+        fun newIntentForModify(
+            context: Context,
+            position: Int,
+            erModel: ERModel
+        ) = Intent(context, ChatActivity::class.java).apply {
+            putExtra(EXTRA_ER_MODEL, erModel)
+            putExtra(EXTRA_ER_POSITION, position)
+        }
+
     }
 
     // 뷰바인딩
@@ -104,8 +104,10 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initView() = with(binding) {
+
         // 채팅목록에서 전달받은 상대방 데이터 저장
         val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
+
         // 툴바에 채팅상대 이름 출력하기
         binding.chatToolbarTitle.text = data?.name
 
@@ -116,12 +118,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun fireBase() {
+
         // 채팅목록에서 전달받은 상대방 데이터 저장
         val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
-
         receiverName = data?.name.toString()
         receiverUid = data?.uid.toString()
-        Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
 
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
@@ -130,7 +131,7 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverUid + senderUid
         receiverRoom = senderUid + receiverUid
 
-        // 메시지 저장하기
+        // db에 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
             val time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh시 mm분"))
@@ -158,13 +159,13 @@ class ChatActivity : AppCompatActivity() {
 
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
-
             }
         }
+
         var finalMessage = ""
         var finalTime = ""
 
-        // 메시지 가져오기
+        // db에 메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
@@ -185,7 +186,7 @@ class ChatActivity : AppCompatActivity() {
                         database.child("chats").child(senderRoom)
                             .child("messages").child("$key").updateChildren(map)
                     }
-
+//                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                     Log.d("choco5744", "message : ${finalMessage}, time : ${finalTime}")
 
                     val intent = Intent().apply {
@@ -204,6 +205,7 @@ class ChatActivity : AppCompatActivity() {
                     }
                     setResult(Activity.RESULT_OK, intent)
                     chatAdapter.notifyDataSetChanged()
+//                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                 }
 
                 override fun onCancelled(error: DatabaseError) {
