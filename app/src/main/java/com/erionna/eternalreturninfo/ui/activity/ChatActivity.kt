@@ -114,9 +114,9 @@ class ChatActivity : AppCompatActivity() {
         receiverRoom = senderUid + receiverUid
         Log.d("#choco5732", "senderRoom : $senderRoom")
 
-        // db에 메시지 저장
+        // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
-            var time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh시 mm분"))
             } else {
                 TODO("VERSION.SDK_INT < O")
@@ -124,7 +124,7 @@ class ChatActivity : AppCompatActivity() {
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(message, senderUid, time)
+            val messageObject = Message(message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
 
             if (message != "") {
                 // 송수신 방 둘 다 저장
@@ -150,17 +150,23 @@ class ChatActivity : AppCompatActivity() {
 
                     messageList.clear()
 
-
                     for (postSnapshot in snapShot.children) {
+                        val key = postSnapshot.key
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
                         finalMessage = messageList.last().message.toString()
                         finalTime = messageList.last().time.toString()
 
+                        val map = HashMap<String, Any>()
+                        map.put("readOrNot", true)
+
+                        database.child("chats").child(senderRoom)
+                            .child("messages").child("$key").updateChildren(map)
                     }
+
                     Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
 
-                    val intent = Intent().apply{
+                    val intent = Intent().apply {
                         putExtra(
                             EXTRA_MESSAGE,
                             finalMessage

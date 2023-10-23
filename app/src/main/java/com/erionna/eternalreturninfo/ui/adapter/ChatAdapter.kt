@@ -1,12 +1,19 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.ChatItemReceiverBinding
 import com.erionna.eternalreturninfo.databinding.ChatItemSenderBinding
 import com.erionna.eternalreturninfo.model.Message
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ChatAdapter(
     private val messageList: ArrayList<Message>,
@@ -74,6 +81,41 @@ class ChatAdapter(
 
             chatItemSenderDate.text = time
             chatItemSenderText.text = item.message
+
+            val database = FirebaseDatabase.getInstance().reference
+            val room : String = item.sendId + item.receiverId
+
+
+//            database.child("chats").child(room).child("messages").get().addOnSuccessListener {
+//                val message = it.children.last().getValue(Message::class.java)
+//                if ( message?.readOrNot == false ) {
+//                    chatItemSenderReadCount.visibility = View.VISIBLE
+//                } else {
+//                    chatItemSenderReadCount.visibility = View.GONE
+//                }
+//            }
+
+
+            database.child("chats").child(room).child("messages")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapShot: DataSnapshot) {
+                        var test: Boolean? = null
+                        for (postSnapshot in snapShot.children) {
+                            val message = postSnapshot.getValue(Message::class.java)
+                            test = message?.readOrNot
+                            if ( test == true ) {
+                                chatItemSenderReadCount.visibility = View.INVISIBLE
+                            } else {
+                                chatItemSenderReadCount.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+
 
             chatItemSenderContainer.setOnClickListener {
                 onClickItem(
