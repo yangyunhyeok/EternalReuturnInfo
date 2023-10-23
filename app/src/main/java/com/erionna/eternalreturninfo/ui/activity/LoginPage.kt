@@ -55,7 +55,7 @@ class LoginPage : AppCompatActivity() {
         googlebinding = GoogleDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        //구글로그인 기본 설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("48907367773-37le51fs370ruk8eirjkmi11k6qmg30k.apps.googleusercontent.com")
             .requestEmail()
@@ -111,6 +111,7 @@ class LoginPage : AppCompatActivity() {
 
     }
 
+    // 구글 로그인
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==100){
@@ -141,10 +142,6 @@ class LoginPage : AppCompatActivity() {
                             if (document != null) {
                                 Toast.makeText(this, "로그인 완료", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this, MainActivity::class.java)
-                                intent.putExtra("email", document["email"].toString())
-                                intent.putExtra("nickName", document["nickName"].toString())
-                                intent.putExtra("character", document["character"].toString())
-                                intent.putExtra("profile", document["profile"].toString())
                                 startActivity(intent)
                             } else {
                                 Log.d(TAG, "No such document")

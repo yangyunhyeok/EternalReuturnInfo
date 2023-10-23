@@ -32,7 +32,6 @@ class SignUpPage : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignupInformationActivityBinding.inflate(layoutInflater)
@@ -67,7 +66,7 @@ class SignUpPage : AppCompatActivity() {
                 }
             }
 
-
+        // 회원가입 버튼
         binding.signupSignupBtn.setOnClickListener {
             createAccount(
                 binding.signupIDEt.text.toString(),
@@ -77,11 +76,10 @@ class SignUpPage : AppCompatActivity() {
                 selectCharacter,
                 selectedImageURI
             )
-            Log.d("이미지 수신", "$selectedImageURI")
         }
     }
 
-
+    // 회원가입 기능
     private fun createAccount(
         email: String,
         password: String,
@@ -120,6 +118,7 @@ class SignUpPage : AppCompatActivity() {
         }
     }
 
+    // DB 업로드
     private fun setDocument(data: SignUpData) {
         FirebaseFirestore.getInstance()
             .collection("EternalReturnInfo")
@@ -133,11 +132,14 @@ class SignUpPage : AppCompatActivity() {
             }
     }
 
+
+    // 프로필사진 열기
     fun selectProfile() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
         startActivityForResult(intent, PICK_IMAGE)
     }
 
+    // 프로필사진 업데이트
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE) {
@@ -149,6 +151,8 @@ class SignUpPage : AppCompatActivity() {
         }
     }
 
+
+    // DB 업로드
     private fun upload(
         uri: Uri,
         email: String,

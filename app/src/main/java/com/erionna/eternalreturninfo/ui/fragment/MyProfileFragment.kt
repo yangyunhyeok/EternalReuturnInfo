@@ -41,7 +41,7 @@ class MyProfileFragment : Fragment() {
         return binding.root
 
     }
-
+    // 마이페이지 생성
     fun Patch(uid: String) {
         val docRef = db.collection("EternalReturnInfo").document("$uid")
         docRef.get()
@@ -59,7 +59,7 @@ class MyProfileFragment : Fragment() {
                 }
             }
     }
-
+    // 이미지 패치
     fun ImgPacth(character: String) {
         when (character) {
             "헤이즈" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
