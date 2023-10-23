@@ -49,11 +49,18 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    // 뷰바인딩
     private lateinit var binding: ChatActivityBinding
 
-    // 파이어베이스 객체
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+    // 파이어베이스 auth 초기화
+    private val auth by lazy {
+        FirebaseAuth.getInstance()
+    }
+
+    // 파이어베이스 db 초기화
+    private val database by lazy {
+        FirebaseDatabase.getInstance().reference
+    }
 
     // 대화상대 정보
     private lateinit var receiverName: String
@@ -63,8 +70,10 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var receiverRoom: String
     private lateinit var senderRoom: String
 
-    private lateinit var messageList : ArrayList<Message>
+    // messageList
+    private val messageList = ArrayList<Message>()
 
+    // position
     private val position by lazy {
         intent.getIntExtra(EXTRA_ER_POSITION, -1)
     }
@@ -80,39 +89,46 @@ class ChatActivity : AppCompatActivity() {
         )
     }
 
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 파이어베이스 객체 초기화
-        database = FirebaseDatabase.getInstance().reference
-        auth = FirebaseAuth.getInstance()
+        initView()
+        fireBase()
+    }
 
+    private fun initView() = with(binding) {
         // 채팅목록에서 전달받은 상대방 데이터 저장
         val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
-        Log.d("#choco5732", "$data")
-
         // 툴바에 채팅상대 이름 출력하기
         binding.chatToolbarTitle.text = data?.name
+
+        // 리사이클러뷰 초기화
+        binding.chatRecycler.adapter = chatAdapter
+        binding.chatRecycler.layoutManager = LinearLayoutManager(this@ChatActivity)
+
+    }
+
+    private fun fireBase() {
+        // 채팅목록에서 전달받은 상대방 데이터 저장
+        val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
 
         receiverName = data?.name.toString()
         receiverUid = data?.uid.toString()
         Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
 
-        // 리사이클러뷰 초기화
-        messageList = ArrayList()
-        binding.chatRecycler.adapter = chatAdapter
-        binding.chatRecycler.layoutManager = LinearLayoutManager(this)
-
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
 
-        // 보낸이 방
+        // 채팅방
         senderRoom = receiverUid + senderUid
-        // 받는이 방
         receiverRoom = senderUid + receiverUid
-        Log.d("#choco5732", "senderRoom : $senderRoom")
 
         // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
@@ -124,7 +140,13 @@ class ChatActivity : AppCompatActivity() {
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
+            val messageObject = Message(
+                message = message,
+                sendId = senderUid,
+                time = time,
+                receiverId = receiverUid,
+                readOrNot = false
+            )
 
             if (message != "") {
                 // 송수신 방 둘 다 저장
@@ -164,7 +186,7 @@ class ChatActivity : AppCompatActivity() {
                             .child("messages").child("$key").updateChildren(map)
                     }
 
-                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
+                    Log.d("choco5744", "message : ${finalMessage}, time : ${finalTime}")
 
                     val intent = Intent().apply {
                         putExtra(
@@ -188,10 +210,5 @@ class ChatActivity : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             })
-    }
-
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
     }
 }
