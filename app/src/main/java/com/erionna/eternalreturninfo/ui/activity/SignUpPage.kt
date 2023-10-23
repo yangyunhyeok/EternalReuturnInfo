@@ -39,10 +39,10 @@ class SignUpPage : AppCompatActivity() {
         database = Firebase.database.reference
         setContentView(binding.root)
 
+        // 프로필 사진 버튼
         binding.signupProfileImg.setOnClickListener {
             selectProfile()
         }
-
 
         // 실험체 스피너
         val characterlist = resources.getStringArray(R.array.character)
@@ -94,7 +94,7 @@ class SignUpPage : AppCompatActivity() {
                     ?.addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(
-                                this, "계정 생성 완료.",
+                                this, R.string.signup_success,
                                 Toast.LENGTH_SHORT
                             ).show()
                             upload(uri, email, password, nickname, character)
@@ -105,33 +105,32 @@ class SignUpPage : AppCompatActivity() {
                             startActivity(intent)
                         } else {
                             Toast.makeText(
-                                this, "계정 생성 실패",
+                                this, R.string.signup_fail,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
             } else {
-                Toast.makeText(this, "같은 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.signup_fail_pw, Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(this, "회원가입 정보를 입력하세요", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.signup_fail_null, Toast.LENGTH_SHORT).show()
         }
     }
 
     // DB 업로드
     private fun setDocument(data: SignUpData) {
         FirebaseFirestore.getInstance()
-            .collection("EternalReturnInfo")
+            .collection(R.string.DB_collection.toString())
             .document(auth.uid!!)
             .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "닉네임 값 저장 성공", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.signup_firebase_success, Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "닉네임 값 저장 실패", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.signup_firebase_fail, Toast.LENGTH_SHORT).show()
             }
     }
-
 
     // 프로필사진 열기
     fun selectProfile() {
@@ -150,7 +149,6 @@ class SignUpPage : AppCompatActivity() {
             }
         }
     }
-
 
     // DB 업로드
     private fun upload(
@@ -177,12 +175,19 @@ class SignUpPage : AppCompatActivity() {
                         )
                     )
                     database.child("user").child(auth.uid!!)
-                        .setValue(ERModel(profilePicture = uri.toString(), email = email, password = password, name = nickname, uid = auth.uid!!))
+                        .setValue(
+                            ERModel(
+                                profilePicture = uri.toString(),
+                                email = email,
+                                password = password,
+                                name = nickname,
+                                uid = auth.uid!!
+                            )
+                        )
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
             .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
-
 }
 

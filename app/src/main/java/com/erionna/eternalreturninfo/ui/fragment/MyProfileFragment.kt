@@ -23,7 +23,6 @@ class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private var _binding: MyprofileFragmentBinding? = null
     private var auth: FirebaseAuth? = null
-    var mGoogleSignInClient: GoogleSignInClient? = null
     var db = Firebase.firestore
 
     companion object {
@@ -41,9 +40,10 @@ class MyProfileFragment : Fragment() {
         return binding.root
 
     }
+
     // 마이페이지 생성
     fun Patch(uid: String) {
-        val docRef = db.collection("EternalReturnInfo").document("$uid")
+        val docRef = db.collection(R.string.DB_collection.toString()).document("$uid")
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -53,29 +53,28 @@ class MyProfileFragment : Fragment() {
                     binding.myprofileMycharacterTv.text = document["character"].toString()
                     Glide.with(this).load(uri).into(binding.myprofileProfileImg);
                     ImgPacth(document["character"].toString())
-                    Log.d("데이터", "${document.data}")
-                } else {
-                    Log.d("마이페이지", "No such document")
                 }
             }
     }
+
     // 이미지 패치
     fun ImgPacth(character: String) {
+        val array: Array<String> = resources.getStringArray(R.array.character)
         when (character) {
-            "헤이즈" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
-            "쇼우" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
-            "나딘" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
-            "나타폰" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
-            "니키" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
-            "다니엘" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
-            "띠아" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
-            "라우라" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
-            "레녹스" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
-            "레온" -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
+            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
+            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
+            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
+            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
+            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
+            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
+            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
+            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
+            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
+            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
         }
     }
 
-    fun GooglePatch(){
+    fun GooglePatch() {
 
     }
 
