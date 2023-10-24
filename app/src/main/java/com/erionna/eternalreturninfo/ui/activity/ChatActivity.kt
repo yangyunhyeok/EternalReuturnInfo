@@ -170,8 +170,8 @@ class ChatActivity : AppCompatActivity() {
                         // 채팅방 들어왔을시 가장 밑으로 이동
                         binding.chatRecycler.scrollToPosition(messageList.size - 1)
 
-//                        finalMessage = messageList.last().message.toString()
-//                        finalTime = messageList.last().time.toString()
+                        finalMessage = messageList.last().message.toString()
+                        finalTime = messageList.last().time.toString()
 //
 //                        // 가져왔을 시 readOrNot을 true로 변경
 //                        val map = HashMap<String, Any>()

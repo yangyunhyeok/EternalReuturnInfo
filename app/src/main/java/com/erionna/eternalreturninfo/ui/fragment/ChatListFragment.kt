@@ -46,7 +46,7 @@ class ChatListFragment : Fragment() {
         ChatListAdapter(
             onClickItem = { position, item ->
                 chatLauncher.launch(
-                    ChatActivity2.newIntentForModify(
+                    ChatActivity.newIntentForModify(
                         requireContext(),
                         position,
                         item
