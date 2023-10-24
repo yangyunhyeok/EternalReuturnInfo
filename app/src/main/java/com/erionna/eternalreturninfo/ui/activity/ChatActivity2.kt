@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.erionna.eternalreturninfo.databinding.ChatActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
@@ -124,6 +125,7 @@ class ChatActivity2 : AppCompatActivity() {
         // 리사이클러뷰 초기화
         binding.chatRecycler.adapter = chatAdapter2
         binding.chatRecycler.layoutManager = LinearLayoutManager(this)
+        binding.chatRecycler.itemAnimator = null
 
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
