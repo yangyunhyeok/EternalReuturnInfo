@@ -161,11 +161,13 @@ class ChatActivity : AppCompatActivity() {
 
                     messageList.clear()
 
+//                    Log.d("choco5733", "마지막 문자 : ${snapShot.children.last().getValue(Message::class.java)?.message}")
+
                     for (postSnapshot in snapShot.children) {
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
 
-                        // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+                        // 채팅방 들어왔을시 가장 밑으로 이동
                         binding.chatRecycler.scrollToPosition(messageList.size - 1)
 
                         finalMessage = messageList.last().message.toString()
