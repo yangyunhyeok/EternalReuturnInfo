@@ -115,13 +115,6 @@ class ChatActivity : AppCompatActivity() {
         binding.chatRecycler.adapter = chatAdapter
         binding.chatRecycler.layoutManager = LinearLayoutManager(this)
 
-
-
-//        binding.chatRecycler.layoutManager = LinearLayoutManager(this).apply {
-//            this.stackFromEnd = true
-//            this.reverseLayout = true
-//        }
-
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
 
@@ -130,9 +123,6 @@ class ChatActivity : AppCompatActivity() {
         // 받는이 방
         receiverRoom = senderUid + receiverUid
         Log.d("#choco5732", "senderRoom : $senderRoom")
-
-//        val count = chatAdapter.itemCount
-//        binding.chatRecycler.scrollToPosition(count)
 
         // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
@@ -161,29 +151,34 @@ class ChatActivity : AppCompatActivity() {
         }
         var finalMessage = ""
         var finalTime = ""
+
         // 메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
-                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+                    // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+                    binding.chatRecycler.scrollToPosition(messageList.size)
 
                     messageList.clear()
 
                     for (postSnapshot in snapShot.children) {
-                        val key = postSnapshot.key
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
-                        binding.chatRecycler.scrollToPosition(messageList.size - 1) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+
+                        // 새로운 메시지 송, 수신시 최하단 화면으로 이동
+                        binding.chatRecycler.scrollToPosition(messageList.size - 1)
+
                         finalMessage = messageList.last().message.toString()
                         finalTime = messageList.last().time.toString()
 
+                        // 가져왔을 시 readOrNot을 true로 변경
                         val map = HashMap<String, Any>()
                         map.put("readOrNot", true)
 
+                        val key = postSnapshot.key
                         database.child("chats").child(senderRoom)
                             .child("messages").child("$key").updateChildren(map)
                     }
-//                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                     Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
 
                     val intent = Intent().apply {
@@ -202,7 +197,6 @@ class ChatActivity : AppCompatActivity() {
                     }
                     setResult(Activity.RESULT_OK, intent)
                     chatAdapter.notifyDataSetChanged()
-//                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                 }
 
                 override fun onCancelled(error: DatabaseError) {

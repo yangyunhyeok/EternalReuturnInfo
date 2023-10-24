@@ -78,22 +78,11 @@ class ChatAdapter(
             val sb = StringBuilder()
             sb.append(item.time)
             val time = sb.substring(14, 24)
-
             chatItemSenderDate.text = time
             chatItemSenderText.text = item.message
 
             val database = FirebaseDatabase.getInstance().reference
-            val recevierRoom : String = item.sendId + item.receiverId
-
-
-//            database.child("chats").child(room).child("messages").get().addOnSuccessListener {
-//                val message = it.children.last().getValue(Message::class.java)
-//                if ( message?.readOrNot == false ) {
-//                    chatItemSenderReadCount.visibility = View.VISIBLE
-//                } else {
-//                    chatItemSenderReadCount.visibility = View.GONE
-//                }
-//            }
+            var recevierRoom: String = item.sendId + item.receiverId
 
 
             database.child("chats").child(recevierRoom).child("messages")
@@ -103,7 +92,7 @@ class ChatAdapter(
                         for (postSnapshot in snapShot.children) {
                             val message = postSnapshot.getValue(Message::class.java)
                             receiverReadOrNot = message?.readOrNot
-                            if ( receiverReadOrNot == true ) {
+                            if (receiverReadOrNot == true) {
                                 chatItemSenderReadCount.visibility = View.INVISIBLE
                             } else {
                                 chatItemSenderReadCount.visibility = View.VISIBLE
@@ -116,7 +105,6 @@ class ChatAdapter(
                     }
                 })
 
-
             chatItemSenderContainer.setOnClickListener {
                 onClickItem(
                     position
@@ -125,14 +113,14 @@ class ChatAdapter(
         }
     }
 
-    class ReceiverViewHolder (
+    class ReceiverViewHolder(
         val binding: ChatItemReceiverBinding,
         private val onClickItem: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Message) = with(binding) {
             val sb = StringBuilder()
             sb.append(item.time)
-            val time = sb.substring(14,24)
+            val time = sb.substring(14, 24)
 
             chatItemRecevierDate.text = time
             chatItemReceiverText.text = item.message
@@ -145,3 +133,35 @@ class ChatAdapter(
         }
     }
 }
+
+//            database.child("chats").child(recevierRoom).child("messages").get().addOnSuccessListener {
+//                for ( child in it.children ) {
+//                    val message = child.getValue(Message::class.java)
+//                    val readOrNot = message?.readOrNot
+//                    if ( readOrNot == true ) {
+//                        chatItemSenderReadCount.visibility = View.INVISIBLE
+//                    } else {
+//                        chatItemSenderReadCount.visibility = View.VISIBLE
+//                    }
+//                }
+//            }
+
+
+//database.child("chats").child(recevierRoom).child("messages")
+//.addValueEventListener(object : ValueEventListener {
+//    override fun onDataChange(snapShot: DataSnapshot) {
+//        var receiverReadOrNot: Boolean? = null
+//        for (postSnapshot in snapShot.children) {
+//            val message = postSnapshot.getValue(Message::class.java)
+//            receiverReadOrNot = message?.readOrNot
+//            if ( receiverReadOrNot == true ) {
+//                chatItemSenderReadCount.visibility = View.INVISIBLE
+//            } else {
+//                chatItemSenderReadCount.visibility = View.VISIBLE
+//            }
+//        }
+//    }
+//    override fun onCancelled(error: DatabaseError) {
+//        TODO("Not yet implemented")
+//    }
+//})

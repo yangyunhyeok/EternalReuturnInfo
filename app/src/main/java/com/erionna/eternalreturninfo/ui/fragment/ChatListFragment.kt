@@ -93,7 +93,7 @@ class ChatListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initModel()
-        getListFromDatabase()
+        setDataFromDatabase()
     }
 
     private fun initView() = with(binding) {
@@ -107,7 +107,7 @@ class ChatListFragment : Fragment() {
         }
     }
 
-    private fun getListFromDatabase() = with(binding) {
+    private fun setDataFromDatabase() = with(binding) {
 
         database = Firebase.database.reference
         // 회원 정보 가져오기
@@ -116,8 +116,8 @@ class ChatListFragment : Fragment() {
 
                 var senderRoom : String
 
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(ERModel::class.java)
+                for (child in snapshot.children) {
+                    val currentUser = child.getValue(ERModel::class.java)
                     senderRoom = auth.currentUser?.uid + currentUser?.uid
 
                     var message = Message()
@@ -132,7 +132,6 @@ class ChatListFragment : Fragment() {
                             Log.d("choco5733 in msg", "$message")
 
                             if (auth.currentUser?.uid != currentUser?.uid) {
-//                                            yyyy년 MM월 dd일 a hh시 mm분
                                 if (message.time != "") {
                                     sb.append(message.time)
                                     convertTime = sb.substring(0, 13)
@@ -161,3 +160,59 @@ class ChatListFragment : Fragment() {
         })
     }
 }
+
+
+
+//private fun setDataFromDatabase() = with(binding) {
+//
+//    database = com.google.firebase.ktx.Firebase.database.reference
+//    // 회원 정보 가져오기
+//    database.child("user").addValueEventListener(object : ValueEventListener {
+//        override fun onDataChange(snapshot: DataSnapshot) {
+//
+//            var senderRoom : String
+//
+//            for (postSnapshot in snapshot.children) {
+//                val currentUser = postSnapshot.getValue(com.erionna.eternalreturninfo.model.ERModel::class.java)
+//                senderRoom = auth.currentUser?.uid + currentUser?.uid
+//
+//                var message = Message()
+//                var convertTime = ""
+//                var sb = StringBuilder()
+//
+//                database.child("chats").child(senderRoom).child("messages")
+//                    .get().addOnSuccessListener {
+//                        for (child in it.children) {
+//                            message = child.getValue(com.erionna.eternalreturninfo.model.Message::class.java)!!
+//                        }
+//                        android.util.Log.d("choco5733 in msg", "$message")
+//
+//                        if (auth.currentUser?.uid != currentUser?.uid) {
+//                            if (message.time != "") {
+//                                sb.append(message.time)
+//                                convertTime = sb.substring(0, 13)
+//                            } else {
+//                                convertTime = message.time!!
+//                            }
+//
+//                            viewModel.addUser(
+//                                currentUser?.copy(
+//                                    msg = "${message.message}",
+//                                    time = convertTime
+//                                )
+//                            )
+//                        } else {
+//                            // 현재 접속자 상단에 표시
+//                            binding.chatListTitle.setText(" ${currentUser?.name} 님 반갑습니다!")
+//                        }
+//                    }
+//            }
+//        }
+//
+//        override fun onCancelled(error: DatabaseError) {
+//            // 가져오기 실패 시
+//            android.widget.Toast.makeText(requireContext(), "가져오기 실패", android.widget.Toast.LENGTH_SHORT).show()
+//        }
+//    })
+//}
+//}
