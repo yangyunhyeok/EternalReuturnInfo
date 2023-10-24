@@ -1,24 +1,34 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
-import android.util.Log
+
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.ChatItemReceiverBinding
 import com.erionna.eternalreturninfo.databinding.ChatItemSenderBinding
 import com.erionna.eternalreturninfo.model.Message
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
-class ChatAdapter(
-    private val messageList: ArrayList<Message>,
+class ChatAdapter2(
     private val onClickItem: (Int) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(
+) : ListAdapter<Message, RecyclerView.ViewHolder>(
+    object : DiffUtil.ItemCallback<Message>() {
+        override fun areItemsTheSame(
+            oldItem: Message,
+            newItem: Message
+        ): Boolean {
+            return oldItem.sendId == newItem.sendId
+        }
+
+        override fun areContentsTheSame(
+            oldItem: Message,
+            newItem: Message
+        ): Boolean {
+            return oldItem == newItem
+        }
+    }
 ) {
     enum class ItemViewType {
         SENDER, RECEIVER
@@ -43,7 +53,7 @@ class ChatAdapter(
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int
     ) {
-        val item = messageList[position]
+        val item = getItem(position)
 
         if (holder.javaClass == SenderViewHolder::class.java) {
             holder as SenderViewHolder
@@ -57,17 +67,12 @@ class ChatAdapter(
     override fun getItemViewType(
         position: Int
     ): Int {
-        val currentMessage = messageList[position]
-        // 현재 메시지의 senduid와 접속자의 uid가 일치하면 전송모드, 불일치하면 수신모드
+        val currentMessage = getItem(position)
         return if (FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.sendId)) {
             ItemViewType.SENDER.ordinal
         } else {
             ItemViewType.RECEIVER.ordinal
         }
-    }
-
-    override fun getItemCount(): Int {
-        return messageList.size
     }
 
     class SenderViewHolder(
@@ -133,35 +138,3 @@ class ChatAdapter(
         }
     }
 }
-
-//            database.child("chats").child(recevierRoom).child("messages").get().addOnSuccessListener {
-//                for ( child in it.children ) {
-//                    val message = child.getValue(Message::class.java)
-//                    val readOrNot = message?.readOrNot
-//                    if ( readOrNot == true ) {
-//                        chatItemSenderReadCount.visibility = View.INVISIBLE
-//                    } else {
-//                        chatItemSenderReadCount.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-
-
-//database.child("chats").child(recevierRoom).child("messages")
-//.addValueEventListener(object : ValueEventListener {
-//    override fun onDataChange(snapShot: DataSnapshot) {
-//        var receiverReadOrNot: Boolean? = null
-//        for (postSnapshot in snapShot.children) {
-//            val message = postSnapshot.getValue(Message::class.java)
-//            receiverReadOrNot = message?.readOrNot
-//            if ( receiverReadOrNot == true ) {
-//                chatItemSenderReadCount.visibility = View.INVISIBLE
-//            } else {
-//                chatItemSenderReadCount.visibility = View.VISIBLE
-//            }
-//        }
-//    }
-//    override fun onCancelled(error: DatabaseError) {
-//        TODO("Not yet implemented")
-//    }
-//})

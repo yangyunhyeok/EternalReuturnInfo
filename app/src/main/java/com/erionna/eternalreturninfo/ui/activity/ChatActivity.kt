@@ -170,18 +170,18 @@ class ChatActivity : AppCompatActivity() {
                         // 채팅방 들어왔을시 가장 밑으로 이동
                         binding.chatRecycler.scrollToPosition(messageList.size - 1)
 
-                        finalMessage = messageList.last().message.toString()
-                        finalTime = messageList.last().time.toString()
-
-                        // 가져왔을 시 readOrNot을 true로 변경
-                        val map = HashMap<String, Any>()
-                        map.put("readOrNot", true)
-
-                        val key = postSnapshot.key
-                        database.child("chats").child(senderRoom)
-                            .child("messages").child("$key").updateChildren(map)
+//                        finalMessage = messageList.last().message.toString()
+//                        finalTime = messageList.last().time.toString()
+//
+//                        // 가져왔을 시 readOrNot을 true로 변경
+//                        val map = HashMap<String, Any>()
+//                        map.put("readOrNot", true)
+//
+//                        val key = postSnapshot.key
+//                        database.child("chats").child(senderRoom)
+//                            .child("messages").child("$key").updateChildren(map)
                     }
-                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
+//                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
 
                     val intent = Intent().apply {
                         putExtra(
