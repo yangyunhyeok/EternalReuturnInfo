@@ -63,6 +63,9 @@ class FindDuoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.findduoRecyclerview.layoutManager = linearManager
+        binding.findduoRecyclerview.adapter = adapter
+
         initView()
 
     }
@@ -83,9 +86,6 @@ class FindDuoFragment : Fragment() {
         findduoGenderBtn.setOnClickListener { showGenderDialog() }
         findduoTierBtn.setOnClickListener { showTierDialog() }
         findduoMostBtn.setOnClickListener { showMostDialog() }
-
-        binding.findduoRecyclerview.layoutManager = linearManager
-        binding.findduoRecyclerview.adapter = adapter
 
         adapter.notifyDataSetChanged()
 

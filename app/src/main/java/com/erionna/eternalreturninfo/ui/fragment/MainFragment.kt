@@ -44,6 +44,9 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.mainRecyclerview.layoutManager = gridmanager
+        binding.mainRecyclerview.adapter = adapter
+
         initView()
     }
 
@@ -52,9 +55,6 @@ class MainFragment : Fragment() {
         super.onDestroyView()
     }
     private fun initView() {
-
-        binding.mainRecyclerview.layoutManager = gridmanager
-        binding.mainRecyclerview.adapter = adapter
 
         GlobalScope.launch(Dispatchers.Main) {
             query = "이터널리턴"

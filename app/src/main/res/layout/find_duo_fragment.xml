@@ -34,19 +34,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="23dp"
-        android:text="111,111"
-        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:text="111,11"
         android:textColor="@color/highlight_color2"
         android:textColorHint="@color/highlight_color2"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/findduo_text1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/main_logo"
+        tools:textAlignment="textEnd" />
 
     <TextView
         android:id="@+id/findduo_text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="4dp"
         android:text="명의 플레이어가 듀오를 찾고 있습니다."
         android:textColor="@color/text_color"
         android:textSize="12dp"
@@ -57,11 +59,13 @@
     <Button
         android:id="@+id/findduo_server_btn"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="20dp"
-        android:background="@color/highlight_color2"
+        android:background="@drawable/shape_findduo_btn"
         android:text="서버 선택"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/findduo_register_btn" />
@@ -69,10 +73,12 @@
     <Button
         android:id="@+id/findduo_gender_btn"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="12dp"
-        android:background="@color/highlight_color2"
+        android:background="@drawable/shape_findduo_btn"
         android:text="성별 선택"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/findduo_server_btn"
         app:layout_constraintStart_toEndOf="@+id/findduo_server_btn"
@@ -82,10 +88,12 @@
     <Button
         android:id="@+id/findduo_tier_btn"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="12dp"
-        android:background="@color/highlight_color2"
+        android:background="@drawable/shape_findduo_btn"
         android:text="티어 선택"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/findduo_gender_btn"
         app:layout_constraintStart_toEndOf="@+id/findduo_gender_btn"
@@ -93,11 +101,13 @@
 
     <Button
         android:id="@+id/findduo_most_btn"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="12dp"
-        android:background="@color/highlight_color2"
+        android:background="@drawable/shape_findduo_btn"
         android:text="실험체 선택"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/findduo_tier_btn"
         app:layout_constraintStart_toEndOf="@+id/findduo_tier_btn"
@@ -107,26 +117,88 @@
         android:id="@+id/findduo_register_btn"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/highlight_color"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_register_btn"
         android:text="내 정보 등록"
+        android:textColor="@color/white"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/findduo_total_number" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findduo_tier_btn">
+
+        <TextView
+            android:id="@+id/server"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@color/darkgray"
+            android:text="서버"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@color/darkgray"
+            android:text="성별"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/tier"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@color/darkgray"
+            android:text="티어"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/most"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@color/darkgray"
+            android:text="모스트"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/findduo_recyclerview"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/findduo_gender_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
