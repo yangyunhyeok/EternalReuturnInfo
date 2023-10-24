@@ -83,7 +83,7 @@ class ChatAdapter(
             chatItemSenderText.text = item.message
 
             val database = FirebaseDatabase.getInstance().reference
-            val room : String = item.sendId + item.receiverId
+            val recevierRoom : String = item.sendId + item.receiverId
 
 
 //            database.child("chats").child(room).child("messages").get().addOnSuccessListener {
@@ -96,14 +96,14 @@ class ChatAdapter(
 //            }
 
 
-            database.child("chats").child(room).child("messages")
+            database.child("chats").child(recevierRoom).child("messages")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapShot: DataSnapshot) {
-                        var test: Boolean? = null
+                        var receiverReadOrNot: Boolean? = null
                         for (postSnapshot in snapShot.children) {
                             val message = postSnapshot.getValue(Message::class.java)
-                            test = message?.readOrNot
-                            if ( test == true ) {
+                            receiverReadOrNot = message?.readOrNot
+                            if ( receiverReadOrNot == true ) {
                                 chatItemSenderReadCount.visibility = View.INVISIBLE
                             } else {
                                 chatItemSenderReadCount.visibility = View.VISIBLE

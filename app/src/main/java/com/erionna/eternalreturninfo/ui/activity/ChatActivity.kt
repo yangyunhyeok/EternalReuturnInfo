@@ -99,39 +99,42 @@ class ChatActivity : AppCompatActivity() {
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initView()
-        fireBase()
-    }
-
-    private fun initView() = with(binding) {
 
         // 채팅목록에서 전달받은 상대방 데이터 저장
         val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
+        Log.d("#choco5732", "$data")
 
         // 툴바에 채팅상대 이름 출력하기
         binding.chatToolbarTitle.text = data?.name
 
-        // 리사이클러뷰 초기화
-        binding.chatRecycler.adapter = chatAdapter
-        binding.chatRecycler.layoutManager = LinearLayoutManager(this@ChatActivity)
-
-    }
-
-    private fun fireBase() {
-
-        // 채팅목록에서 전달받은 상대방 데이터 저장
-        val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
         receiverName = data?.name.toString()
         receiverUid = data?.uid.toString()
+        Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
+
+        // 리사이클러뷰 초기화
+        binding.chatRecycler.adapter = chatAdapter
+        binding.chatRecycler.layoutManager = LinearLayoutManager(this)
+
+
+
+//        binding.chatRecycler.layoutManager = LinearLayoutManager(this).apply {
+//            this.stackFromEnd = true
+//            this.reverseLayout = true
+//        }
 
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
 
-        // 채팅방
+        // 보낸이 방
         senderRoom = receiverUid + senderUid
+        // 받는이 방
         receiverRoom = senderUid + receiverUid
+        Log.d("#choco5732", "senderRoom : $senderRoom")
 
-        // db에 메시지 저장하기
+//        val count = chatAdapter.itemCount
+//        binding.chatRecycler.scrollToPosition(count)
+
+        // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
             val time = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh시 mm분"))
@@ -141,13 +144,7 @@ class ChatActivity : AppCompatActivity() {
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(
-                message = message,
-                sendId = senderUid,
-                time = time,
-                receiverId = receiverUid,
-                readOrNot = false
-            )
+            val messageObject = Message(message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
 
             if (message != "") {
                 // 송수신 방 둘 다 저장
@@ -159,13 +156,12 @@ class ChatActivity : AppCompatActivity() {
 
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
+
             }
         }
-
         var finalMessage = ""
         var finalTime = ""
-
-        // db에 메시지 가져오기
+        // 메시지 가져오기
         database.child("chats").child(senderRoom).child("messages")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
@@ -177,6 +173,7 @@ class ChatActivity : AppCompatActivity() {
                         val key = postSnapshot.key
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
+                        binding.chatRecycler.scrollToPosition(messageList.size - 1) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
                         finalMessage = messageList.last().message.toString()
                         finalTime = messageList.last().time.toString()
 
@@ -187,7 +184,7 @@ class ChatActivity : AppCompatActivity() {
                             .child("messages").child("$key").updateChildren(map)
                     }
 //                    binding.chatRecycler.scrollToPosition(messageList.size) // 새로운 메시지 송, 수신시 최하단 화면으로 이동
-                    Log.d("choco5744", "message : ${finalMessage}, time : ${finalTime}")
+                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
 
                     val intent = Intent().apply {
                         putExtra(
