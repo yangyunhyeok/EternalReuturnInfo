@@ -32,6 +32,11 @@ class ChatViewModel() : ViewModel() {
         _list.value = currentList
     }
 
+    fun getListSize(): Int {
+        val currentList = list.value.orEmpty().toMutableList()
+        return currentList.size
+    }
+
 //    class ChatViewModelFactory : ViewModelProvider.Factory {
 //        private val idGenerate = AtomicLong(1L)
 //

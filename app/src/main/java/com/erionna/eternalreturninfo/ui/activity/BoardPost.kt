@@ -122,7 +122,7 @@ class BoardPost : AppCompatActivity() {
                                         val customDialog = BoardDialog(this@BoardPost, user?.uid ?: "", user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
                                                 startActivity(
-                                                    ChatActivity.newIntent(
+                                                    ChatActivity2.newIntent(
                                                         this@BoardPost,
                                                         ERModel(
                                                             uid = user?.uid,

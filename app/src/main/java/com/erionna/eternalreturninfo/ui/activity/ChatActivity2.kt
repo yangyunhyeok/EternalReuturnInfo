@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicLong
 
 class ChatActivity2 : AppCompatActivity() {
 
@@ -75,6 +76,7 @@ class ChatActivity2 : AppCompatActivity() {
 
     // messageList
     private val messageList = ArrayList<Message>()
+    private val idGenerate = AtomicLong(1L)
 
     // position
     private val position by lazy {
@@ -142,7 +144,7 @@ class ChatActivity2 : AppCompatActivity() {
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
+            val messageObject = Message(id = idGenerate.getAndIncrement(), message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
 
             if (message != "") {
                 // 송수신 방 둘 다 저장
@@ -165,7 +167,8 @@ class ChatActivity2 : AppCompatActivity() {
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapShot: DataSnapshot) {
                     // 새로운 메시지 송, 수신시 최하단 화면으로 이동
-                    binding.chatRecycler.scrollToPosition(messageList.size)
+//                    binding.chatRecycler.scrollToPosition(messageList.size)
+                    binding.chatRecycler.scrollToPosition(viewModel.getListSize())
 
                     viewModel.clearList()
                     messageList.clear()
@@ -176,7 +179,7 @@ class ChatActivity2 : AppCompatActivity() {
                         messageList.add(message!!)
                         viewModel.addItem(message)
                         // 새로운 메시지 송, 수신시 최하단 화면으로 이동
-                        binding.chatRecycler.scrollToPosition(messageList.size - 1)
+                        binding.chatRecycler.scrollToPosition(viewModel.getListSize() - 1)
 
                         finalMessage = messageList.last().message.toString()
                         finalTime = messageList.last().time.toString()

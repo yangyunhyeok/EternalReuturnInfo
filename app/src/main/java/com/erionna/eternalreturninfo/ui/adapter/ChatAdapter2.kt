@@ -19,7 +19,7 @@ class ChatAdapter2(
             oldItem: Message,
             newItem: Message
         ): Boolean {
-            return oldItem.sendId == newItem.sendId
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
