@@ -15,7 +15,7 @@ import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity2
-import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter2
+import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
@@ -42,7 +42,7 @@ class ChatListFragment : Fragment() {
     private lateinit var database: DatabaseReference
 
     private val chatListAdapter by lazy {
-        ChatListAdapter2(
+        ChatListAdapter(
             onClickItem = { position, item ->
                 chatLauncher.launch(
                     ChatActivity2.newIntentForModify(

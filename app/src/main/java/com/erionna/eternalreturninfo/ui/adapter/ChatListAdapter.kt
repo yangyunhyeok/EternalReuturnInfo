@@ -9,9 +9,9 @@ import coil.api.load
 import com.erionna.eternalreturninfo.databinding.ChatListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 
-class ChatListAdapter2(
+class ChatListAdapter(
     private val onClickItem: (Int, ERModel) -> Unit
-) : ListAdapter<ERModel, ChatListAdapter2.ViewHolder>(
+) : ListAdapter<ERModel, ChatListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<ERModel>() {
         override fun areItemsTheSame(
             oldItem: ERModel,
@@ -29,14 +29,14 @@ class ChatListAdapter2(
     }
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListAdapter2.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListAdapter.ViewHolder {
         return ViewHolder(
             ChatListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onClickItem
         )
     }
 
-    override fun onBindViewHolder(holder: ChatListAdapter2.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChatListAdapter.ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
     }

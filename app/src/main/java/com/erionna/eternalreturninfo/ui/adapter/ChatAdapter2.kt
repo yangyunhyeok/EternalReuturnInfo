@@ -86,30 +86,6 @@ class ChatAdapter2(
             chatItemSenderDate.text = time
             chatItemSenderText.text = item.message
 
-//            val database = FirebaseDatabase.getInstance().reference
-//            var recevierRoom: String = item.sendId + item.receiverId
-
-
-//            database.child("chats").child(recevierRoom).child("messages")
-//                .addValueEventListener(object : ValueEventListener {
-//                    override fun onDataChange(snapShot: DataSnapshot) {
-//                        var receiverReadOrNot: Boolean? = null
-//                        for (postSnapshot in snapShot.children) {
-//                            val message = postSnapshot.getValue(Message::class.java)
-//                            receiverReadOrNot = message?.readOrNot
-//                            if (receiverReadOrNot == true) {
-//                                chatItemSenderReadCount.visibility = View.INVISIBLE
-//                            } else {
-//                                chatItemSenderReadCount.visibility = View.VISIBLE
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                        TODO("Not yet implemented")
-//                    }
-//                })
-
             chatItemSenderContainer.setOnClickListener {
                 onClickItem(
                     position
@@ -138,3 +114,29 @@ class ChatAdapter2(
         }
     }
 }
+
+
+
+//            val database = FirebaseDatabase.getInstance().reference
+//            var recevierRoom: String = item.sendId + item.receiverId
+
+
+//            database.child("chats").child(recevierRoom).child("messages")
+//                .addValueEventListener(object : ValueEventListener {
+//                    override fun onDataChange(snapShot: DataSnapshot) {
+//                        var receiverReadOrNot: Boolean? = null
+//                        for (postSnapshot in snapShot.children) {
+//                            val message = postSnapshot.getValue(Message::class.java)
+//                            receiverReadOrNot = message?.readOrNot
+//                            if (receiverReadOrNot == true) {
+//                                chatItemSenderReadCount.visibility = View.INVISIBLE
+//                            } else {
+//                                chatItemSenderReadCount.visibility = View.VISIBLE
+//                            }
+//                        }
+//                    }
+//
+//                    override fun onCancelled(error: DatabaseError) {
+//                        TODO("Not yet implemented")
+//                    }
+//                })
