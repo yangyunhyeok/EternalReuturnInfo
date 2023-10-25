@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
+import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -77,10 +78,9 @@ class FindDuoFragment : Fragment() {
 
     private fun initView() = with(binding) {
 
-        findduoRegisterBtn.setOnClickListener {
-            val intent: Intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-        }
+//        findduoRegisterBtn.setOnClickListener {
+//            val intent: Intent = Intent(requireContext(), LoginActivity::class.java)
+//            startActivity(intent)         }
 
         findduoServerBtn.setOnClickListener { showServerDialog() }
         findduoGenderBtn.setOnClickListener { showGenderDialog() }
@@ -130,7 +130,6 @@ class FindDuoFragment : Fragment() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }
-
 
     private fun showGenderDialog() {
         val mSelectedServer: ArrayList<String> = arrayListOf()
@@ -263,7 +262,7 @@ class FindDuoFragment : Fragment() {
         )
 
         // Firebase Realtime Database 경로
-        val databasePath = "userInfo/$userId"
+        val databasePath = "user/$userId"
 
         // 데이터베이스에 업데이트할 내용을 설정
         mDbRef.child(databasePath).updateChildren(updateData)
@@ -282,7 +281,7 @@ class FindDuoFragment : Fragment() {
 
     private fun loadAllUserDataFromFirebase() {
         // Firebase Realtime Database 경로
-        val databasePath = "userInfo"
+        val databasePath = "user"
 
         // 데이터베이스에서 모든 사용자 정보 가져오기
         mDbRef.child(databasePath).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -292,11 +291,20 @@ class FindDuoFragment : Fragment() {
                 binding.findduoTotalNumber.text = numberOfUsers.toString()
 
                 if (snapshot.exists()) {
-                    val usersList = ArrayList<User>()
+                    val usersList = ArrayList<ERModel>()
 
                     for (userSnapshot in snapshot.children) {
-                        val user = userSnapshot.getValue(User::class.java)
-                        user?.let { usersList.add(it) }
+                        val user = userSnapshot.getValue(ERModel::class.java)
+                        user?.let {
+                            val filteredUser = ERModel(
+                                it.server,
+                                it.name,
+                                it.gender,
+                                it.tier,
+                                it.most
+                            )
+                            usersList.add(filteredUser)
+                        }
                     }
 
                     // RecyclerView 어댑터의 데이터 소스에 모든 사용자 정보 추가

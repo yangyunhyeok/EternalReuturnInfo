@@ -15,13 +15,8 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: SignUpActivity2Binding
     private lateinit var mAuth: FirebaseAuth
-
     private lateinit var mDbRef: DatabaseReference
 
-    private var mServer = ""
-    private var mGender = ""
-    private var mTier = ""
-    private var mMost = ""
     private var mUID = ""
 
 
@@ -59,9 +54,9 @@ class SignUpActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     Toast.makeText(this@SignUpActivity, "회원가입 완료", Toast.LENGTH_SHORT).show()
                     val intent: Intent = Intent(this@SignUpActivity, LoginActivity::class.java)
-                    startActivity(intent)
-                 //   addUserToDataBase(mServer, mGender, mTier, mMost, mUID)
                     finish()
+                    startActivity(intent)
+
                 } else {
                     Toast.makeText(this@SignUpActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()
                 }
@@ -69,15 +64,4 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    private fun addUserToDataBase(
-        server: String,
-        gender: String,
-        tier: String,
-        most: String,
-        uId: String
-    ) {
-        mDbRef.child("userInfo").child(uId).setValue(
-            User(server, gender, tier, most, uId)
-        )
-    }
 }

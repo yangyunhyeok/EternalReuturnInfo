@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.erionna.eternalreturninfo.databinding.FindDuoListItemBinding
+import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
 
 class FindduoAdapter(private val context: Context) :
     RecyclerView.Adapter<FindduoAdapter.ItemViewHolder>() {
-    var items = ArrayList<User>()
+    var items = ArrayList<ERModel>()
 
     override fun getItemCount(): Int {
         return items.size
@@ -31,6 +32,7 @@ class FindduoAdapter(private val context: Context) :
 
         // currentItem에서 데이터를 추출하고 뷰에 설정
         holder.server.text = currentItem.server
+        holder.name.text = currentItem.name
         holder.gender.text = currentItem.gender
         holder.tier.text = currentItem.tier
         holder.most.text = currentItem.most
@@ -41,10 +43,11 @@ class FindduoAdapter(private val context: Context) :
     inner class ItemViewHolder(var binding: FindDuoListItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        var server= binding.server
-        var gender= binding.gender
-        var tier= binding.tier
-        var most= binding.most
+        var server= binding.fdliServer
+        var name= binding.fdliName
+        var gender= binding.fdliGender
+        var tier= binding.fdliTier
+        var most= binding.fdliMost
 
         override fun onClick(view: View) {
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
@@ -55,7 +58,7 @@ class FindduoAdapter(private val context: Context) :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item: User)
+        fun onItemClick(item: ERModel)
     }
 
     private var itemClickListener: OnItemClickListener? = null

@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/server"
+            android:id="@+id/fdli_server"
             android:layout_width="30dp"
             android:layout_height="50dp"
             android:layout_marginBottom="1dp"
@@ -27,7 +27,21 @@
             android:background="@color/darkgray2"/>
 
         <TextView
-            android:id="@+id/gender"
+            android:id="@+id/fdli_name"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="name"
+            android:textSize="18dp"
+            android:textColor="@color/text_color"
+            android:background="@color/darkgray2"/>
+
+        <TextView
+            android:id="@+id/fdli_gender"
             android:layout_width="30dp"
             android:layout_height="50dp"
             android:layout_marginLeft="1dp"
@@ -41,7 +55,7 @@
             android:background="@color/darkgray2"/>
 
         <TextView
-            android:id="@+id/tier"
+            android:id="@+id/fdli_tier"
             android:layout_width="60dp"
             android:layout_height="50dp"
             android:layout_marginLeft="1dp"
@@ -55,7 +69,7 @@
             android:background="@color/darkgray2"/>
 
         <TextView
-            android:id="@+id/most"
+            android:id="@+id/fdli_most"
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:layout_marginLeft="1dp"
