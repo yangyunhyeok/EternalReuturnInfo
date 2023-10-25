@@ -1,14 +1,19 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -73,6 +78,16 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
                         val author = snapshot.getValue<ERModel>()
 
                         boardPostTvUser.text = author?.name
+
+                        if(author?.uid == BoardSingletone.manager().uid){
+                            boardPostTvTitle.text = "[공지]  " + item.title
+                            val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
+                            boardPostTvTitle.setTextColor(blueColor)
+                        }else{
+                            boardPostTvTitle.text = "[일반]  " + item.title
+                            boardPostTvTitle.setTextColor(Color.WHITE)
+                        }
+
                     }
 
                 }
@@ -81,9 +96,6 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
                 }
 
             })
-
-            //작성자가 관리자 아이디면 title [공지]로 바꾸는 코드 추가 + 공지 고정하기..?
-            boardPostTvTitle.text = "[일반]  " + item.title
 
 
             boardPostTvDate.text = formatTimeOrDate(item.date)

@@ -37,10 +37,6 @@ class FindDuoFragment : Fragment() {
 
     private var mUID = ""
 
-    private val linearManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
-
     private val adapter: FindduoAdapter by lazy {
         FindduoAdapter(requireContext())
     }
@@ -63,6 +59,8 @@ class FindDuoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.findduoRecyclerview.adapter = adapter
+        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         initView()
 
     }
@@ -84,8 +82,6 @@ class FindDuoFragment : Fragment() {
         findduoTierBtn.setOnClickListener { showTierDialog() }
         findduoMostBtn.setOnClickListener { showMostDialog() }
 
-        binding.findduoRecyclerview.layoutManager = linearManager
-        binding.findduoRecyclerview.adapter = adapter
 
         adapter.notifyDataSetChanged()
 

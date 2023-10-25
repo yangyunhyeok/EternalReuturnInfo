@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.erionna.eternalreturninfo.databinding.MainFragmentBinding
 import com.erionna.eternalreturninfo.model.VideoModel
@@ -25,9 +26,6 @@ class MainFragment : Fragment() {
     private val adapter: MainAdapter by lazy {
         MainAdapter(requireContext())
     }
-    private val gridmanager: StaggeredGridLayoutManager by lazy {
-        StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-    }
 
     private val resItems: ArrayList<VideoModel> = ArrayList()
     private var query:String =""
@@ -44,6 +42,9 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.mainRecyclerview.adapter = adapter
+        binding.mainRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
+
         initView()
     }
 
@@ -52,9 +53,6 @@ class MainFragment : Fragment() {
         super.onDestroyView()
     }
     private fun initView() {
-
-        binding.mainRecyclerview.layoutManager = gridmanager
-        binding.mainRecyclerview.adapter = adapter
 
         GlobalScope.launch(Dispatchers.Main) {
             query = "이터널리턴"
@@ -85,6 +83,7 @@ class MainFragment : Fragment() {
 
             adapter.items = resItems
             adapter.notifyDataSetChanged()
+
         } catch (e: Exception) {
             Log.e("#error check", "Error: ${e.message}")
         }
