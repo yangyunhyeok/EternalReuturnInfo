@@ -31,7 +31,7 @@
             android:name=".ui.activity.BoardAdd"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.ChatActivity2"
+            android:name=".ui.activity.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"

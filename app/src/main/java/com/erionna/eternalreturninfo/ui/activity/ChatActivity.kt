@@ -161,8 +161,6 @@ class ChatActivity : AppCompatActivity() {
 
                     messageList.clear()
 
-//                    Log.d("choco5733", "마지막 문자 : ${snapShot.children.last().getValue(Message::class.java)?.message}")
-
                     for (postSnapshot in snapShot.children) {
                         val message = postSnapshot.getValue(Message::class.java)
                         messageList.add(message!!)
@@ -172,16 +170,18 @@ class ChatActivity : AppCompatActivity() {
 
                         finalMessage = messageList.last().message.toString()
                         finalTime = messageList.last().time.toString()
-//
-//                        // 가져왔을 시 readOrNot을 true로 변경
-//                        val map = HashMap<String, Any>()
-//                        map.put("readOrNot", true)
-//
-//                        val key = postSnapshot.key
-//                        database.child("chats").child(senderRoom)
-//                            .child("messages").child("$key").updateChildren(map)
+
+                        // 가져왔을 시 readOrNot을 true로 변경
+                        val map = HashMap<String, Any>()
+                        map.put("readOrNot", true)
+
+//                        if (message.readOrNot == false) {
+//                            val key = postSnapshot.key
+//                            database.child("chats").child(senderRoom)
+//                                .child("messages").child("$key").updateChildren(map)
+//                        }
                     }
-//                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
+                    Log.d("choco5744","message : ${finalMessage}, time : ${finalTime}")
 
                     val intent = Intent().apply {
                         putExtra(

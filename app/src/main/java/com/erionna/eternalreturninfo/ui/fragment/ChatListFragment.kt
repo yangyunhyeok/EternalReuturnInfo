@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
+import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity2
 import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
@@ -45,7 +46,7 @@ class ChatListFragment : Fragment() {
         ChatListAdapter(
             onClickItem = { position, item ->
                 chatLauncher.launch(
-                    ChatActivity2.newIntentForModify(
+                    ChatActivity.newIntentForModify(
                         requireContext(),
                         position,
                         item
