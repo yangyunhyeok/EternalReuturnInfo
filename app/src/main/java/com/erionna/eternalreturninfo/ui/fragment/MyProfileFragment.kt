@@ -1,5 +1,6 @@
 package com.erionna.eternalreturninfo.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,20 +13,28 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
+import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
 import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
 import com.erionna.eternalreturninfo.ui.activity.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.LoginPage
+import com.erionna.eternalreturninfo.ui.activity.WebView
 import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
 import com.erionna.eternalreturninfo.ui.adapter.VideoListAdapter
+import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
+import com.erionna.eternalreturninfo.util.Constants
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -40,6 +49,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
@@ -59,6 +72,21 @@ class MyProfileFragment : Fragment() {
         BoardRecyclerViewAdapter()
     }
 
+    private val boardViewModel: BoardListViewModel by activityViewModels()
+
+    private val loadBoardLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val updateBoard = result.data?.getParcelableExtra<BoardModel>("updateBoard")
+
+                if(updateBoard != null){
+                    boardViewModel.updateBoard(updateBoard)
+                }
+
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,6 +103,46 @@ class MyProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListener()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val nickname = BoardSingletone.LoginUser().name.toString()
+
+                //수정 : 로그인한 사람 닉네임 가져오기
+                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                val userID_response = userID_call.execute()
+
+                if (userID_response.isSuccessful) {
+                    val gameResponse = userID_response.body()
+                    val userNum = gameResponse?.user?.userNum.toString()
+                    val seasonId = "19"
+
+                    val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
+                        Constants.MAIN_APIKEY, userNum, seasonId)
+                    val userstate_response = userstate_call.execute()
+
+                    if (userstate_response.isSuccessful) {
+                        val userStateResponse = userstate_response.body()
+
+                        withContext(Dispatchers.Main) {
+
+                            val user = userStateResponse?.userStats?.get(0)
+
+                            binding.myprofileTvTop1.text = (user?.top1?.times(100) ?: 0).toString() + "%"
+                            binding.myprofileTvAverageRank.text = "#"+(user?.averageRank ?: 0).toString()
+                            binding.myprofileTvAverageKill.text = (user?.averageKills ?: 0).toString()
+                        }
+
+                    } else {
+                        Log.d("userStateResponse", "${userstate_response}")
+                    }
+                }
+
+            } catch (e: Exception) {
+                // 오류 처리
+                e.printStackTrace()
+            }
+        }
 
         binding.myprofileMyboardRv.adapter = boardListAdapter
         binding.myprofileMyboardRv.layoutManager = LinearLayoutManager(requireContext())
@@ -121,7 +189,7 @@ class MyProfileFragment : Fragment() {
                             FBRef.postRef.child(boardItem.id).child("views").setValue(views)
                             val intent = Intent(requireContext(), BoardPost::class.java)
                             intent.putExtra("ID", boardItem.id)
-                            startActivity(intent)
+                            loadBoardLauncher.launch(intent)
                         }
                     }
 
