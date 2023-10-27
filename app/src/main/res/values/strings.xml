@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">EternalReturnInfo</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="main_tab_main_title">메인</string>
-    <string name="main_tab_walkthrough_title">공략</string>
+    <string name="main_tab_walkthrough_title">듀오찾기</string>
     <string name="main_tab_board_title">게시판</string>
     <string name="main_tab_chat_title">채팅</string>
     <string name="main_tab_search_title">전적검색</string>
+
     <string name="board_save">등록</string>
     <string name="board_comment">댓글</string>
     <string name="board_title_message">제목을 입력해주세요</string>
@@ -27,6 +29,30 @@
     <string name="Announcement">공지사항</string>
     <string name="Patch_notes">패치노트</string>
     <string name="Event">이벤트</string>
+    서버 티어 성별 선호실험체
+    <string-array name="server">
+        <item>KR</item>
+        <item>EU</item>
+    </string-array>
+
+    <string-array name="tier">
+        <item>Bronze</item>
+        <item>Silver</item>
+        <item>Gold</item>
+        <item>Platinum</item>
+        <item>Diamond</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>남자</item>
+        <item>여자</item>
+    </string-array>
+
+    <string-array name="most">
+        <item>쇼우</item>
+        <item>쇼이치</item>
+        <item>헤이즈</item>
+    </string-array>
     <string name="menu_sign_up">회원가입</string>
     <string name="log_out_toast">로그아웃</string>
     <string name="chat_list_msg">최근에 대화한 내용이 없습니다.</string>
