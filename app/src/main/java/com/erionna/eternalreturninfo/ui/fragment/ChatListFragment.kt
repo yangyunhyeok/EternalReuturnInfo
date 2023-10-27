@@ -93,7 +93,7 @@ class ChatListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initModel()
-        getListFromDatabase()
+        setDataFromDatabase()
     }
 
     private fun initView() = with(binding) {
@@ -107,17 +107,18 @@ class ChatListFragment : Fragment() {
         }
     }
 
-    private fun getListFromDatabase() = with(binding) {
+    private fun setDataFromDatabase() = with(binding) {
 
         database = Firebase.database.reference
         // 회원 정보 가져오기
         database.child("user").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
+                // 리스트 초기화
+                viewModel.clearList()
                 var senderRoom : String
 
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(ERModel::class.java)
+                for (child in snapshot.children) {
+                    val currentUser = child.getValue(ERModel::class.java)
                     senderRoom = auth.currentUser?.uid + currentUser?.uid
 
                     var message = Message()
@@ -132,7 +133,6 @@ class ChatListFragment : Fragment() {
                             Log.d("choco5733 in msg", "$message")
 
                             if (auth.currentUser?.uid != currentUser?.uid) {
-//                                            yyyy년 MM월 dd일 a hh시 mm분
                                 if (message.time != "") {
                                     sb.append(message.time)
                                     convertTime = sb.substring(0, 13)
