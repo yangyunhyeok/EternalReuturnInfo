@@ -1,12 +1,13 @@
 package com.erionna.eternalreturninfo.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import com.google.firebase.database.Exclude
+import com.google.firebase.database.IgnoreExtraProperties
 
+@IgnoreExtraProperties
 data class User(
-    val id: Long? = null,
-    var email: String? = null,
-    var password: String? = null,
-    var name: String? = null,
-    var uId: String? = null
+    var server: String? = "",
+    var gender: String? = "",
+    var tier: String? = "",
+    var most: String? = "",
+    var uid: String? = ""
 )

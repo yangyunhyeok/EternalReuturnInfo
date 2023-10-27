@@ -37,9 +37,10 @@
 
         android:layout_marginStart="24dp"
         android:layout_marginTop="30dp"
-
-        android:background="@drawable/shape_gray_btn"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/shape_main_btn"
         android:text="@string/News"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/main_announcement_btn"
         app:layout_constraintHorizontal_bias="0.5"
@@ -53,9 +54,10 @@
         android:layout_height="40dp"
 
         android:layout_marginTop="30dp"
-        android:background="@drawable/shape_highlight_btn"
-
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/shape_main_btn"
         android:text="@string/Announcement"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/main_patch_notes_btn"
         app:layout_constraintHorizontal_bias="0.5"
@@ -68,9 +70,11 @@
         android:layout_height="40dp"
 
         android:layout_marginTop="30dp"
-        android:background="@drawable/shape_gray_btn"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/shape_main_btn"
 
         android:text="@string/Patch_notes"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/main_event_btn"
         app:layout_constraintHorizontal_bias="0.5"
@@ -85,7 +89,9 @@
         android:layout_marginTop="29dp"
         android:layout_marginEnd="24dp"
 
-        android:background="@drawable/shape_gray_btn"
+        android:background="@drawable/shape_main_btn"
+        android:textColor="@color/white"
+
         android:text="@string/Event"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,26 +101,46 @@
 
     <Button
         android:id="@+id/button3"
+        android:background="@drawable/shape_findduo_btn"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-
+        android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
 
         android:layout_marginStart="20dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:text="듀오 찾기 어필 부분"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_news_btn" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
 
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_hotclip" />
+
+    <TextView
+        android:id="@+id/main_hotclip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Hot Clip"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="normal|italic"
+        app:layout_constraintBottom_toTopOf="@+id/main_recyclerview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3" />
 
