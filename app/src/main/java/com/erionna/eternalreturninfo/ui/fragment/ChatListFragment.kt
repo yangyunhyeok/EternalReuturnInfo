@@ -113,7 +113,8 @@ class ChatListFragment : Fragment() {
         // 회원 정보 가져오기
         database.child("user").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
+                // 리스트 초기화
+                viewModel.clearList()
                 var senderRoom : String
 
                 for (child in snapshot.children) {

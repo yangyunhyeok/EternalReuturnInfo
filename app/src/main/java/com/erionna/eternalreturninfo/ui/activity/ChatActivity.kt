@@ -81,7 +81,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var refDb: DatabaseReference
     private lateinit var refEventListener: ValueEventListener
 
-    // atomicLong
+    // AtomicLong
     private val idGenerate = AtomicLong(1L)
 
     private val chatAdapter by lazy {
@@ -107,7 +107,6 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         // 채팅목록에서 전달받은 상대방 데이터 저장
         val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
@@ -213,6 +212,7 @@ class ChatActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         }
+
         // 메시지 가져오기
         refDb.addValueEventListener(refEventListener)
     }
