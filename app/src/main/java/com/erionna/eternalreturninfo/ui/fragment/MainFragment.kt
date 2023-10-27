@@ -234,13 +234,6 @@ class MainFragment : Fragment() {
                     resItems.add(VideoModel(id= snippet.id.videoId, title = title, thumbnail = url,  url = "https://www.youtube.com/watch?v=${snippet.id}"))
                 }
             }else{
-                if (response.code() == 403 || response.code() == 429) {
-                    Toast.makeText(
-                        requireContext(),
-                        "API 호출 제한 오류! 나중에 다시 시도해주세요.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
 
             currenttoken = response.body()!!.nextPageToken

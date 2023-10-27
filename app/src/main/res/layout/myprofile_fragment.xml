@@ -8,31 +8,6 @@
     tools:context=".ui.fragment.MyProfileFragment"
     android:background="@color/black">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="24dp"
-            android:background="@drawable/ic_white_logo" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <View
-        android:id="@+id/myprofile_line_view"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#717171"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -40,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_line_view"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -86,7 +62,7 @@
                 android:textColor="@color/white"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toTopOf="@+id/myprofile_nickname_tv"
-                app:layout_constraintStart_toStartOf="@+id/myprofile_nickname_tv" />
+                app:layout_constraintStart_toEndOf="@+id/myprofile_profile_img" />
 
             <TextView
                 android:id="@+id/myprofile_nickname_tv"
@@ -155,7 +131,6 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:adjustViewBounds="true"
                 android:src="@drawable/ic_character"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
@@ -174,11 +149,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/myprofile_character_img" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/myprofile_rv_board"
-                android:layout_width="0dp"
+                android:id="@+id/myprofile_myboard_rv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/myprofile_myboard_layout" />
@@ -285,6 +258,22 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/myprofile_logo_img"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_white_logo" />
+
+    <View
+        android:id="@+id/myprofile_line_view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#717171"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_logo_img"></View>
 
     <Button
         android:id="@+id/myprofile_logout_btn"

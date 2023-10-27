@@ -13,7 +13,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
+import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
+import com.erionna.eternalreturninfo.ui.activity.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.ChatActivity
+import com.erionna.eternalreturninfo.ui.activity.DialogListener
+import com.erionna.eternalreturninfo.ui.activity.MainActivity
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -21,6 +26,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class FindDuoFragment : Fragment() {
     companion object {
@@ -51,7 +57,8 @@ class FindDuoFragment : Fragment() {
             onClickUser = { position, item ->
                 Log.d("choco5733", "$item")
                 if (item.uid != mAuth.uid) {
-                    val customDialog = BoardDialog(requireContext(), item.uid ?: "", item.name ?: "",object : DialogListener {
+                    val customDialog = BoardDialog(requireContext(), item.name ?: "",object :
+                        DialogListener {
                         override fun onOKButtonClicked() {
                             startActivity(
                                 ChatActivity.newIntent(
@@ -99,11 +106,6 @@ class FindDuoFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-
-        findduoRegisterBtn.setOnClickListener {
-            val intent: Intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-        }
 
         findduoServerBtn.setOnClickListener { showServerDialog() }
         findduoGenderBtn.setOnClickListener { showGenderDialog() }
@@ -352,14 +354,13 @@ class FindDuoFragment : Fragment() {
         })
     }
 
-    //파이어스터어랑 연동하기 위한 함수
     private fun updateMostInFirestore(finalSelection: String) {
         val userId = mAuth.currentUser?.uid
         if (userId != null) {
             val userRef = firestore.collection("EternalReturnInfo").document(userId)
 
             // Firestore의 'most' 필드 업데이트
-            userRef.update("character",finalSelection)
+            userRef.update("character", finalSelection)
                 .addOnSuccessListener {
                     Log.d(TAG, "Firestore 'most' 업데이트 성공")
                 }
@@ -368,4 +369,5 @@ class FindDuoFragment : Fragment() {
                 }
         }
     }
+
 }
