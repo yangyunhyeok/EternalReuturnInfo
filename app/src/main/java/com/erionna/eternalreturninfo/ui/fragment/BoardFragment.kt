@@ -3,6 +3,7 @@ package com.erionna.eternalreturninfo.ui.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.BoardFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.activity.BoardAdd
 import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
@@ -34,6 +36,10 @@ class BoardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val listAdapter by lazy {
+        BoardRecyclerViewAdapter()
+    }
+
+    private val noticeListAdapter by lazy {
         BoardRecyclerViewAdapter()
     }
 
@@ -114,6 +120,7 @@ class BoardFragment : Fragment() {
             }
         })
 
+
         boardFab.setOnClickListener {
             val intent = Intent(requireContext(), BoardAdd::class.java)
             addBoardLauncher.launch(intent)
@@ -151,8 +158,13 @@ class BoardFragment : Fragment() {
     }
     private fun initModel() = with(boardViewModel) {
         boardList.observe(viewLifecycleOwner) {
+
+            val (noticeItems, nonNoticeItems) = it.partition { it.author == BoardSingletone.manager().uid }
+            val sortedNonNoticeItems = nonNoticeItems.sortedBy { it.date }
+            val combinedList = sortedNonNoticeItems + noticeItems
+
             listAdapter.submitList(
-                it.toMutableList().reversed()
+                combinedList.reversed()
             )
         }
     }

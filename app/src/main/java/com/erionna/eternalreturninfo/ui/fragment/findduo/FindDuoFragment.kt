@@ -57,7 +57,8 @@ class FindDuoFragment : Fragment() {
             onClickUser = { position, item ->
                 Log.d("choco5733", "$item")
                 if (item.uid != mAuth.uid) {
-                    val customDialog = BoardDialog(requireContext(), item.uid ?: "", item.name ?: "",object : DialogListener {
+                    val customDialog = BoardDialog(requireContext(), item.name ?: "",object :
+                        DialogListener {
                         override fun onOKButtonClicked() {
                             startActivity(
                                 ChatActivity.newIntent(
@@ -96,6 +97,7 @@ class FindDuoFragment : Fragment() {
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
         initView()
+
     }
 
     override fun onDestroyView() {
@@ -104,10 +106,6 @@ class FindDuoFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-
-//        findduoRegisterBtn.setOnClickListener {
-//            val intent: Intent = Intent(requireContext(), LoginActivity::class.java)
-//            startActivity(intent)         }
 
         findduoServerBtn.setOnClickListener { showServerDialog() }
         findduoGenderBtn.setOnClickListener { showGenderDialog() }
@@ -157,6 +155,7 @@ class FindDuoFragment : Fragment() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }
+
 
     private fun showGenderDialog() {
         val mSelectedServer: ArrayList<String> = arrayListOf()
@@ -355,14 +354,13 @@ class FindDuoFragment : Fragment() {
         })
     }
 
-    //파이어스터어랑 연동하기 위한 함수
     private fun updateMostInFirestore(finalSelection: String) {
         val userId = mAuth.currentUser?.uid
         if (userId != null) {
             val userRef = firestore.collection("EternalReturnInfo").document(userId)
 
             // Firestore의 'most' 필드 업데이트
-            userRef.update("character",finalSelection)
+            userRef.update("character", finalSelection)
                 .addOnSuccessListener {
                     Log.d(TAG, "Firestore 'most' 업데이트 성공")
                 }
@@ -371,4 +369,5 @@ class FindDuoFragment : Fragment() {
                 }
         }
     }
+
 }

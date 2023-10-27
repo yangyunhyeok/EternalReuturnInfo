@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class VideoModel(
-    val id: Long?=-1,
+    val id: String?,
     val thumbnail: String?,
     val title: String?,
     val url: String?

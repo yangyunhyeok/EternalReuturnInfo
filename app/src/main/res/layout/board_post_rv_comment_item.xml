@@ -20,7 +20,7 @@
             android:id="@+id/board_comment_ib_profile"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintStart_toStartOf="parent"

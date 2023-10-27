@@ -1,12 +1,14 @@
 package com.erionna.eternalreturninfo.ui.activity
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
@@ -45,6 +47,8 @@ class BoardPost : AppCompatActivity() {
     private var board: BoardModel? = null
     private var id: String = ""
 
+    private var dataload = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = BoardPostActivityBinding.inflate(layoutInflater)
@@ -53,13 +57,24 @@ class BoardPost : AppCompatActivity() {
         initDataload()
         initView()
         initModel()
+    }
 
-        binding.boardPostProgressbar.visibility = View.GONE
-        binding.boardPostCommentLayout.visibility = View.VISIBLE
-        binding.nestedScrollView.visibility = View.VISIBLE
+    private fun progressbar(isLoading:Boolean){
+
+        if(isLoading){
+            binding.boardPostProgressbar.visibility = View.VISIBLE
+            binding.boardPostCommentLayout.visibility = View.INVISIBLE
+            binding.nestedScrollView.visibility = View.INVISIBLE
+        }else{
+            binding.boardPostProgressbar.visibility = View.GONE
+            binding.boardPostCommentLayout.visibility = View.VISIBLE
+            binding.nestedScrollView.visibility = View.VISIBLE
+        }
+
     }
 
     private fun initDataload() = with(binding){
+
 
         boardPostRvComment.adapter = listAdapter
         boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPost)
@@ -69,13 +84,22 @@ class BoardPost : AppCompatActivity() {
         FBRef.postRef.child(id).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
+                progressbar(isLoading = true)
+
                 if(snapshot.exists()){
                     board = snapshot.getValue<BoardModel>()
 
-                    boardPostTvTitle.text = "[일반]  " + board?.title
                     boardPostTvContent.text = board?.content
                     boardPostTvVisit.text = board?.views.toString()
 
+                    if(board?.author == BoardSingletone.manager().uid){
+                        boardPostTvTitle.text = "[공지]  " + board?.title
+                        val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
+                        boardPostTvTitle.setTextColor(blueColor)
+                    }else{
+                        boardPostTvTitle.text = "[일반]  " + board?.title
+                        boardPostTvTitle.setTextColor(Color.WHITE)
+                    }
 
                     FBRef.userRef.child(board?.author.toString()).addValueEventListener(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
@@ -118,7 +142,7 @@ class BoardPost : AppCompatActivity() {
                                     boardPostIbMenu.visibility = View.INVISIBLE
 
                                     boardPostIbProfile.setOnClickListener {
-                                        val customDialog = BoardDialog(this@BoardPost, user?.uid ?: "", user?.name ?: "",object : DialogListener {
+                                        val customDialog = BoardDialog(this@BoardPost, user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
                                                 startActivity(
                                                     ChatActivity.newIntent(
@@ -162,6 +186,8 @@ class BoardPost : AppCompatActivity() {
                         }
                     }
                 }
+
+                progressbar(isLoading = false)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -182,6 +208,7 @@ class BoardPost : AppCompatActivity() {
             BoardCommentRecyclerViewAdpater.OnItemClickListener {
             override fun onDeleteItemClick(commentItem: CommentModel, position: Int) {
                 FBRef.postRef.child(id).child("comments").child(commentItem.id).removeValue()
+                boardViewModel.removeComment(position)
             }
 
             override fun onUpdateItemClick(commentItem: CommentModel, position: Int) {
@@ -223,6 +250,8 @@ class BoardPost : AppCompatActivity() {
             setResult(RESULT_OK, intent)
             finish()
         }
+
+        dataload = true
 
     }
 

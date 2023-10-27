@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.activity.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.DialogListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.coroutines.coroutineContext
 
 class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardCommentRecyclerViewAdpater.ViewHolder>(
 
@@ -114,9 +117,16 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
                             boardCommentIbMenu.visibility = View.INVISIBLE
 
                             boardCommentIbProfile.setOnClickListener {
-                                val customDialog = BoardDialog(binding.root.context, author?.uid.toString(), author?.name.toString(), object : DialogListener {
+                                val customDialog = BoardDialog(binding.root.context, author?.name.toString(), object : DialogListener {
                                     override fun onOKButtonClicked() {
-                                        Toast.makeText(binding.root.context, "채팅창 이동", Toast.LENGTH_SHORT).show()
+                                        val intent = ChatActivity.newIntent(binding.root.context,
+                                            ERModel(
+                                                uid = author?.uid,
+                                                profilePicture = author?.profilePicture,
+                                                name = author?.name
+                                            )
+                                        )
+                                        binding.root.context.startActivity(intent)
                                     }
                                 })
 
