@@ -1,5 +1,7 @@
 package com.erionna.eternalreturninfo.ui.fragment
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log

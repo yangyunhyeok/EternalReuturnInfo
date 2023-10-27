@@ -9,10 +9,13 @@ import com.erionna.eternalreturninfo.databinding.FindDuoListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
 
-class FindduoAdapter(private val context: Context) :
-    RecyclerView.Adapter<FindduoAdapter.ItemViewHolder>() {
-    var items = ArrayList<ERModel>()
+class FindduoAdapter(
+    private val context: Context,
+    private val onClickUser: (Int, ERModel) -> Unit
+) : RecyclerView.Adapter<FindduoAdapter.ItemViewHolder>(
+) {
 
+    var items = ArrayList<ERModel>()
     override fun getItemCount(): Int {
         return items.size
     }
@@ -24,7 +27,10 @@ class FindduoAdapter(private val context: Context) :
         val binding =
             FindDuoListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ItemViewHolder(binding)
+        return ItemViewHolder(
+            binding,
+            onClickUser
+        )
     }
 
     override fun onBindViewHolder(holder: FindduoAdapter.ItemViewHolder, position: Int) {
@@ -36,11 +42,17 @@ class FindduoAdapter(private val context: Context) :
         holder.gender.text = currentItem.gender
         holder.tier.text = currentItem.tier
         holder.most.text = currentItem.most
-
-
+        holder.binding.fdliContainer.setOnClickListener {
+            onClickUser(
+                position,
+                currentItem
+            )
+        }
     }
-
-    inner class ItemViewHolder(var binding: FindDuoListItemBinding) :
+    inner class ItemViewHolder(
+        var binding: FindDuoListItemBinding,
+        private val onClickUser: (Int, ERModel) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         var server= binding.fdliServer
@@ -55,6 +67,8 @@ class FindduoAdapter(private val context: Context) :
 
             itemClickListener?.onItemClick(item)
         }
+
+
     }
 
     interface OnItemClickListener {

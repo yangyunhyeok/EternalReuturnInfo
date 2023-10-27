@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.erionna.eternalreturninfo.databinding.MainFragmentBinding
 import com.erionna.eternalreturninfo.model.VideoModel
@@ -44,7 +45,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.mainRecyclerview.layoutManager = gridmanager
+        binding.mainRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.mainRecyclerview.adapter = adapter
 
         initView()

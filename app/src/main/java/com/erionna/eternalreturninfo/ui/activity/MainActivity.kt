@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MainActivityBinding
 import com.erionna.eternalreturninfo.ui.adapter.MainViewPagerAdapter
@@ -14,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: MainActivityBinding
+    lateinit var binding: MainActivityBinding
     private var auth: FirebaseAuth? = null
 
 
