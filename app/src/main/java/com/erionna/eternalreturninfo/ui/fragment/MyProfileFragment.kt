@@ -27,6 +27,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
@@ -34,6 +35,9 @@ class MyProfileFragment : Fragment() {
     private var auth: FirebaseAuth? = null
     var db = Firebase.firestore
     private lateinit var characterbinding: MyprofileCharacterDialogBinding
+    private val PICK_IMAGE = 1111
+    val storage = Firebase.storage
+    var email: String? = null
 
     companion object {
         fun newInstance() = MyProfileFragment()
@@ -60,6 +64,10 @@ class MyProfileFragment : Fragment() {
     private fun setOnClickListener() {
         var logoutBtn = binding.myprofileLogoutBtn
         var characterBtn = binding.myprofileCharacterImg
+        var profileBtn = binding.myprofileProfileImg
+        profileBtn.setOnClickListener {
+            selectProfile()
+        }
         logoutBtn.setOnClickListener {
             Firebase.auth.signOut()
             var intent = Intent(activity, LoginPage::class.java)
@@ -106,14 +114,14 @@ class MyProfileFragment : Fragment() {
                 FirebaseFirestore.getInstance()
                     .collection("EternalReturnInfo")
                     .document(auth!!.uid!!)
-                    .update("character",selectCharacter)
+                    .update("character", selectCharacter)
                     .addOnSuccessListener {
-                        Log.d("실험체","성공")
+                        Log.d("실험체", "성공")
                         var uid = auth?.uid.toString()
                         Patch(uid)
                     }
                     .addOnFailureListener {
-                        Log.d("실험체","실패")
+                        Log.d("실험체", "실패")
                     }
                 alertDialog.dismiss()
             }
@@ -134,6 +142,7 @@ class MyProfileFragment : Fragment() {
                     binding.myprofileMycharacterTv.text = document["character"].toString()
                     Glide.with(this).load(uri).into(binding.myprofileProfileImg);
                     ImgPacth(document["character"].toString())
+                    email = document["email"].toString()
                 }
             }
     }
@@ -161,6 +170,45 @@ class MyProfileFragment : Fragment() {
         Patch(uid)
     }
 
+    fun selectProfile() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
+        startActivityForResult(intent, PICK_IMAGE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE) {
+            val uri: Uri? = data?.data
+            if (uri != null) {
+                upload(uri, email!!)
+                var uid = auth?.uid.toString()
+                Patch(uid)
+            }
+        }
+    }
+
+    fun upload(
+        uri: Uri,
+        email: String,
+    ) {
+        val storageRef = storage.reference
+        val fileName = email + ".jpg"
+        val riversRef = storageRef.child("/$fileName")
+
+        riversRef.putFile(uri)
+            .addOnProgressListener { taskSnapshot ->
+                riversRef.downloadUrl.addOnSuccessListener { uri ->
+                    FirebaseFirestore.getInstance()
+                        .collection("EternalReturnInfo")
+                        .document(auth!!.uid!!)
+                        .update("profile",uri.toString())
+                }
+            }
+            .addOnFailureListener { Log.i("업로드 실패", "") }
+            .addOnSuccessListener { Log.i("업로드 성공", "") }
+    }
+
+
     fun GooglePatch() {
 
     }
@@ -168,5 +216,6 @@ class MyProfileFragment : Fragment() {
     fun updateCharacter(character: String) {
         ImgPacth(character)
     }
+
 
 }
