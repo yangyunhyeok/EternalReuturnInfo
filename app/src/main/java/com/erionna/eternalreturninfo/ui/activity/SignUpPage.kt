@@ -31,6 +31,7 @@ class SignUpPage : AppCompatActivity() {
     private val PICK_IMAGE = 1111
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
+    var ImageCheck = 0
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,9 +76,8 @@ class SignUpPage : AppCompatActivity() {
                 binding.signupPWCheckEt.text.toString(),
                 binding.signupNickNameEt.text.toString(),
                 selectCharacter,
-                selectedImageURI
+//                selectedImageURI
             )
-            Log.d("이미지 수신", "$selectedImageURI")
         }
     }
 
@@ -88,9 +88,9 @@ class SignUpPage : AppCompatActivity() {
         passwordCheck: String,
         nickname: String,
         character: String,
-        uri: Uri
+//        uri: Uri
     ) {
-        if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty() && uri != null) {
+        if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty()) {
             if (password == passwordCheck) {
                 auth?.createUserWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener(this) { task ->
@@ -99,7 +99,21 @@ class SignUpPage : AppCompatActivity() {
                                 this, "계정 생성 완료.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            upload(uri, email, password, nickname, character)
+                            var baseImage = "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_character.jpg?alt=media&token=b0908050-66b9-4273-95e4-38645bd02477&_gl=1*1aipnfg*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODM4OTAyOS41My4xLjE2OTgzOTM5NzEuMS4wLjA."
+                            setDocument(
+                                SignUpData(
+                                    Email = email,
+                                    PW = password,
+                                    NickName = nickname,
+                                    Character = character,
+                                    profile = baseImage
+                                )
+                            )
+                            database.child("user").child(auth.uid!!)
+                                .setValue(ERModel(profilePicture = baseImage, email = email, password = password, name = nickname, uid = auth.uid!!))
+                            if(ImageCheck == 1){
+                                upload(selectedImageURI, email)
+                            }
 
                             Toast.makeText(this, "$character", Toast.LENGTH_SHORT).show()
                             finish()
@@ -145,16 +159,14 @@ class SignUpPage : AppCompatActivity() {
             if (uri != null) {
                 selectedImageURI = uri
                 binding.signupProfileImg.setImageURI(uri)
+                ImageCheck = 1
             }
         }
     }
 
-    private fun upload(
+    fun upload(
         uri: Uri,
         email: String,
-        password: String,
-        nickname: String,
-        character: String
     ) {
         val storageRef = storage.reference
         val fileName = email + ".jpg"
@@ -163,17 +175,10 @@ class SignUpPage : AppCompatActivity() {
         riversRef.putFile(uri)
             .addOnProgressListener { taskSnapshot ->
                 riversRef.downloadUrl.addOnSuccessListener { uri ->
-                    setDocument(
-                        SignUpData(
-                            Email = email,
-                            PW = password,
-                            NickName = nickname,
-                            Character = character,
-                            profile = uri.toString()
-                        )
-                    )
-                    database.child("user").child(auth.uid!!)
-                        .setValue(ERModel(most= character, profilePicture = uri.toString(), email = email, password = password, name = nickname, uid = auth.uid!!))
+                    FirebaseFirestore.getInstance()
+                        .collection("EternalReturnInfo")
+                        .document(auth.uid!!)
+                        .update("profile",uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
