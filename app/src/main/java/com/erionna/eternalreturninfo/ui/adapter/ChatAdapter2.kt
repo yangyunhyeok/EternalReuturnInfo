@@ -68,6 +68,7 @@ class ChatAdapter2(
         position: Int
     ): Int {
         val currentMessage = getItem(position)
+        // 현재 메시지의 senduid와 접속자의 uid가 일치하면 전송모드, 불일치하면 수신모드
         return if (FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.sendId)) {
             ItemViewType.SENDER.ordinal
         } else {
@@ -114,4 +115,24 @@ class ChatAdapter2(
         }
     }
 }
+
+//             기존 에러 코드
+//            database.child("chats").child(recevierRoom).child("messages")
+//                .addValueEventListener(object : ValueEventListener {
+//                    override fun onDataChange(snapShot: DataSnapshot) {
+//                        var receiverReadOrNot: Boolean? = null
+//                        for (child in snapShot.children) {
+//                            val message = child.getValue(Message::class.java)
+//                            receiverReadOrNot = message?.readOrNot
+//                        }
+//                        if ( receiverReadOrNot == true ) {
+//                            chatItemSenderReadCount.visibility = View.INVISIBLE
+//                        } else {
+//                            chatItemSenderReadCount.visibility = View.VISIBLE
+//                        }
+//                    }
+//                    override fun onCancelled(error: DatabaseError) {
+//                        TODO("Not yet implemented")
+//                    }
+//                })
 

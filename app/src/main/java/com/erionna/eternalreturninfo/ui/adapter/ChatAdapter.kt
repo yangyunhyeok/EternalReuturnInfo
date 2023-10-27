@@ -58,7 +58,6 @@ class ChatAdapter(
         position: Int
     ): Int {
         val currentMessage = messageList[position]
-        // 현재 메시지의 senduid와 접속자의 uid가 일치하면 전송모드, 불일치하면 수신모드
         return if (FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.sendId)) {
             ItemViewType.SENDER.ordinal
         } else {
@@ -85,7 +84,7 @@ class ChatAdapter(
             var recevierRoom: String = item.sendId + item.receiverId
 
 
-            // 수정한 코드 ( 고쳐서 잘 작동은 하지만.. 왜 잘 작동하는지..)
+            // 수정한 코드
             database.child("chats").child(recevierRoom).child("messages")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapShot: DataSnapshot) {
@@ -106,26 +105,6 @@ class ChatAdapter(
                         TODO("Not yet implemented")
                     }
                 })
-
-//             기존 에러 코드
-//            database.child("chats").child(recevierRoom).child("messages")
-//                .addValueEventListener(object : ValueEventListener {
-//                    override fun onDataChange(snapShot: DataSnapshot) {
-//                        var receiverReadOrNot: Boolean? = null
-//                        for (child in snapShot.children) {
-//                            val message = child.getValue(Message::class.java)
-//                            receiverReadOrNot = message?.readOrNot
-//                        }
-//                        if ( receiverReadOrNot == true ) {
-//                            chatItemSenderReadCount.visibility = View.INVISIBLE
-//                        } else {
-//                            chatItemSenderReadCount.visibility = View.VISIBLE
-//                        }
-//                    }
-//                    override fun onCancelled(error: DatabaseError) {
-//                        TODO("Not yet implemented")
-//                    }
-//                })
 
             chatItemSenderContainer.setOnClickListener {
                 onClickItem(
@@ -155,35 +134,3 @@ class ChatAdapter(
         }
     }
 }
-
-//            database.child("chats").child(recevierRoom).child("messages").get().addOnSuccessListener {
-//                for ( child in it.children ) {
-//                    val message = child.getValue(Message::class.java)
-//                    val readOrNot = message?.readOrNot
-//                    if ( readOrNot == true ) {
-//                        chatItemSenderReadCount.visibility = View.INVISIBLE
-//                    } else {
-//                        chatItemSenderReadCount.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-
-
-//database.child("chats").child(recevierRoom).child("messages")
-//.addValueEventListener(object : ValueEventListener {
-//    override fun onDataChange(snapShot: DataSnapshot) {
-//        var receiverReadOrNot: Boolean? = null
-//        for (postSnapshot in snapShot.children) {
-//            val message = postSnapshot.getValue(Message::class.java)
-//            receiverReadOrNot = message?.readOrNot
-//            if ( receiverReadOrNot == true ) {
-//                chatItemSenderReadCount.visibility = View.INVISIBLE
-//            } else {
-//                chatItemSenderReadCount.visibility = View.VISIBLE
-//            }
-//        }
-//    }
-//    override fun onCancelled(error: DatabaseError) {
-//        TODO("Not yet implemented")
-//    }
-//})
