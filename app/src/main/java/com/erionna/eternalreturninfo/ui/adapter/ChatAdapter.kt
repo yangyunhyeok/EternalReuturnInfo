@@ -85,25 +85,47 @@ class ChatAdapter(
             var recevierRoom: String = item.sendId + item.receiverId
 
 
+            // 수정한 코드 ( 고쳐서 잘 작동은 하지만.. 왜 잘 작동하는지..)
             database.child("chats").child(recevierRoom).child("messages")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapShot: DataSnapshot) {
                         var receiverReadOrNot: Boolean? = null
-                        for (postSnapshot in snapShot.children) {
-                            val message = postSnapshot.getValue(Message::class.java)
-                            receiverReadOrNot = message?.readOrNot
-                            if (receiverReadOrNot == true) {
-                                chatItemSenderReadCount.visibility = View.INVISIBLE
-                            } else {
-                                chatItemSenderReadCount.visibility = View.VISIBLE
+                        for (child in snapShot.children) {
+                            val message = child.getValue(Message::class.java)
+                            if (message?.id == item.id) {
+                                receiverReadOrNot = message?.readOrNot
                             }
                         }
+                        if (receiverReadOrNot == false) {
+                            chatItemSenderReadCount.visibility = View.VISIBLE
+                        } else {
+                            chatItemSenderReadCount.visibility = View.GONE
+                        }
                     }
-
                     override fun onCancelled(error: DatabaseError) {
                         TODO("Not yet implemented")
                     }
                 })
+
+//             기존 에러 코드
+//            database.child("chats").child(recevierRoom).child("messages")
+//                .addValueEventListener(object : ValueEventListener {
+//                    override fun onDataChange(snapShot: DataSnapshot) {
+//                        var receiverReadOrNot: Boolean? = null
+//                        for (child in snapShot.children) {
+//                            val message = child.getValue(Message::class.java)
+//                            receiverReadOrNot = message?.readOrNot
+//                        }
+//                        if ( receiverReadOrNot == true ) {
+//                            chatItemSenderReadCount.visibility = View.INVISIBLE
+//                        } else {
+//                            chatItemSenderReadCount.visibility = View.VISIBLE
+//                        }
+//                    }
+//                    override fun onCancelled(error: DatabaseError) {
+//                        TODO("Not yet implemented")
+//                    }
+//                })
 
             chatItemSenderContainer.setOnClickListener {
                 onClickItem(
