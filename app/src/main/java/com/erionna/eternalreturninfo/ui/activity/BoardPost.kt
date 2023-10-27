@@ -82,7 +82,6 @@ class BoardPost : AppCompatActivity() {
 
                             if(snapshot.exists()){
                                 val user = snapshot.getValue<ERModel>()
-                                Log.d("choco5733" , "누구냐 넌 : {$user}")
                                 boardPostTvUser.text = user?.name
 
                                 if(user?.profilePicture?.isEmpty() == true){

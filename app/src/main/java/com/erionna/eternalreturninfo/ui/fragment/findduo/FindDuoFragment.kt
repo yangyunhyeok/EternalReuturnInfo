@@ -15,7 +15,10 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
-import com.erionna.eternalreturninfo.ui.fragment.MyProfileFragment
+import com.erionna.eternalreturninfo.ui.activity.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.ChatActivity
+import com.erionna.eternalreturninfo.ui.activity.DialogListener
+import com.erionna.eternalreturninfo.ui.activity.MainActivity
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -49,7 +52,28 @@ class FindDuoFragment : Fragment() {
     }
 
     private val adapter: FindduoAdapter by lazy {
-        FindduoAdapter(requireContext())
+        FindduoAdapter(
+            requireContext(),
+            onClickUser = { position, item ->
+                Log.d("choco5733", "$item")
+                if (item.uid != mAuth.uid) {
+                    val customDialog = BoardDialog(requireContext(), item.uid ?: "", item.name ?: "",object : DialogListener {
+                        override fun onOKButtonClicked() {
+                            startActivity(
+                                ChatActivity.newIntent(
+                                    requireContext(),
+                                    item
+                                )
+                            )
+                        }
+                    })
+                    customDialog.show()
+                } else {
+                    val mainActivity = activity as MainActivity
+                    mainActivity.binding.tabLayout.getTabAt(4)?.select()
+                }
+            }
+        )
     }
 
     override fun onCreateView(
@@ -306,14 +330,7 @@ class FindDuoFragment : Fragment() {
                             !user.gender.isNullOrEmpty() &&
                             !user.tier.isNullOrEmpty()
                         ) {
-                            val filteredUser = ERModel(
-                                user.server,
-                                user.name,
-                                user.gender,
-                                user.tier,
-                                user.most
-                            )
-                            filteredUsersList.add(filteredUser)
+                            filteredUsersList.add(user)
                         }
                     }
 

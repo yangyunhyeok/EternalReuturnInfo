@@ -44,6 +44,7 @@ class ChatListFragment : Fragment() {
     private val chatListAdapter by lazy {
         ChatListAdapter(
             onClickItem = { position, item ->
+                Log.d("choco5733 list", "$item")
                 chatLauncher.launch(
                     ChatActivity.newIntentForModify(
                         requireContext(),
