@@ -22,7 +22,6 @@ class ChatListViewModel(
         if (item == null) {
             return
         }
-
         val currentList = list.value.orEmpty().toMutableList()
         _list.value = currentList.apply {
             add(

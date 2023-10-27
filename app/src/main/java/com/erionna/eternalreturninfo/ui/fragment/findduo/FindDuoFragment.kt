@@ -37,8 +37,37 @@ class FindDuoFragment : Fragment() {
 
     private var mUID = ""
 
+    //파이어스터오랑 연동하기위한 코드
+
+    private val firestore = FirebaseFirestore.getInstance()
+
+    private val linearManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
     private val adapter: FindduoAdapter by lazy {
-        FindduoAdapter(requireContext())
+        FindduoAdapter(
+            requireContext(),
+            onClickUser = { position, item ->
+                Log.d("choco5733", "$item")
+                if (item.uid != mAuth.uid) {
+                    val customDialog = BoardDialog(requireContext(), item.uid ?: "", item.name ?: "",object : DialogListener {
+                        override fun onOKButtonClicked() {
+                            startActivity(
+                                ChatActivity.newIntent(
+                                    requireContext(),
+                                    item
+                                )
+                            )
+                        }
+                    })
+                    customDialog.show()
+                } else {
+                    val mainActivity = activity as MainActivity
+                    mainActivity.binding.tabLayout.getTabAt(4)?.select()
+                }
+            }
+        )
     }
 
     override fun onCreateView(
@@ -58,9 +87,8 @@ class FindDuoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.findduoRecyclerview.adapter = adapter
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.findduoRecyclerview.adapter = adapter
         initView()
 
     }
@@ -81,7 +109,6 @@ class FindDuoFragment : Fragment() {
         findduoGenderBtn.setOnClickListener { showGenderDialog() }
         findduoTierBtn.setOnClickListener { showTierDialog() }
         findduoMostBtn.setOnClickListener { showMostDialog() }
-
 
         adapter.notifyDataSetChanged()
 
@@ -226,9 +253,13 @@ class FindDuoFragment : Fragment() {
             var finalSelection = ""
 
             for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
+                finalSelection = item
             }
 
+            // 파이어스토어에 모스트 값을 업데이트
+            updateMostInFirestore(finalSelection)
+
+            //파이어베이스에
             updateUserInFirebase(finalSelection, "most")
 
             Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
@@ -259,7 +290,7 @@ class FindDuoFragment : Fragment() {
         )
 
         // Firebase Realtime Database 경로
-        val databasePath = "userInfo/$userId"
+        val databasePath = "user/$userId"
 
         // 데이터베이스에 업데이트할 내용을 설정
         mDbRef.child(databasePath).updateChildren(updateData)
@@ -278,28 +309,36 @@ class FindDuoFragment : Fragment() {
 
     private fun loadAllUserDataFromFirebase() {
         // Firebase Realtime Database 경로
-        val databasePath = "userInfo"
+        val databasePath = "user"
 
         // 데이터베이스에서 모든 사용자 정보 가져오기
-        mDbRef.child(databasePath).addListenerForSingleValueEvent(object : ValueEventListener {
+        mDbRef.child(databasePath).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val numberOfUsers = snapshot.childrenCount
-
-                binding.findduoTotalNumber.text = numberOfUsers.toString()
+                val filteredUsersList = ArrayList<ERModel>() // 필터링된 사용자 목록
 
                 if (snapshot.exists()) {
-                    val usersList = ArrayList<User>()
-
                     for (userSnapshot in snapshot.children) {
-                        val user = userSnapshot.getValue(User::class.java)
-                        user?.let { usersList.add(it) }
+                        val user = userSnapshot.getValue(ERModel::class.java)
+
+                        // 유저의 필드 중 하나라도 null이 아니면 필터링 대상에 포함
+                        if (user != null &&
+                            !user.server.isNullOrEmpty() &&
+                            !user.name.isNullOrEmpty() &&
+                            !user.gender.isNullOrEmpty() &&
+                            !user.tier.isNullOrEmpty()
+                        ) {
+                            filteredUsersList.add(user)
+                        }
                     }
 
-                    // RecyclerView 어댑터의 데이터 소스에 모든 사용자 정보 추가
+                    // RecyclerView 어댑터의 데이터 소스에 필터링된 사용자 정보 추가
                     adapter.items.clear()
-                    adapter.items.addAll(usersList)
+                    adapter.items.addAll(filteredUsersList)
                     // RecyclerView 갱신
                     adapter.notifyDataSetChanged()
+
+                    val filteredUserCount = filteredUsersList.size
+                    binding.findduoTotalNumber.text = filteredUserCount.toString() // 필터링된 사용자 수 표시
                 } else {
                     // 데이터가 존재하지 않는 경우
                     Log.d(TAG, "No user data found")
@@ -313,4 +352,20 @@ class FindDuoFragment : Fragment() {
         })
     }
 
+    //파이어스터어랑 연동하기 위한 함수
+    private fun updateMostInFirestore(finalSelection: String) {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            val userRef = firestore.collection("EternalReturnInfo").document(userId)
+
+            // Firestore의 'most' 필드 업데이트
+            userRef.update("character",finalSelection)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Firestore 'most' 업데이트 성공")
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Firestore 'most' 업데이트 실패: $e")
+                }
+        }
+    }
 }

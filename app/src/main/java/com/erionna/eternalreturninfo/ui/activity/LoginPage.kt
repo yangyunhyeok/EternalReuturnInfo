@@ -57,17 +57,15 @@ class LoginPage : AppCompatActivity() {
         googlebinding = GoogleDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        //구글로그인 기본 설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("48907367773-37le51fs370ruk8eirjkmi11k6qmg30k.apps.googleusercontent.com")
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
-
         //로그인 버튼
         binding.loginLoginBtn.setOnClickListener {
-
             Login(binding.loginIDEt.text.toString(), binding.loginPWEt.text.toString())
         }
 
@@ -83,51 +81,58 @@ class LoginPage : AppCompatActivity() {
             val alertDialog = AlertDialog.Builder(this)
                 .setView(dialogView)
                 .create()
-
             val Email = dialogView.findViewById<EditText>(R.id.findpw_id_et).text
             val button = dialogView.findViewById<Button>(R.id.findpw_findpw_btn)
 
             // 비밀번호찾기 이메일 전송 버튼
             button.setOnClickListener {
-                FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(this, "재설정 이메일을 보냈습니다!", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(this, "존재하지 않는 아이디 입니다", Toast.LENGTH_SHORT).show()
+                if(Email.isNotEmpty()) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    Email.toString() + R.string.login_lostpw_success,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    R.string.login_lostpw_fail,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                    }
-                Log.d("test", "$Email")
-                alertDialog.dismiss()
+                    alertDialog.dismiss()
+                }else{
+                    Toast.makeText(this, R.string.login_lostpw_null, Toast.LENGTH_SHORT).show()
+                }
             }
-
             alertDialog.show()
         }
 
         //구글로그인 다이얼로그 버튼
         binding.loginSnsLoginBtn.setOnClickListener {
-            val intent= mGoogleSignInClient!!.signInIntent
-            startActivityForResult(intent,100)
+            val intent = mGoogleSignInClient!!.signInIntent
+            startActivityForResult(intent, 100)
         }
-
-
     }
 
+    // 구글 로그인
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==100){
+        if (requestCode == 100) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val google = task.getResult(ApiException::class.java)
-            val credential = GoogleAuthProvider.getCredential(google.idToken,null)
+            val credential = GoogleAuthProvider.getCredential(google.idToken, null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener{task->
-                    if(task.isSuccessful){
-                        val intent = Intent(this,MainActivity::class.java)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                    }else{
-                        Toast.makeText(this,task.exception?.message,Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
                     }
-
                 }
         }
     }
@@ -141,30 +146,28 @@ class LoginPage : AppCompatActivity() {
                     docRef.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
-                                Toast.makeText(this, "로그인 완료", Toast.LENGTH_SHORT).show()
-
+                                Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT)
+                                    .show()
                                 BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)
-                                intent.putExtra("email", document["email"].toString())
-                                intent.putExtra("nickName", document["nickName"].toString())
-                                intent.putExtra("character", document["character"].toString())
-                                intent.putExtra("profile", document["profile"].toString())
                                 startActivity(intent)
                             } else {
-                                Log.d(TAG, "No such document")
                             }
                         }
                         .addOnFailureListener { exception ->
-                            Log.d(TAG, "get failed with ", exception)
                         }
                 } else {
-                    Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this, R.string.login_fail,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         } else {
-            Toast.makeText(this, "이메일과 비밀번호 전부 입력하세요", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.login_fail_null, Toast.LENGTH_SHORT).show()
         }
     }
+
     companion object {
         private const val TAG = "GoogleActivity"
     }

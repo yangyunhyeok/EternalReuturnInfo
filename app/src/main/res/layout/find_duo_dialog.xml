@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shape_findduo_dialog"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,7 +17,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:text="text"
+            android:textColor="@color/white"/>
 
         <EditText
             android:id="@+id/editText2"
@@ -24,6 +26,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="AGE" />
+            android:text="text"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>
