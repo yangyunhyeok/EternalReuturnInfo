@@ -64,6 +64,10 @@ class MainActivity : AppCompatActivity() {
             tab.setIcon(tabIcon[position])
         }.attach()
 
+        viewPager.run {
+            isUserInputEnabled = false
+        }
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 updateTabIconsAndText(tab, true)

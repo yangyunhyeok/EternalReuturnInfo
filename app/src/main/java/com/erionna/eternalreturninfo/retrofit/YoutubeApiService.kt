@@ -1,8 +1,11 @@
 package com.erionna.eternalreturninfo.retrofit
 
 import com.erionna.eternalreturninfo.util.Constants.Companion.AUTH_KEY
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface YoutubeApiService {
@@ -28,4 +31,26 @@ interface YoutubeApiService {
         @Query("channelId") channelId: String = "",
         @Query("part") part: String = "snippet",
     ): Response<YoutubeVideo>
+}
+
+interface ApiService {
+    @GET("/api/v1/posts/news")
+    fun getNews(@Header("Cookie") locale: String): Call<ResponseModel>
+}
+
+interface UserStatsService {
+    @GET("v1/user/stats/{userNum}/{seasonId}")
+    fun getUserStats(
+        @Header("x-api-key") apiKey: String,
+        @Path("userNum") userNum: String,
+        @Path("seasonId") seasonId: String
+    ): Call<UserStatsResponse>
+}
+
+interface UserService {
+    @GET("v1/user/nickname")
+    fun getUserByNickname(
+        @Header("x-api-key") apiKey: String,
+        @Query("query") query: String
+    ): Call<UserResponse>
 }

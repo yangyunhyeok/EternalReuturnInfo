@@ -1,5 +1,6 @@
 package com.erionna.eternalreturninfo.retrofit
 
+import android.util.Log
 import com.erionna.eternalreturninfo.model.ERModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -31,6 +32,7 @@ object BoardSingletone {
                         val user = snapshot.getValue<ERModel>()
                         if (user != null) {
                             loginUser = user
+                            Log.d("user.name",user.name.toString())
                         }
                     }
                 }

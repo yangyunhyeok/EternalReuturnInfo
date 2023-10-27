@@ -9,5 +9,10 @@ class Constants {
         const val EXTRA_MESSAGE = "extra_message"
         const val EXTRA_TIME = "extra_time"
 
+        const val MAIN_BASE_URL = "https://open-api.bser.io"
+        const val MAIN_APIKEY = "ir1CnLrsNK2EbPKc8QNRE3Fx4C3dPoHP2UDTjKhE"
+
+        const val ETERNAL_RETURN_BASE_URL = "https://playeternalreturn.com"
     }
+
 }

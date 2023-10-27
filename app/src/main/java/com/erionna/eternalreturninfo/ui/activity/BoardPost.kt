@@ -209,6 +209,7 @@ class BoardPost : AppCompatActivity() {
             BoardCommentRecyclerViewAdpater.OnItemClickListener {
             override fun onDeleteItemClick(commentItem: CommentModel, position: Int) {
                 FBRef.postRef.child(id).child("comments").child(commentItem.id).removeValue()
+                boardViewModel.removeComment(position)
             }
 
             override fun onUpdateItemClick(commentItem: CommentModel, position: Int) {

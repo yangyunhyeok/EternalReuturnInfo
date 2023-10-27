@@ -151,6 +151,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             <ImageView
                 android:id="@+id/myprofile_character_img"
                 android:layout_width="150dp"
@@ -174,6 +175,16 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/myprofile_character_img" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/myprofile_rv_board"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/myprofile_myboard_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
