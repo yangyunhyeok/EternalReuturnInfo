@@ -19,7 +19,6 @@ import com.erionna.eternalreturninfo.ui.activity.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.DialogListener
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
-import com.erionna.eternalreturninfo.ui.fragment.MyProfileFragment
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
