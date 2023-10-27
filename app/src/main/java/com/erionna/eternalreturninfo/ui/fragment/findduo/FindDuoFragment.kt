@@ -69,12 +69,9 @@ class FindDuoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.findduoRecyclerview.layoutManager = linearManager
+        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
-
         initView()
-
     }
 
     override fun onDestroyView() {
@@ -235,7 +232,7 @@ class FindDuoFragment : Fragment() {
             var finalSelection = ""
 
             for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
+                finalSelection = item
             }
 
             // 파이어스토어에 모스트 값을 업데이트
@@ -348,7 +345,7 @@ class FindDuoFragment : Fragment() {
             val userRef = firestore.collection("EternalReturnInfo").document(userId)
 
             // Firestore의 'most' 필드 업데이트
-            userRef.update("character", finalSelection)
+            userRef.update("character",finalSelection)
                 .addOnSuccessListener {
                     Log.d(TAG, "Firestore 'most' 업데이트 성공")
                 }
