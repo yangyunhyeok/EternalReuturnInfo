@@ -15,6 +15,7 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
+import com.erionna.eternalreturninfo.ui.fragment.MyProfileFragment
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class FindDuoFragment : Fragment() {
     companion object {
@@ -37,6 +39,10 @@ class FindDuoFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
 
     private var mUID = ""
+
+    //파이어스터오랑 연동하기위한 코드
+
+    private val firestore = FirebaseFirestore.getInstance()
 
     private val linearManager: LinearLayoutManager by lazy {
         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -232,6 +238,10 @@ class FindDuoFragment : Fragment() {
                 finalSelection = finalSelection + "\n" + item
             }
 
+            // 파이어스토어에 모스트 값을 업데이트
+            updateMostInFirestore(finalSelection)
+
+            //파이어베이스에
             updateUserInFirebase(finalSelection, "most")
 
             Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
@@ -284,34 +294,40 @@ class FindDuoFragment : Fragment() {
         val databasePath = "user"
 
         // 데이터베이스에서 모든 사용자 정보 가져오기
-        mDbRef.child(databasePath).addListenerForSingleValueEvent(object : ValueEventListener {
+        mDbRef.child(databasePath).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val numberOfUsers = snapshot.childrenCount
-
-                binding.findduoTotalNumber.text = numberOfUsers.toString()
+                val filteredUsersList = ArrayList<ERModel>() // 필터링된 사용자 목록
 
                 if (snapshot.exists()) {
-                    val usersList = ArrayList<ERModel>()
-
                     for (userSnapshot in snapshot.children) {
                         val user = userSnapshot.getValue(ERModel::class.java)
-                        user?.let {
+
+                        // 유저의 필드 중 하나라도 null이 아니면 필터링 대상에 포함
+                        if (user != null &&
+                            !user.server.isNullOrEmpty() &&
+                            !user.name.isNullOrEmpty() &&
+                            !user.gender.isNullOrEmpty() &&
+                            !user.tier.isNullOrEmpty()
+                        ) {
                             val filteredUser = ERModel(
-                                it.server,
-                                it.name,
-                                it.gender,
-                                it.tier,
-                                it.most
+                                user.server,
+                                user.name,
+                                user.gender,
+                                user.tier,
+                                user.most
                             )
-                            usersList.add(filteredUser)
+                            filteredUsersList.add(filteredUser)
                         }
                     }
 
-                    // RecyclerView 어댑터의 데이터 소스에 모든 사용자 정보 추가
+                    // RecyclerView 어댑터의 데이터 소스에 필터링된 사용자 정보 추가
                     adapter.items.clear()
-                    adapter.items.addAll(usersList)
+                    adapter.items.addAll(filteredUsersList)
                     // RecyclerView 갱신
                     adapter.notifyDataSetChanged()
+
+                    val filteredUserCount = filteredUsersList.size
+                    binding.findduoTotalNumber.text = filteredUserCount.toString() // 필터링된 사용자 수 표시
                 } else {
                     // 데이터가 존재하지 않는 경우
                     Log.d(TAG, "No user data found")
@@ -325,4 +341,20 @@ class FindDuoFragment : Fragment() {
         })
     }
 
+    //파이어스터어랑 연동하기 위한 함수
+    private fun updateMostInFirestore(finalSelection: String) {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            val userRef = firestore.collection("EternalReturnInfo").document(userId)
+
+            // Firestore의 'most' 필드 업데이트
+            userRef.update("character", finalSelection)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Firestore 'most' 업데이트 성공")
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Firestore 'most' 업데이트 실패: $e")
+                }
+        }
+    }
 }

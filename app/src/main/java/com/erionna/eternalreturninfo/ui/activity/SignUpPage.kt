@@ -173,7 +173,7 @@ class SignUpPage : AppCompatActivity() {
                         )
                     )
                     database.child("user").child(auth.uid!!)
-                        .setValue(ERModel(profilePicture = uri.toString(), email = email, password = password, name = nickname, uid = auth.uid!!))
+                        .setValue(ERModel(most= character, profilePicture = uri.toString(), email = email, password = password, name = nickname, uid = auth.uid!!))
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }

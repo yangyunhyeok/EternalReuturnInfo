@@ -44,6 +44,7 @@ class MyProfileFragment : Fragment() {
 
     fun Patch(uid: String) {
         val docRef = db.collection("EternalReturnInfo").document("$uid")
+
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -79,5 +80,8 @@ class MyProfileFragment : Fragment() {
 
     }
 
+    fun updateCharacter(character: String) {
+        ImgPacth(character)
+    }
 
 }
