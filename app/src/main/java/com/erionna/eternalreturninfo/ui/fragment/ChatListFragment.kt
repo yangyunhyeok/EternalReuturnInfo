@@ -149,7 +149,8 @@ class ChatListFragment : Fragment() {
                                 )
                             } else {
                                 // 현재 접속자 상단에 표시
-                                binding.chatListTitle.setText(" ${currentUser?.name} 님 반갑습니다!")
+                                binding.chatListTitle.text = " ${currentUser?.name} 님 반갑습니다!"
+                                Log.d("choco5733 currentuser", "${currentUser?.name}")
                             }
                         }
                 }

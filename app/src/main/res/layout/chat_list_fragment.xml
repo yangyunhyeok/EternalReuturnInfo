@@ -28,13 +28,25 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_horizontal"
             android:layout_marginRight="32dp"
-            android:text="@string/chat_list_chat_tv"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/chat_list_chat_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="@string/chat_list_chat_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_list_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/chat_list_recyclerview"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_list_recyclerview"
@@ -43,6 +55,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_list_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/chat_list_chat_tv"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
