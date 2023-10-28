@@ -77,6 +77,9 @@ class ChatActivity : AppCompatActivity() {
     private val position by lazy {
         intent.getIntExtra(EXTRA_ER_POSITION, -1)
     }
+    private val data by lazy {
+        intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
+    }
 
     private lateinit var refDb: DatabaseReference
     private lateinit var refEventListener: ValueEventListener
@@ -95,6 +98,8 @@ class ChatActivity : AppCompatActivity() {
         )
     }
 
+
+
     override fun onBackPressed() {
         refDb.removeEventListener(refEventListener)
         finish()
@@ -107,21 +112,23 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initView()
+        saveChat()
+        loadChat()
+    }
 
-        // 채팅목록에서 전달받은 상대방 데이터 저장
-        val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
-        Log.d("#choco5732", "$data")
+    private fun initView() = with(binding) {
+        // 리사이클러뷰 초기화
+        chatRecycler.adapter = chatAdapter
+        chatRecycler.layoutManager = LinearLayoutManager(this@ChatActivity)
 
         // 툴바에 채팅상대 이름 출력하기
         binding.chatToolbarTitle.text = data?.name
+    }
 
+    private fun saveChat() {
         receiverName = data?.name.toString()
         receiverUid = data?.uid.toString()
-        Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
-
-        // 리사이클러뷰 초기화
-        binding.chatRecycler.adapter = chatAdapter
-        binding.chatRecycler.layoutManager = LinearLayoutManager(this)
 
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
@@ -130,7 +137,6 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverUid + senderUid
         // 받는이 방
         receiverRoom = senderUid + receiverUid
-        Log.d("#choco5732", "senderRoom : $senderRoom")
 
         // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
@@ -157,6 +163,20 @@ class ChatActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun loadChat() {
+        receiverName = data?.name.toString()
+        receiverUid = data?.uid.toString()
+
+        // 로그인 한 사용자 uid
+        val senderUid = auth.currentUser?.uid
+
+        // 보낸이 방
+        senderRoom = receiverUid + senderUid
+        // 받는이 방
+        receiverRoom = senderUid + receiverUid
+
         var finalMessage = ""
         var finalTime = ""
 
