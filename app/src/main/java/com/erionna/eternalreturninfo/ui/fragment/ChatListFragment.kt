@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
@@ -56,8 +58,13 @@ class ChatListFragment : Fragment() {
         )
     }
 
-    private val viewModel: ChatListViewModel by lazy {
-        ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
+//    private val viewModel: ChatListViewModel by lazy {
+//        ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
+//    }
+
+//    private val viewModel: ChatListViewModel by viewModels()
+    private val viewModel: ChatListViewModel by viewModels {
+        ChatListViewModelFactory()
     }
 
     private val chatLauncher =

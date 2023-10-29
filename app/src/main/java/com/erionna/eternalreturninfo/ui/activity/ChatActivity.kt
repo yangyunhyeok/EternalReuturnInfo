@@ -98,15 +98,11 @@ class ChatActivity : AppCompatActivity() {
         )
     }
 
-
-
     override fun onBackPressed() {
         refDb.removeEventListener(refEventListener)
         finish()
         super.onBackPressed()
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

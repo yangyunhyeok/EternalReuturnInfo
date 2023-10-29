@@ -12,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chat_list_recyclerview">
 
         <ImageView
             android:layout_width="100dp"
@@ -35,26 +36,13 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/chat_list_chat_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:text="@string/chat_list_chat_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chat_list_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/chat_list_recyclerview"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_list_recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_list_chat_tv"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat_list_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
