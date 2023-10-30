@@ -119,7 +119,13 @@ class ChatActivity : AppCompatActivity() {
         chatRecycler.layoutManager = LinearLayoutManager(this@ChatActivity)
 
         // 툴바에 채팅상대 이름 출력하기
-        binding.chatToolbarTitle.text = data?.name
+        chatToolbarTitle.text = data?.name
+
+        // 뒤로가기 클릭 시 채팅방에서 빠져나옴
+        chatBackBtn.setOnClickListener{
+            refDb.removeEventListener(refEventListener)
+            finish()
+        }
     }
 
     private fun saveChat() {
