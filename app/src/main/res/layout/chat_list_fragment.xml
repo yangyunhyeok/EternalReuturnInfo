@@ -9,13 +9,15 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/chat_list_toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chat_list_chat_tv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/chat_list_recyclerview">
+        app:layout_constraintVertical_bias="0.52">
 
         <ImageView
             android:layout_width="100dp"
@@ -30,19 +32,32 @@
             android:layout_gravity="right|center_horizontal"
             android:layout_marginRight="32dp"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            android:textSize="16sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/chat_list_chat_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="채팅"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginStart="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/chat_list_recyclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_list_toolbar" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_list_recyclerview"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_list_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat_list_chat_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

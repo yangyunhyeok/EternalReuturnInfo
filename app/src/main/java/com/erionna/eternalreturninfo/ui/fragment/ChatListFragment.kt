@@ -58,11 +58,6 @@ class ChatListFragment : Fragment() {
         )
     }
 
-//    private val viewModel: ChatListViewModel by lazy {
-//        ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
-//    }
-
-//    private val viewModel: ChatListViewModel by viewModels()
     private val viewModel: ChatListViewModel by viewModels {
         ChatListViewModelFactory()
     }
@@ -102,6 +97,12 @@ class ChatListFragment : Fragment() {
         initView()
         initModel()
         setDataFromDatabase()
+        setChangedMsg()
+    }
+
+    private fun setChangedMsg() {
+        database = Firebase.database.reference
+
     }
 
     private fun initView() = with(binding) {
@@ -123,7 +124,7 @@ class ChatListFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 // 리스트 초기화
                 viewModel.clearList()
-                var senderRoom : String
+                var senderRoom: String
 
                 for (child in snapshot.children) {
                     val currentUser = child.getValue(ERModel::class.java)
@@ -136,9 +137,9 @@ class ChatListFragment : Fragment() {
                     database.child("chats").child(senderRoom).child("messages")
                         .get().addOnSuccessListener {
                             for (child in it.children) {
-                                message = child.getValue(Message::class.java)!!
+                                message = child.getValue(com.erionna.eternalreturninfo.model.Message::class.java)!!
                             }
-                            Log.d("choco5733 in msg", "$message")
+                            android.util.Log.d("choco5733 in msg", "$message")
 
                             if (auth.currentUser?.uid != currentUser?.uid) {
                                 if (message.time != "") {
@@ -157,12 +158,48 @@ class ChatListFragment : Fragment() {
                             } else {
                                 // 현재 접속자 상단에 표시
                                 binding.chatListTitle.text = " ${currentUser?.name} 님 반갑습니다!"
-                                Log.d("choco5733 currentuser", "${currentUser?.name}")
+                                android.util.Log.d("choco5733 currentuser", "${currentUser?.name}")
                             }
                         }
+
+
+                        database.child("chats").child(senderRoom).child("messages")
+                            .addValueEventListener(object : ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+
+                                    for (child in snapshot.children) {
+                                        message = child.getValue(Message::class.java)!!
+                                    }
+                                    Log.d("choco5733 in msg", "$message")
+
+                                    if (auth.currentUser?.uid != currentUser?.uid) {
+                                        if (message.time != "") {
+                                            sb.append(message.time)
+                                            convertTime = sb.substring(0, 13)
+                                        } else {
+                                            convertTime = message.time!!
+                                        }
+
+                                        viewModel.modifyItem2(
+                                            currentUser?.copy(
+                                                msg = "${message.message}",
+                                                time = convertTime
+                                            )
+                                        )
+                                    } else {
+                                        // 현재 접속자 상단에 표시
+                                        binding.chatListTitle.text = " ${currentUser?.name} 님 반갑습니다!"
+                                        Log.d("choco5733 currentuser", "${currentUser?.name}")
+                                    }
+
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+                            })
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 // 가져오기 실패 시
                 Toast.makeText(requireContext(), "가져오기 실패", Toast.LENGTH_SHORT).show()

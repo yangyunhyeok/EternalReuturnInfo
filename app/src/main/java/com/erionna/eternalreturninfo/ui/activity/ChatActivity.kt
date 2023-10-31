@@ -90,7 +90,7 @@ class ChatActivity : AppCompatActivity() {
     private val chatAdapter by lazy {
         ChatAdapter(
             messageList,
-            onClickItem = { position ->
+            onClickItem = { _ ->
                 val imm =
                     this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
