@@ -41,7 +41,7 @@
         android:layout_marginEnd="3dp"
         android:text="@string/chat_item_readOrNot"
         android:textColor="@color/highlight_color"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/chat_item_sender_text"
         app:layout_constraintEnd_toStartOf="@+id/chat_item_sender_text"
         app:layout_constraintTop_toTopOf="@+id/chat_item_sender_text" />

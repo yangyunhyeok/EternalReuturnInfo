@@ -19,6 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ImageView
+        android:id="@+id/chat_list_new_msg"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="24dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_new_message2"
+        app:layout_constraintStart_toEndOf="@+id/chat_list_profile_picture"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/chat_list_name"
         android:layout_width="wrap_content"
@@ -35,13 +46,11 @@
         android:id="@+id/chat_list_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginEnd="25dp"
         android:text="@string/chat_list_item_date"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/chat_list_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
-        app:layout_constraintStart_toEndOf="@+id/chat_list_name"
         app:layout_constraintTop_toTopOf="@id/chat_list_name" />
 
     <TextView

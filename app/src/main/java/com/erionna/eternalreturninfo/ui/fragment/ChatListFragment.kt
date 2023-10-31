@@ -97,13 +97,8 @@ class ChatListFragment : Fragment() {
         initView()
         initModel()
         setDataFromDatabase()
-        setChangedMsg()
     }
 
-    private fun setChangedMsg() {
-        database = Firebase.database.reference
-
-    }
 
     private fun initView() = with(binding) {
         chatListRecyclerview.adapter = chatListAdapter
@@ -125,16 +120,18 @@ class ChatListFragment : Fragment() {
                 // 리스트 초기화
                 viewModel.clearList()
                 var senderRoom: String
+                var receiverRoom: String
 
                 for (child in snapshot.children) {
                     val currentUser = child.getValue(ERModel::class.java)
                     senderRoom = auth.currentUser?.uid + currentUser?.uid
+                    receiverRoom = currentUser?.uid + auth.currentUser?.uid
 
                     var message = Message()
                     var convertTime = ""
                     var sb = StringBuilder()
 
-                    database.child("chats").child(senderRoom).child("messages")
+                    database.child("chats").child(receiverRoom).child("messages")
                         .get().addOnSuccessListener {
                             for (child in it.children) {
                                 message = child.getValue(com.erionna.eternalreturninfo.model.Message::class.java)!!
@@ -152,7 +149,8 @@ class ChatListFragment : Fragment() {
                                 viewModel.addUser(
                                     currentUser?.copy(
                                         msg = "${message.message}",
-                                        time = convertTime
+                                        time = convertTime,
+                                        readOrNot = message.readOrNot
                                     )
                                 )
                             } else {
@@ -163,7 +161,7 @@ class ChatListFragment : Fragment() {
                         }
 
 
-                        database.child("chats").child(senderRoom).child("messages")
+                        database.child("chats").child(receiverRoom).child("messages")
                             .addValueEventListener(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -183,7 +181,8 @@ class ChatListFragment : Fragment() {
                                         viewModel.modifyItem2(
                                             currentUser?.copy(
                                                 msg = "${message.message}",
-                                                time = convertTime
+                                                time = convertTime,
+                                                readOrNot = message.readOrNot
                                             )
                                         )
                                     } else {
