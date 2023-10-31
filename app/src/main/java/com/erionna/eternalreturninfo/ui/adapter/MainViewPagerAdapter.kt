@@ -5,10 +5,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.model.MainTabs
-import com.erionna.eternalreturninfo.ui.fragment.board.BoardFragment
-import com.erionna.eternalreturninfo.ui.fragment.chat.ChatFragment
+import com.erionna.eternalreturninfo.ui.fragment.BoardFragment
+import com.erionna.eternalreturninfo.ui.fragment.ChatListFragment
+import com.erionna.eternalreturninfo.ui.fragment.MyProfileFragment
+import com.erionna.eternalreturninfo.ui.fragment.findduo.FindDuoFragment
 import com.erionna.eternalreturninfo.ui.fragment.main.MainFragment
-import com.erionna.eternalreturninfo.ui.fragment.search.SearchFragment
 
 class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
@@ -18,10 +19,10 @@ class MainViewPagerAdapter(
 
     private val fragments = listOf(
         MainTabs(MainFragment.newInstance(), R.string.main_tab_main_title),
-        MainTabs(MainFragment.newInstance(), R.string.main_tab_walkthrough_title),
+        MainTabs(FindDuoFragment.newInstance(), R.string.main_tab_search_duo),
         MainTabs(BoardFragment.newInstance(), R.string.main_tab_board_title),
-        MainTabs(ChatFragment.newInstance(), R.string.main_tab_chat_title),
-        MainTabs(SearchFragment.newInstance(), R.string.main_tab_search_title)
+        MainTabs(ChatListFragment.newInstance(), R.string.main_tab_chat_title),
+        MainTabs(MyProfileFragment.newInstance(), R.string.main_tab_my_profile)
     )
 
     fun getFragment(position: Int): Fragment {

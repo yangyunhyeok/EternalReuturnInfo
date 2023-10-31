@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "48907367773",
+    "firebase_url": "https://eternalreturninfo-4dc4b-default-rtdb.firebaseio.com",
+    "project_id": "eternalreturninfo-4dc4b",
+    "storage_bucket": "eternalreturninfo-4dc4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48907367773:android:b263b8ac15ea73ddbda4b4",
+        "android_client_info": {
+          "package_name": "com.erionna.eternalreturninfo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48907367773-8t4s9gt6usc425e2vef0v785fvg0iq8n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.erionna.eternalreturninfo",
+            "certificate_hash": "0dbbe17cdad2cfb53eb6d1d2bb4d6f2485faea43"
+          }
+        },
+        {
+          "client_id": "48907367773-37le51fs370ruk8eirjkmi11k6qmg30k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5_nVEnaS1MX5Ydxjh-mvlaWykbxfOL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48907367773-37le51fs370ruk8eirjkmi11k6qmg30k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
