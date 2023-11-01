@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black">
+    android:background="@drawable/shape_findduo_item"
+    >
 
     <LinearLayout
         android:id="@+id/fdli_container"
@@ -23,49 +24,35 @@
                 android:id="@+id/fdli_most"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_margin="20dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_xiuk"
                 app:civ_border_color="@color/darkgray2"
                 app:civ_border_width="1dp"
-                android:src="@drawable/ic_xiuk"
-                />
+                app:layout_constraintBottom_toTopOf="@+id/fdli_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/fdli_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="68dp"
                 android:text="Owler2"
                 android:textColor="@color/text_color"
-                android:textSize="22dp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="15dp"
+                android:textStyle="bold|italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:paddingRight="15dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/fdli_server"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="@color/white"
-
-                android:text="KR"
-
-                android:textColor="@color/text_color"
-                android:textSize="12dp"
-                android:textStyle="italic"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
 
 
             <TextView
@@ -73,101 +60,163 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginStart="184dp"
-                android:layout_marginTop="8dp"
-
+                android:layout_marginStart="10dp"
                 android:text="gender"
                 android:textColor="@color/text_color"
                 android:textSize="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fdli_winratetv" />
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/textView13"
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toTopOf="@+id/textView13" />
 
             <TextView
-                android:id="@+id/fdli_avgrank"
+                android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginStart="108dp"
-
-                android:layout_marginTop="10dp"
-                android:text="#0.0"
-                android:textColor="@color/text_color"
-                android:textSize="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fdli_avgranktv" />
-
-            <TextView
-                android:id="@+id/fdli_winrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginStart="24dp"
-
-                android:layout_marginTop="10dp"
-                android:text="00%"
-                android:textColor="@color/text_color"
-                android:textSize="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fdli_avgranktv" />
-
-            <TextView
-                android:id="@+id/fdli_avgranktv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginStart="65dp"
-                android:layout_marginTop="11dp"
-
-                android:text="평균 순위"
-                android:textColor="@color/text_color"
-                android:textSize="10sp"
-                app:layout_constraintStart_toEndOf="@+id/fdli_winratetv"
-                app:layout_constraintTop_toBottomOf="@+id/fdli_tierimage" />
-
-            <TextView
-                android:id="@+id/fdli_winratetv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
                 android:layout_marginStart="16dp"
-
-                android:layout_marginTop="11dp"
-                android:text="승률"
-                android:textColor="@color/text_color"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="@+id/fdli_avgranktv"
+                android:layout_marginTop="15dp"
+                android:text="서버"
+                android:textColor="@color/white"
+                android:textSize="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fdli_name" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/fdli_server"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="7dp"
+                android:backgroundTint="@color/white"
+                android:text="KR"
+                android:textColor="@color/text_color"
+                android:textSize="15dp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                app:layout_constraintStart_toEndOf="@+id/textView17"
+                app:layout_constraintTop_toTopOf="@+id/textView17" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:text="성별"
+                android:textColor="@color/white"
+                android:textSize="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fdli_server"
+                app:layout_constraintStart_toEndOf="@+id/fdli_server"
+                app:layout_constraintTop_toTopOf="@+id/fdli_server" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/fdli_tierimage"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="5dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="15dp"
                 android:src="@drawable/ic_diamond"
                 app:civ_border_color="@color/darkgray2"
                 app:civ_border_overlay="true"
                 app:civ_border_width="1dp"
-                app:layout_constraintBottom_toBottomOf="@+id/fdli_name"
-                app:layout_constraintEnd_toStartOf="@+id/fdli_tier"
-                app:layout_constraintTop_toTopOf="@+id/fdli_tier"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintStart_toEndOf="@+id/textView18"
+                app:layout_constraintTop_toBottomOf="@+id/fdli_server" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="티어"
+                android:textColor="@color/white"
+                android:textSize="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fdli_tierimage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/fdli_tierimage"
+                app:layout_constraintVertical_bias="0.615" />
 
             <TextView
                 android:id="@+id/fdli_tier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:background="@color/black"
                 android:gravity="center"
                 android:text="Diamond"
                 android:textAlignment="center"
                 android:textColor="@color/text_color"
                 android:textSize="18dp"
-                app:layout_constraintBottom_toBottomOf="@+id/fdli_name"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textStyle="italic"
+                app:layout_constraintStart_toEndOf="@+id/fdli_tierimage"
+                app:layout_constraintTop_toBottomOf="@+id/fdli_gender" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="7dp"
+                android:background="@drawable/shape_findduo_item2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/fdli_winrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="13dp"
+                    android:text="00%"
+                    android:textColor="@color/text_color"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fdli_winratetv" />
+
+                <TextView
+                    android:id="@+id/fdli_winratetv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="13dp"
+                    android:text="승률"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/fdli_avgrank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="13dp"
+                    android:text="#0.0"
+                    android:textColor="@color/text_color"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/fdli_winrate"
+                    app:layout_constraintTop_toBottomOf="@+id/fdli_avgranktv" />
+
+                <TextView
+                    android:id="@+id/fdli_avgranktv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="13dp"
+                    android:text="평균 순위"
+                    android:textColor="@color/text_color"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toEndOf="@+id/fdli_winratetv"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -123,7 +123,7 @@ class FindDuoFragment : Fragment() {
         val databasePath = "user"
 
         // 데이터베이스에서 모든 사용자 정보 가져오기
-        mDbRef.child(databasePath).addValueEventListener(object : ValueEventListener {
+        mDbRef.child(databasePath).orderByChild("timestamp").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val filteredUsersList = ArrayList<ERModel>() // 필터링된 사용자 목록
 

@@ -11,6 +11,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -19,212 +21,179 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.databinding.FindduoPopupWindowActivityBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class FindduoPopupWindow(private val context: Context) {
     private var popupWindow: PopupWindow? = null
     private var _binding: FindduoPopupWindowActivityBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var mDbRef: DatabaseReference
-
     private lateinit var mAuth: FirebaseAuth
-
     private var mUID = ""
 
     //파이어스터오랑 연동하기위한 코드
-
     private val firestore = FirebaseFirestore.getInstance()
 
     fun showPopup(anchorView: View) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         _binding = FindduoPopupWindowActivityBinding.inflate(inflater, null, false)
+        mAuth = Firebase.auth
+        mDbRef = Firebase.database.reference
 
-        // PopupWindow 생성
-        popupWindow = PopupWindow(binding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        // PopupWindow
+        popupWindow = PopupWindow(
+            binding.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
         popupWindow?.apply {
-            elevation = 10.0f // 필요시 고도(elevation) 설정
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 투명한 배경 설정
+            elevation = 10.0f // 고도
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경
             isOutsideTouchable = true
-            animationStyle = android.R.style.Animation_Dialog // 애니메이션 스타일 설정
+            animationStyle = android.R.style.Animation_Dialog // 애니메이션
         }
 
-        // 버튼에 대한 클릭 리스너 설정
-        binding.findduoServerBtn.setOnClickListener { showServerDialog() }
-        binding.findduoGenderBtn.setOnClickListener { showGenderDialog() }
-        binding.findduoTierBtn.setOnClickListener { showTierDialog() }
-        binding.findduoMostBtn.setOnClickListener { showMostDialog() }
+        //서버 스피너
+
+        val serverlist = context.resources.getStringArray(R.array.server)
+        val adpater = ArrayAdapter<String>(
+            context,
+            R.layout.findduo_spinner,
+            R.id.findduo_spinner_tv,
+            serverlist
+        )
+        var selectServer: String? = null
+
+        binding.findduoServerBtn.adapter = adpater
+
+        binding.findduoServerBtn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectServer = serverlist[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectServer = null // 사용자가 선택을 취소할 때 null로 초기화
+            }
+        }
+
+        //티어 스피너
+
+        val tierlist = context.resources.getStringArray(R.array.tier)
+        val adpater2 =
+            ArrayAdapter<String>(context, R.layout.findduo_spinner, R.id.findduo_spinner_tv, tierlist)
+        var selectTier: String? = null
+
+        binding.findduoTierBtn.adapter = adpater2
+
+        binding.findduoTierBtn.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectTier = tierlist[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectServer = null
+                }
+            }
+
+        //성별 스피너
+
+        val genderlist = context.resources.getStringArray(R.array.gender)
+        val adpater3 = ArrayAdapter<String>(
+            context,
+            R.layout.findduo_spinner,
+            R.id.findduo_spinner_tv,
+            genderlist
+        )
+        var selectGender : String? = null
+
+        binding.findduoGenderBtn.adapter = adpater3
+
+        binding.findduoGenderBtn.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectGender = genderlist[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectServer = null
+                }
+            }
+
+        //선호 실험체 스피너
+
+        val mostlist = context.resources.getStringArray(R.array.character)
+        val adpater4 = ArrayAdapter<String>(
+            context,
+            R.layout.findduo_spinner,
+            R.id.findduo_spinner_tv,
+            mostlist
+        )
+        var selectMost: String? = null
+
+        binding.findduoMostBtn.adapter = adpater4
+
+        binding.findduoMostBtn.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectMost = mostlist[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectServer = null
+                }
+            }
+
+        binding.findduoYesBtn.setOnClickListener {
+            updateUserInFirebase(selectServer, "server")
+            updateUserInFirebase(selectTier, "tier")
+            updateUserInFirebase(selectGender, "gender")
+            updateUserInFirebase(selectMost, "most")
+            addTimestampToFirebase()
+
+            dismissPopup()
+        }
 
         // PopupWindow 표시
         popupWindow?.showAtLocation(anchorView, Gravity.CENTER, 0, 0)
+    }
+
+    private fun addTimestampToFirebase() {
+        val timestamp = System.currentTimeMillis() // 현재 시간을 밀리초로 얻기
+
+        updateUserInFirebase(timestamp.toString(), "timestamp")
     }
 
     fun dismissPopup() {
         popupWindow?.dismiss()
     }
 
-
-
-    private fun showServerDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val serverArray = context.resources.getStringArray(R.array.server)
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(serverArray, null) { _, which, isChecked ->
-
-            if (isChecked) {
-                mSelectedServer.add(serverArray[which])
-            } else {
-                mSelectedServer.remove(serverArray[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
-            }
-
-            updateUserInFirebase(finalSelection, "server")
-
-            Toast.makeText(context, finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-
-    private fun showGenderDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val genderArray = context.resources.getStringArray(R.array.gender)
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(genderArray, null) { _, which, isChecked ->
-
-
-            if (isChecked) {
-                mSelectedServer.add(genderArray[which])
-            } else {
-                mSelectedServer.remove(genderArray[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
-            }
-
-            updateUserInFirebase(finalSelection, "gender")
-
-            Toast.makeText(context, finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun showTierDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val tierArray = context.resources.getStringArray(R.array.tier)
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(tierArray, null) { _, which, isChecked ->
-
-            if (isChecked) {
-                mSelectedServer.add(tierArray[which])
-            } else {
-                mSelectedServer.remove(tierArray[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
-            }
-
-            updateUserInFirebase(finalSelection, "tier")
-
-            Toast.makeText(context, finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun showMostDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val mostArray = context.resources.getStringArray(R.array.most)
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(mostArray, null) { _, which, isChecked ->
-
-            if (isChecked) {
-                mSelectedServer.add(mostArray[which])
-            } else {
-                mSelectedServer.remove(mostArray[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = item
-            }
-
-            // 파이어스토어에 모스트 값을 업데이트
-            updateMostInFirestore(finalSelection)
-
-            //파이어베이스에
-            updateUserInFirebase(finalSelection, "most")
-
-            Toast.makeText(context, finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun updateUserInFirebase(finalSelection: String, s: String) {
+    private fun updateUserInFirebase(finalSelection: String?, s: String) {
 
         // 사용자의 Firebase UID
         val userId = mAuth.currentUser?.uid
