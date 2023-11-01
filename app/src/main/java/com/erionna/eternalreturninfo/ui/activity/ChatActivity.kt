@@ -109,8 +109,8 @@ class ChatActivity : AppCompatActivity() {
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-        saveChat()
         loadChat()
+        saveChat()
     }
 
     private fun initView() = with(binding) {

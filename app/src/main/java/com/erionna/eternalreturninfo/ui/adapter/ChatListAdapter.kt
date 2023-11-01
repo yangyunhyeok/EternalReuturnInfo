@@ -1,7 +1,7 @@
 package com.erionna.eternalreturninfo.ui.adapter
 
+import android.media.Image
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -55,6 +55,8 @@ class ChatListAdapter(
             chatListDate.text = item.time
 
             chatListNewMsg.isVisible = item.readOrNot == false
+
+
 
             chatListContainer.setOnClickListener {
                 onClickItem(

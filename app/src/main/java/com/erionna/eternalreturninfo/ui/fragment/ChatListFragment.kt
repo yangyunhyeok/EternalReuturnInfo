@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
@@ -84,6 +82,11 @@ class ChatListFragment : Fragment() {
         super.onDestroyView()
     }
 
+    override fun onPause() {
+        _binding = null
+        super.onPause()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -100,9 +103,12 @@ class ChatListFragment : Fragment() {
     }
 
 
+
     private fun initView() = with(binding) {
         chatListRecyclerview.adapter = chatListAdapter
         chatListRecyclerview.layoutManager = LinearLayoutManager(context)
+        chatListRecyclerview.itemAnimator = null
+
     }
 
     private fun initModel() = with(viewModel) {
@@ -126,6 +132,8 @@ class ChatListFragment : Fragment() {
                     val currentUser = child.getValue(ERModel::class.java)
                     senderRoom = auth.currentUser?.uid + currentUser?.uid
                     receiverRoom = currentUser?.uid + auth.currentUser?.uid
+                    Log.d("choco5733" , "senderRoom : ${senderRoom}")
+                    Log.d("choco5733" , "receiverRoom : ${receiverRoom}")
 
                     var message = Message()
                     var convertTime = ""
@@ -134,9 +142,9 @@ class ChatListFragment : Fragment() {
                     database.child("chats").child(receiverRoom).child("messages")
                         .get().addOnSuccessListener {
                             for (child in it.children) {
-                                message = child.getValue(com.erionna.eternalreturninfo.model.Message::class.java)!!
+                                message = child.getValue(Message::class.java)!!
                             }
-                            android.util.Log.d("choco5733 in msg", "$message")
+                            Log.d("choco5733 in msg", "$message")
 
                             if (auth.currentUser?.uid != currentUser?.uid) {
                                 if (message.time != "") {
@@ -156,7 +164,7 @@ class ChatListFragment : Fragment() {
                             } else {
                                 // 현재 접속자 상단에 표시
                                 binding.chatListTitle.text = " ${currentUser?.name} 님 반갑습니다!"
-                                android.util.Log.d("choco5733 currentuser", "${currentUser?.name}")
+                                Log.d("choco5733 currentuser", "${currentUser?.name}")
                             }
                         }
 
@@ -185,10 +193,6 @@ class ChatListFragment : Fragment() {
                                                 readOrNot = message.readOrNot
                                             )
                                         )
-                                    } else {
-                                        // 현재 접속자 상단에 표시
-                                        binding.chatListTitle.text = " ${currentUser?.name} 님 반갑습니다!"
-                                        Log.d("choco5733 currentuser", "${currentUser?.name}")
                                     }
 
                                 }
