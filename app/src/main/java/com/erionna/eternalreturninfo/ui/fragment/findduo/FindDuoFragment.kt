@@ -74,6 +74,13 @@ class FindDuoFragment : Fragment() {
                     val mainActivity = activity as MainActivity
                     mainActivity.binding.tabLayout.getTabAt(4)?.select()
                 }
+            },
+            onLongClickUser = { position, item ->
+                if (mAuth.currentUser?.uid != item.uid) {
+                    Toast.makeText(requireContext(), "권한이 없습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    deleteSpecificFieldsFromDatabase(item)
+                }
             }
         )
     }
@@ -159,6 +166,47 @@ class FindDuoFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
                 // 데이터 가져오기가 실패한 경우
                 Log.e(TAG, "Data retrieval failed: $error")
+            }
+        })
+    }
+
+    //롱 클릭 시 아이템 삭제
+
+    private fun deleteSpecificFieldsFromDatabase(item: ERModel) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("카드 삭제")
+        alertDialogBuilder.setMessage("정말로 카드를 삭제하시겠습니까?")
+        alertDialogBuilder.setPositiveButton("예") { dialog, _ ->
+            deleteItem(item)
+            dialog.dismiss()
+        }
+        alertDialogBuilder.setNegativeButton("아니오") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    private fun deleteItem(item:ERModel){
+        val userDatabaseRef = mDbRef.child("user")
+
+        userDatabaseRef.orderByChild("name").equalTo(item.name).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (childSnapshot in snapshot.children) {
+                    val updates = HashMap<String, Any>()
+                    updates["server"] = ""
+                    updates["gender"] = ""
+                    updates["tier"] = ""
+                    updates["most"] = ""
+
+                    childSnapshot.ref.updateChildren(updates)
+                }
+
+                loadAllUserDataFromFirebase()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Error deleting specific fields: $error")
             }
         })
     }

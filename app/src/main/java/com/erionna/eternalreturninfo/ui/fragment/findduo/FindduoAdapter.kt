@@ -12,13 +12,19 @@ import com.erionna.eternalreturninfo.model.User
 
 class FindduoAdapter(
     private val context: Context,
-    private val onClickUser: (Int, ERModel) -> Unit
+    private val onClickUser: (Int, ERModel) -> Unit,
+    private val onLongClickUser: (Int, ERModel) -> Unit
 ) : RecyclerView.Adapter<FindduoAdapter.ItemViewHolder>(
 ) {
 
     var items = ArrayList<ERModel>()
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     override fun onCreateViewHolder(
@@ -28,10 +34,7 @@ class FindduoAdapter(
         val binding =
             FindDuoListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ItemViewHolder(
-            binding,
-            onClickUser
-        )
+        return ItemViewHolder(binding, onClickUser, onLongClickUser)
     }
 
     override fun onBindViewHolder(holder: FindduoAdapter.ItemViewHolder, position: Int) {
@@ -53,10 +56,16 @@ class FindduoAdapter(
                 currentItem
             )
         }
+
+        holder.binding.fdliContainer.setOnLongClickListener {
+            onLongClickUser(position, currentItem)
+            true
+        }
     }
     inner class ItemViewHolder(
         var binding: FindDuoListItemBinding,
-        private val onClickUser: (Int, ERModel) -> Unit
+        private val onClickUser: (Int, ERModel) -> Unit,
+        private val onLongClickUser: (Int, ERModel) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
