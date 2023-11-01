@@ -47,9 +47,10 @@ class FindDuoFragment : Fragment() {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    private val linearManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
+    //팝업창이랑 연결
+
+    private lateinit var findduoPopupWindow: FindduoPopupWindow
+
 
     private val adapter: FindduoAdapter by lazy {
         FindduoAdapter(
@@ -96,6 +97,7 @@ class FindDuoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
+
         initView()
 
     }
@@ -107,207 +109,14 @@ class FindDuoFragment : Fragment() {
 
     private fun initView() = with(binding) {
 
-        findduoServerBtn.setOnClickListener { showServerDialog() }
-        findduoGenderBtn.setOnClickListener { showGenderDialog() }
-        findduoTierBtn.setOnClickListener { showTierDialog() }
-        findduoMostBtn.setOnClickListener { showMostDialog() }
+        findduoPopupWindow = FindduoPopupWindow(requireContext())
+
+        binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
 
         adapter.notifyDataSetChanged()
 
         loadAllUserDataFromFirebase()
     }
-
-
-    private fun showServerDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(R.array.server, null) { _, which, isChecked ->
-
-            val server: Array<String> = resources.getStringArray(R.array.server)
-
-            if (isChecked) {
-                mSelectedServer.add(server[which])
-            } else {
-                mSelectedServer.remove(server[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
-            }
-
-            updateUserInFirebase(finalSelection, "server")
-
-            Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-
-    private fun showGenderDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(R.array.gender, null) { _, which, isChecked ->
-
-            val gender: Array<String> = resources.getStringArray(R.array.gender)
-
-            if (isChecked) {
-                mSelectedServer.add(gender[which])
-            } else {
-                mSelectedServer.remove(gender[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
-            }
-
-            updateUserInFirebase(finalSelection, "gender")
-
-            Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun showTierDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(R.array.tier, null) { _, which, isChecked ->
-
-            val tier: Array<String> = resources.getStringArray(R.array.tier)
-
-            if (isChecked) {
-                mSelectedServer.add(tier[which])
-            } else {
-                mSelectedServer.remove(tier[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = finalSelection + "\n" + item
-            }
-
-            updateUserInFirebase(finalSelection, "tier")
-
-            Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun showMostDialog() {
-        val mSelectedServer: ArrayList<String> = arrayListOf()
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-
-        builder.setTitle("해당 사항을 선택해 주세요")
-
-        builder.setMultiChoiceItems(R.array.most, null) { _, which, isChecked ->
-
-            val most: Array<String> = resources.getStringArray(R.array.most)
-
-            if (isChecked) {
-                mSelectedServer.add(most[which])
-            } else {
-                mSelectedServer.remove(most[which])
-            }
-        }
-
-        builder.setPositiveButton("완료") { _, _ ->
-            var finalSelection = ""
-
-            for (item: String in mSelectedServer) {
-                finalSelection = item
-            }
-
-            // 파이어스토어에 모스트 값을 업데이트
-            updateMostInFirestore(finalSelection)
-
-            //파이어베이스에
-            updateUserInFirebase(finalSelection, "most")
-
-            Toast.makeText(requireContext(), finalSelection, Toast.LENGTH_SHORT).show()
-        }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-    }
-
-    private fun updateUserInFirebase(finalSelection: String, s: String) {
-
-        // 사용자의 Firebase UID
-        val userId = mAuth.currentUser?.uid
-
-        // 사용자의 Firebase UID가 없으면 함수를 종료
-        if (userId == null) {
-            Log.w(TAG, "User UID is null")
-            return
-        }
-
-        // 업데이트할 데이터를 맵으로 구성
-        val updateData = mapOf(
-            s to finalSelection
-        )
-
-        // Firebase Realtime Database 경로
-        val databasePath = "user/$userId"
-
-        // 데이터베이스에 업데이트할 내용을 설정
-        mDbRef.child(databasePath).updateChildren(updateData)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // 업데이트가 성공한 경우
-                    Log.d(TAG, "User info updated successfully")
-                    // 여기에 추가적인 작업을 수행할 수 있습니다.
-                } else {
-                    // 업데이트가 실패한 경우
-                    Log.e(TAG, "User info update failed: ${task.exception}")
-                }
-            }
-    }
-
 
     private fun loadAllUserDataFromFirebase() {
         // Firebase Realtime Database 경로
@@ -354,20 +163,5 @@ class FindDuoFragment : Fragment() {
         })
     }
 
-    private fun updateMostInFirestore(finalSelection: String) {
-        val userId = mAuth.currentUser?.uid
-        if (userId != null) {
-            val userRef = firestore.collection("EternalReturnInfo").document(userId)
-
-            // Firestore의 'most' 필드 업데이트
-            userRef.update("character", finalSelection)
-                .addOnSuccessListener {
-                    Log.d(TAG, "Firestore 'most' 업데이트 성공")
-                }
-                .addOnFailureListener { e ->
-                    Log.e(TAG, "Firestore 'most' 업데이트 실패: $e")
-                }
-        }
-    }
 
 }

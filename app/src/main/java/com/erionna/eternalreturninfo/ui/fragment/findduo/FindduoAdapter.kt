@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.databinding.FindDuoListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
@@ -41,7 +42,11 @@ class FindduoAdapter(
         holder.name.text = currentItem.name
         holder.gender.text = currentItem.gender
         holder.tier.text = currentItem.tier
-        holder.most.text = currentItem.most
+
+        Glide.with(holder.itemView.context)
+            .load(currentItem.profilePicture)
+            .into(holder.profilePicture)
+
         holder.binding.fdliContainer.setOnClickListener {
             onClickUser(
                 position,
@@ -59,7 +64,7 @@ class FindduoAdapter(
         var name= binding.fdliName
         var gender= binding.fdliGender
         var tier= binding.fdliTier
-        var most= binding.fdliMost
+        var profilePicture= binding.fdliMost
 
         override fun onClick(view: View) {
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
