@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
@@ -56,9 +57,16 @@ class ChatListFragment : Fragment() {
         )
     }
 
-    private val viewModel: ChatListViewModel by viewModels {
-        ChatListViewModelFactory()
+//    private val viewModel: ChatListViewModel by viewModels {
+//        ChatListViewModelFactory()
+//    }
+
+    private val viewModel: ChatListViewModel by lazy {
+        ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
     }
+
+
+
 
     private val chatLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -80,11 +88,6 @@ class ChatListFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    override fun onPause() {
-        _binding = null
-        super.onPause()
     }
 
     override fun onCreateView(

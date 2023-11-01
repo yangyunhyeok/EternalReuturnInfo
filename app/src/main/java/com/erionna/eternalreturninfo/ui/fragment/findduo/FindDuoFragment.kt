@@ -54,7 +54,6 @@ class FindDuoFragment : Fragment() {
     private val adapter: FindduoAdapter by lazy {
         FindduoAdapter(
             requireContext(),
-
             onClickUser = { position, item ->
                 Log.d("choco5733", "$item")
                 if (item.uid != mAuth.uid) {
