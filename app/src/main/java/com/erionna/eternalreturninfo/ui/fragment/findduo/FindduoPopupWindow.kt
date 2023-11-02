@@ -175,7 +175,7 @@ class FindduoPopupWindow(private val context: Context) {
             updateUserInFirebase(selectGender, "gender")
             updateUserInFirebase(selectMost, "most")
             addTimestampToFirebase()
-
+            updateMostInFirestore(selectMost)
             dismissPopup()
         }
 
@@ -226,7 +226,7 @@ class FindduoPopupWindow(private val context: Context) {
             }
     }
 
-    private fun updateMostInFirestore(finalSelection: String) {
+    private fun updateMostInFirestore(finalSelection: String?) {
         val userId = mAuth.currentUser?.uid
         if (userId != null) {
             val userRef = firestore.collection("EternalReturnInfo").document(userId)
