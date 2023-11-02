@@ -149,6 +149,9 @@ class FindDuoFragment : Fragment() {
                         }
                     }
 
+                    // 리스트를 역순으로 뒤집음
+                    filteredUsersList.reverse()
+
                     // RecyclerView 어댑터의 데이터 소스에 필터링된 사용자 정보 추가
                     adapter.items.clear()
                     adapter.items.addAll(filteredUsersList)
