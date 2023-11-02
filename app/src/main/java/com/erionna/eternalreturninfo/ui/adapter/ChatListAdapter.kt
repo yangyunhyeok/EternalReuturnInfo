@@ -56,8 +56,6 @@ class ChatListAdapter(
 
             chatListNewMsg.isVisible = item.readOrNot == false
 
-
-
             chatListContainer.setOnClickListener {
                 onClickItem(
                     adapterPosition,

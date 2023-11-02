@@ -63,7 +63,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F6E8E8"
+            android:background="#534E4E"
             android:layout_weight="90">
 
             <EditText
@@ -75,8 +75,8 @@
                 android:background="@android:color/transparent"
                 android:textSize="18sp"
                 android:hint="@string/chat_enter_msg"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black">
+                android:textColor="@color/white"
+                android:textColorHint="@color/white">
             </EditText>
 
         </LinearLayout>
@@ -95,6 +95,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:background="@android:color/transparent"
+                android:textColor="@color/black"
                 android:text="@string/chat_send">
             </Button>
 
