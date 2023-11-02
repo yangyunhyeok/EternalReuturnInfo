@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.User
@@ -46,9 +48,8 @@ class FindduoAdapter(
         holder.gender.text = currentItem.gender
         holder.tier.text = currentItem.tier
 
-        Glide.with(holder.itemView.context)
-            .load(currentItem.profilePicture)
-            .into(holder.profilePicture)
+        // 이미지 설정을 위해 ImgPatch 클래스의 메서드 호출
+        ImgPatch().setCharacterImage(currentItem.most, holder.binding.fdliMost)
 
         holder.binding.fdliContainer.setOnClickListener {
             onClickUser(
@@ -73,7 +74,7 @@ class FindduoAdapter(
         var name= binding.fdliName
         var gender= binding.fdliGender
         var tier= binding.fdliTier
-        var profilePicture= binding.fdliMost
+        var most= binding.fdliMost
 
         override fun onClick(view: View) {
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
@@ -94,4 +95,30 @@ class FindduoAdapter(
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
     }
+
+    class ImgPatch {
+        fun setCharacterImage(character: String?, imageView: ImageView) {
+            val resources = imageView.context.resources
+            val array = resources.getStringArray(R.array.character)
+            val imageArray = arrayOf(
+                R.drawable.ic_character_01haze,
+                R.drawable.ic_character_02xiukai,
+                R.drawable.ic_character_03nadine,
+                R.drawable.ic_character_04nathapon,
+                R.drawable.ic_character_05nicty,
+                R.drawable.ic_character_06daniel,
+                R.drawable.ic_character_07tia,
+                R.drawable.ic_character_08laura,
+                R.drawable.ic_character_09lenox,
+                R.drawable.ic_character_10leon
+            )
+
+            val index = array.indexOf(character)
+            if (index != -1 && index < imageArray.size) {
+                imageView.setImageResource(imageArray[index])
+            }
+        }
+    }
+
+
 }
