@@ -50,6 +50,7 @@ class FindduoAdapter(
 
         // 이미지 설정을 위해 ImgPatch 클래스의 메서드 호출
         ImgPatch().setCharacterImage(currentItem.most, holder.binding.fdliMost)
+        ImgPatch2().setTierImage(currentItem.tier,holder.binding.fdliTierimage)
 
         holder.binding.fdliContainer.setOnClickListener {
             onClickUser(
@@ -120,5 +121,27 @@ class FindduoAdapter(
         }
     }
 
+    class ImgPatch2{
+        fun setTierImage(tier:String?,imageView: ImageView){
+            val resources = imageView.context.resources
+            val array = resources.getStringArray(R.array.tier)
+            val imageArray = arrayOf(
+                R.drawable.ic_unrank,
+                R.drawable.ic_iron,
+                R.drawable.ic_bronze,
+                R.drawable.ic_silver,
+                R.drawable.ic_gold,
+                R.drawable.ic_platinum,
+                R.drawable.ic_diamond,
+                R.drawable.ic_mithril,
+                R.drawable.ic_titan,
+                R.drawable.ic_immortal
+            )
+            val index = array.indexOf(tier)
+            if (index != -1 && index < imageArray.size) {
+                imageView.setImageResource(imageArray[index])
+            }
+        }
+    }
 
 }

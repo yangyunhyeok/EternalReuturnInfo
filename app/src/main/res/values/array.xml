@@ -19,11 +19,16 @@
     </string-array>
 
     <string-array name="tier">
+        <item>Unrank</item>
+        <item>Iron</item>
         <item>Bronze</item>
         <item>Silver</item>
         <item>Gold</item>
         <item>Platinum</item>
         <item>Diamond</item>
+        <item>Mithril</item>
+        <item>Titan</item>
+        <item>Immortal</item>
     </string-array>
 
     <string-array name="gender">
