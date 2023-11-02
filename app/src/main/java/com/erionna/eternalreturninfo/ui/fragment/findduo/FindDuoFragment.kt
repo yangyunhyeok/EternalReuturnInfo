@@ -81,6 +81,8 @@ class FindDuoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        Log.d("choco5733 : onCreateView Test", "duo onCreateView started")
         _binding = FindDuoFragmentBinding.inflate(inflater, container, false)
 
         mAuth = FirebaseAuth.getInstance()
