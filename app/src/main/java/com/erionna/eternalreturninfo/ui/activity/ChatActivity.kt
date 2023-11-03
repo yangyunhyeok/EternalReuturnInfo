@@ -180,6 +180,7 @@ class ChatActivity : AppCompatActivity() {
                 // 전송 버튼을 누르면 whereRU를 true로 바꿔줘 채팅리스트에 추가
                 val map = HashMap<String, Any>()
                 map.put("whereRU", true)
+                map.put("breaker", false)
 
                 database.child("chats").child(senderRoom).child("messages")
                     .get().addOnSuccessListener {
@@ -221,8 +222,8 @@ class ChatActivity : AppCompatActivity() {
 
                 messageList.clear()
 
-                for (postSnapshot in snapShot.children) {
-                    val message = postSnapshot.getValue(Message::class.java)
+                for (child in snapShot.children) {
+                    val message = child.getValue(Message::class.java)
                     var readOrNot: Boolean = false
 
                     messageList.add(message!!)
@@ -238,7 +239,7 @@ class ChatActivity : AppCompatActivity() {
                     val map = HashMap<String, Any>()
                     map.put("readOrNot", true)
 
-                    val key = postSnapshot.key
+                    val key = child.key
                     database.child("chats").child(senderRoom)
                         .child("messages").child("$key").updateChildren(map)
                 }

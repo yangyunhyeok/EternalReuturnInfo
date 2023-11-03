@@ -19,7 +19,7 @@ class ChatListAdapter(
             oldItem: ERModel,
             newItem: ERModel
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(

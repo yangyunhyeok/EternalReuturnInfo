@@ -25,19 +25,39 @@ class ChatListViewModel(
         var time = ""
         if (item.time != "") {
             sb.append(item.time)
-            time = sb.substring(0,13)
+            time = sb.substring(0, 13)
         } else {
             time = ""
         }
 
         val currentList = list.value.orEmpty().toMutableList()
-        _list.value = currentList.apply {
-            add(
-                item.copy(
-                    id = idGenerate.getAndIncrement(),
-                    time = time
+        var gotCha: Boolean? = null
+
+        if (currentList.size > 1) {
+
+            for (i in 0 until currentList.size) {
+                if (currentList[i].name == item.name) {
+                    gotCha = true
+                }
+            }
+            if (gotCha != true) {
+                _list.value = currentList.apply {
+                    add(
+                        item.copy(
+                            time = time
+                        )
+                    )
+                }
+            }
+
+        } else {
+            _list.value = currentList.apply {
+                add(
+                    item.copy(
+                        time = time
+                    )
                 )
-            )
+            }
         }
     }
 
