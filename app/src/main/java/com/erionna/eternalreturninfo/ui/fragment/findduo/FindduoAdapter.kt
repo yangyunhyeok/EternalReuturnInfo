@@ -113,6 +113,7 @@ class FindduoAdapter(
             val resources = imageView.context.resources
             val array = resources.getStringArray(R.array.character)
             val imageArray = arrayOf(
+                R.drawable.ic_xiuk,
                 R.drawable.ic_character_01haze,
                 R.drawable.ic_character_02xiukai,
                 R.drawable.ic_character_03nadine,
@@ -137,6 +138,7 @@ class FindduoAdapter(
             val resources = imageView.context.resources
             val array = resources.getStringArray(R.array.tier)
             val imageArray = arrayOf(
+                R.drawable.ic_xiuk,
                 R.drawable.ic_unrank,
                 R.drawable.ic_iron,
                 R.drawable.ic_bronze,

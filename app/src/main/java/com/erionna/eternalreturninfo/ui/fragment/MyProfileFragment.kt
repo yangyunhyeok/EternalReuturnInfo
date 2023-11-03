@@ -285,16 +285,17 @@ class MyProfileFragment : Fragment() {
     fun ImgPacth(character: String) {
         val array: Array<String> = resources.getStringArray(R.array.character)
         when (character) {
-            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
-            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
-            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
-            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
-            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
-            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
-            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
-            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
-            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
-            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
+            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
+            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
+            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
+            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
+            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
+            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
+            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
+            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
+            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
+            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
+            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
         }
     }
 

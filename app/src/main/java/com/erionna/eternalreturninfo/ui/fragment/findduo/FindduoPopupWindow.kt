@@ -4,8 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,10 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupWindow
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.erionna.eternalreturninfo.R
-import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.databinding.FindduoPopupWindowActivityBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -53,23 +48,24 @@ class FindduoPopupWindow(private val context: Context) {
         )
         popupWindow?.apply {
             elevation = 10.0f // 고도
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경
+            val alphaColor = Color.argb(80, 0, 0, 0) // 여기서 80은 투명도를 나타냄 (0은 완전 투명, 255는 완전 불투명)
+            setBackgroundDrawable(ColorDrawable(alphaColor))
             isOutsideTouchable = true
-            animationStyle = android.R.style.Animation_Dialog // 애니메이션
+            animationStyle = android.R.style.Animation_InputMethod // 애니메이션
         }
 
         //서버 스피너
 
-        val serverlist = context.resources.getStringArray(R.array.server)
-        val adpater = ArrayAdapter<String>(
+        val serverList = context.resources.getStringArray(R.array.server)
+        val serverAdpater = ArrayAdapter<String>(
             context,
             R.layout.findduo_spinner,
             R.id.findduo_spinner_tv,
-            serverlist
+            serverList
         )
-        var selectServer: String? = null
+        var selectServer: String? = "선택"
 
-        binding.findduoServerBtn.adapter = adpater
+        binding.findduoServerBtn.adapter = serverAdpater
 
         binding.findduoServerBtn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -78,22 +74,22 @@ class FindduoPopupWindow(private val context: Context) {
                 position: Int,
                 id: Long
             ) {
-                selectServer = serverlist[position]
+                selectServer = serverList[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectServer = null // 사용자가 선택을 취소할 때 null로 초기화
+                selectServer = "선택"
             }
         }
 
         //티어 스피너
 
-        val tierlist = context.resources.getStringArray(R.array.tier)
-        val adpater2 =
-            ArrayAdapter<String>(context, R.layout.findduo_spinner, R.id.findduo_spinner_tv, tierlist)
-        var selectTier: String? = null
+        val tierList = context.resources.getStringArray(R.array.tier)
+        val tierAdapter =
+            ArrayAdapter<String>(context, R.layout.findduo_spinner, R.id.findduo_spinner_tv, tierList)
+        var selectTier: String? = "선택"
 
-        binding.findduoTierBtn.adapter = adpater2
+        binding.findduoTierBtn.adapter = tierAdapter
 
         binding.findduoTierBtn.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -103,26 +99,26 @@ class FindduoPopupWindow(private val context: Context) {
                     position: Int,
                     id: Long
                 ) {
-                    selectTier = tierlist[position]
+                    selectTier = tierList[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectServer = null
+                    selectServer = "선택"
                 }
             }
 
         //성별 스피너
 
-        val genderlist = context.resources.getStringArray(R.array.gender)
-        val adpater3 = ArrayAdapter<String>(
+        val genderList = context.resources.getStringArray(R.array.gender)
+        val genderAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             context,
             R.layout.findduo_spinner,
             R.id.findduo_spinner_tv,
-            genderlist
+            genderList
         )
-        var selectGender : String? = null
+        var selectGender : String? = "선택"
 
-        binding.findduoGenderBtn.adapter = adpater3
+        binding.findduoGenderBtn.adapter = genderAdapter
 
         binding.findduoGenderBtn.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -132,26 +128,26 @@ class FindduoPopupWindow(private val context: Context) {
                     position: Int,
                     id: Long
                 ) {
-                    selectGender = genderlist[position]
+                    selectGender = genderList[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectServer = null
+                    selectServer = "선택"
                 }
             }
 
         //선호 실험체 스피너
 
-        val mostlist = context.resources.getStringArray(R.array.character)
-        val adpater4 = ArrayAdapter<String>(
+        val mostList = context.resources.getStringArray(R.array.most)
+        val mostAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             context,
             R.layout.findduo_spinner,
             R.id.findduo_spinner_tv,
-            mostlist
+            mostList
         )
-        var selectMost: String? = null
+        var selectMost: String? = "선택"
 
-        binding.findduoMostBtn.adapter = adpater4
+        binding.findduoMostBtn.adapter = mostAdapter
 
         binding.findduoMostBtn.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -161,22 +157,28 @@ class FindduoPopupWindow(private val context: Context) {
                     position: Int,
                     id: Long
                 ) {
-                    selectMost = mostlist[position]
+                    selectMost = mostList[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectServer = null
+                    selectServer = "선택"
+
                 }
+
             }
 
         binding.findduoYesBtn.setOnClickListener {
-            updateUserInFirebase(selectServer, "server")
-            updateUserInFirebase(selectTier, "tier")
-            updateUserInFirebase(selectGender, "gender")
-            updateUserInFirebase(selectMost, "most")
-            addTimestampToFirebase()
-            updateMostInFirestore(selectMost)
-            dismissPopup()
+            if (selectServer != "선택" && selectTier != "선택" && selectGender != "선택" && selectMost != "선택") {
+                updateUserInFirebase(selectServer, "server")
+                updateUserInFirebase(selectTier, "tier")
+                updateUserInFirebase(selectGender, "gender")
+                updateUserInFirebase(selectMost, "most")
+                addTimestampToFirebase()
+                updateMostInFirestore(selectMost)
+                dismissPopup()
+            } else {
+                Toast.makeText(context, "모든 옵션을 선택해주세요", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // PopupWindow 표시

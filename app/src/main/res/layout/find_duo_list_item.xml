@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_findduo_item"
+    android:layout_margin="2dp"
     >
 
     <LinearLayout
@@ -17,18 +18,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="85dp"
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/fdli_most"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:padding="5dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/ic_xiuk"
-                app:civ_border_color="@color/darkgray2"
+                app:civ_border_color="@color/grey"
                 app:civ_border_width="1dp"
-                app:layout_constraintBottom_toTopOf="@+id/fdli_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -37,14 +37,14 @@
                 android:id="@+id/fdli_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="68dp"
+                android:padding="3dp"
                 android:text="Owler2"
                 android:textColor="@color/text_color"
-                android:textSize="15dp"
-                android:textStyle="bold|italic"
+                android:textSize="14dp"
+                android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fdli_most"
                 tools:paddingRight="15dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -73,8 +73,8 @@
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="29dp"
                 android:text="서버"
                 android:textColor="@color/white"
                 android:textSize="8dp"
@@ -113,7 +113,7 @@
                 android:layout_width="30dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_diamond"
                 app:civ_border_color="@color/darkgray2"
                 app:civ_border_overlay="true"
@@ -125,7 +125,7 @@
                 android:id="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:text="티어"
                 android:textColor="@color/white"
                 android:textSize="8dp"
@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Diamond"
@@ -151,11 +151,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/fdli_gender" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginEnd="13dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginBottom="6dp"
                 android:background="@drawable/shape_findduo_item2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -211,9 +211,11 @@
 
                     android:layout_marginStart="19dp"
                     android:layout_marginTop="13dp"
+                    android:layout_marginEnd="8dp"
                     android:text="평균 순위"
                     android:textColor="@color/text_color"
                     android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fdli_winratetv"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
