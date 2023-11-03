@@ -164,7 +164,7 @@ class ChatActivity : AppCompatActivity() {
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(id = "${idGenerate.getAndIncrement()}" + time, message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
+            val messageObject = Message(id = "${idGenerate.getAndIncrement()}" + time, message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false, whereRU = true)
 
             if (message != "") {
                 // 송수신 방 둘 다 저장
@@ -180,19 +180,30 @@ class ChatActivity : AppCompatActivity() {
                 // 전송 버튼을 누르면 whereRU를 true로 바꿔줘 채팅리스트에 추가
                 val map = HashMap<String, Any>()
                 map.put("whereRU", true)
-                map.put("breaker", false)
 
-                database.child("chats").child(senderRoom).child("messages")
-                    .get().addOnSuccessListener {
-                        for (child in it.children) {
-                            val chat = child.getValue(Message::class.java)
-                            val key = child.key
-
-                            database.child("chats").child(senderRoom)
-                                .child("messages").child("$key").updateChildren(map)
-
-                        }
-                    }
+//                database.child("chats").child(senderRoom).child("messages")
+//                    .get().addOnSuccessListener {
+//                        for (child in it.children) {
+//                            val chat = child.getValue(Message::class.java)
+//                            val key = child.key
+//
+//                            database.child("chats").child(senderRoom)
+//                                .child("messages").child("$key").updateChildren(map)
+//
+//                        }
+//                    }
+//
+//                database.child("chats").child(receiverRoom).child("messages")
+//                    .get().addOnSuccessListener {
+//                        for (child in it.children) {
+//                            val chat = child.getValue(Message::class.java)
+//                            val key = child.key
+//
+//                            database.child("chats").child(receiverRoom)
+//                                .child("messages").child("$key").updateChildren(map)
+//
+//                        }
+//                    }
 
             }
 
