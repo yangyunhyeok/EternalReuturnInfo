@@ -136,8 +136,6 @@ class ChatActivity : AppCompatActivity() {
         // 뒤로가기 클릭 시 채팅방에서 빠져나옴
         chatBackBtn.setOnClickListener{
             refDb.removeEventListener(refEventListener)
-//            val mainActivity = MainActivity()
-//            mainActivity.binding.tabLayout.getTabAt(3)?.select()
             finish()
         }
     }

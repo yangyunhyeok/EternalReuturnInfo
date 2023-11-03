@@ -57,9 +57,6 @@ class FindDuoFragment : Fragment() {
         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
-    private val viewModel: ChatListViewModel by lazy {
-        ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
-    }
 
     private val adapter: FindduoAdapter by lazy {
         FindduoAdapter(
@@ -96,6 +93,13 @@ class FindDuoFragment : Fragment() {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.findduoRecyclerview.adapter = adapter
+        initView()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,19 +117,16 @@ class FindDuoFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        binding.findduoRecyclerview.adapter = adapter
-        initView()
-        initModel()
-    }
 
-    private fun initModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner) {
-            chatListAdapter.submitList(it)
-        }
-    }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+////        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+////        binding.findduoRecyclerview.adapter = adapter
+////        initView()
+//    }
+
+
 
     override fun onDestroyView() {
         _binding = null

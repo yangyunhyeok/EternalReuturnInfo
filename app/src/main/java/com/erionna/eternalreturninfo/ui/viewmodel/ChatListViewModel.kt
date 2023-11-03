@@ -96,8 +96,18 @@ class ChatListViewModel(
             return
         }
 
+        val sb = StringBuilder()
+        var time = ""
+        if (item.time != "") {
+            sb.append(item.time )
+            time = sb.substring(0,13)
+        } else {
+            time = ""
+        }
+
+
         val currentList = list.value.orEmpty().toMutableList()
-        currentList[findPosition] = item
+        currentList[findPosition] = item.copy(time = time)
         _list.value = currentList
 
     }

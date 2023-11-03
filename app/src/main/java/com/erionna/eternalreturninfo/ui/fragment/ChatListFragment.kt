@@ -1,5 +1,6 @@
 package com.erionna.eternalreturninfo.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
@@ -58,9 +58,6 @@ class ChatListFragment : Fragment() {
         )
     }
 
-//    private val viewModel: ChatListViewModel by viewModels {
-//        ChatListViewModelFactory()
-//    }
 
     private val viewModel: ChatListViewModel by lazy {
         ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
@@ -101,7 +98,7 @@ class ChatListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initModel()
-//        setDataFromChatting()
+        addChatList()
 //        setDataFromDatabase()
     }
 
@@ -114,59 +111,76 @@ class ChatListFragment : Fragment() {
         chatListRecyclerview.adapter = chatListAdapter
         chatListRecyclerview.layoutManager = LinearLayoutManager(context)
         chatListRecyclerview.itemAnimator = null
-//        viewModel.addUser(ERModel(id = 1, name = "장재용", msg = "뭐요", time = "아앙기모디"))
-//        viewModel.addUser(ERModel(id = 1, name = "장재용", msg = "뭐요", time = "아앙기모디"))
-//        viewModel.addUser(ERModel(id = 1, name = "장재용2", msg = "뭐요", time = "아앙기모디"))
 
         Log.d("choco5744", "${viewModel.currentList()}")
-        whatTheFuck()
-
     }
 
 
 
-    private fun whatTheFuck() {
+    private fun addChatList() {
         database = Firebase.database.reference
-    database.child("user").get().addOnSuccessListener {
-            // 리스트 초기화
-//                viewModel.clearList()
-            var senderRoom = ""
-            var receiverRoom = ""
+            database.child("user").get().addOnSuccessListener {
+                // 리스트 초기화 for 회원가입시 중복리스트
+                viewModel.clearList()
+                var senderRoom = ""
+                var receiverRoom = ""
 
-            for (child in it.children) {
-                val currentUser = child.getValue(ERModel::class.java)
-                senderRoom = currentUser?.uid + auth.currentUser?.uid
+                for (child in it.children) {
+                    val currentUser = child.getValue(ERModel::class.java)
 
+                    senderRoom = currentUser?.uid + auth.currentUser?.uid
+                    var message = Message()
 
-                database.child("chats").child(senderRoom).child("messages")
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            Log.d("choco5744", "sender : ${senderRoom}")
-                            var message = Message()
-                            for (child in snapshot.children) {
-                                message = child.getValue(Message::class.java)!!
+                    database.child("chats").child(senderRoom).child("messages")
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                for (child in snapshot.children) {
+                                    message = child.getValue(Message::class.java)!!
+                                }
+                                if (message.whereRU == true) {
+                                    viewModel.addUser(
+                                        currentUser?.copy(
+                                            msg = message.message,
+                                            time = message.time,
+                                            readOrNot = message.readOrNot
+                                        )
+                                    )
+                                    Log.d("choco5744", "currentUser : ${currentUser}")
+                                }
                             }
-                            if (message.whereRU == true) {
-                                viewModel.addUser(
+
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+
+                    database.child("chats").child(senderRoom).child("messages")
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+
+                                for (child in snapshot.children) {
+                                    message = child.getValue(Message::class.java)!!
+                                }
+                                Log.d("choco5733 in msg", "$message")
+
+
+                                viewModel.modifyItem2(
                                     currentUser?.copy(
                                         msg = message.message,
                                         time = message.time,
                                         readOrNot = message.readOrNot
                                     )
                                 )
-
-                                Log.d("choco5744", "currentUser : ${currentUser}")
                             }
-                        }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-                    })
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+                }
             }
-
         }
-    }
+
 
     private fun initModel() = with(viewModel) {
         list.observe(viewLifecycleOwner) {
