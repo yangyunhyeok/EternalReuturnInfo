@@ -33,7 +33,7 @@ class ChatListViewModel(
         val currentList = list.value.orEmpty().toMutableList()
         var gotCha: Boolean? = null
 
-        if (currentList.size > 1) {
+        if (currentList.size > 0) {
 
             for (i in 0 until currentList.size) {
                 if (currentList[i].name == item.name) {
