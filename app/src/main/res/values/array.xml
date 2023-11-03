@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="character">
+        <item>선택</item>
         <item>헤이즈</item>
         <item>쇼우</item>
         <item>나딘</item>
@@ -12,4 +13,46 @@
         <item>레녹스</item>
         <item>레온</item>
     </string-array>
+
+    <string-array name="server">
+        <item>선택</item>
+        <item>KR</item>
+        <item>EU</item>
+    </string-array>
+
+    <string-array name="tier">
+        <item>선택</item>
+        <item>Unrank</item>
+        <item>Iron</item>
+        <item>Bronze</item>
+        <item>Silver</item>
+        <item>Gold</item>
+        <item>Platinum</item>
+        <item>Diamond</item>
+        <item>Mithril</item>
+        <item>Titan</item>
+        <item>Immortal</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>선택</item>
+        <item>남자</item>
+        <item>여자</item>
+    </string-array>
+
+    <string-array name="most">
+        <item>선택</item>
+        <item>헤이즈</item>
+        <item>쇼우</item>
+        <item>나딘</item>
+        <item>나타폰</item>
+        <item>니키</item>
+        <item>다니엘</item>
+        <item>띠아</item>
+        <item>라우라</item>
+        <item>레녹스</item>
+        <item>레온</item>
+    </string-array>
+
+
 </resources>

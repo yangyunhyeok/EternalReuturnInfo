@@ -99,7 +99,8 @@ class SignUpPage : AppCompatActivity() {
                                 this, "계정 생성 완료.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            var baseImage = "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_character.jpg?alt=media&token=b0908050-66b9-4273-95e4-38645bd02477&_gl=1*1aipnfg*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODM4OTAyOS41My4xLjE2OTgzOTM5NzEuMS4wLjA."
+                            var baseImage =
+                                "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_character.jpg?alt=media&token=b0908050-66b9-4273-95e4-38645bd02477&_gl=1*1aipnfg*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODM4OTAyOS41My4xLjE2OTgzOTM5NzEuMS4wLjA."
                             setDocument(
                                 SignUpData(
                                     Email = email,
@@ -110,8 +111,16 @@ class SignUpPage : AppCompatActivity() {
                                 )
                             )
                             database.child("user").child(auth.uid!!)
-                                .setValue(ERModel(profilePicture = baseImage, email = email, password = password, name = nickname, uid = auth.uid!!))
-                            if(ImageCheck == 1){
+                                .setValue(
+                                    ERModel(
+                                        profilePicture = baseImage,
+                                        email = email,
+                                        password = password,
+                                        name = nickname,
+                                        uid = auth.uid!!
+                                    )
+                                )
+                            if (ImageCheck == 1) {
                                 upload(selectedImageURI, email)
                             }
 
@@ -178,7 +187,7 @@ class SignUpPage : AppCompatActivity() {
                     FirebaseFirestore.getInstance()
                         .collection("EternalReturnInfo")
                         .document(auth.uid!!)
-                        .update("profile",uri.toString())
+                        .update("profile", uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }

@@ -51,6 +51,6 @@ interface UserService {
     @GET("v1/user/nickname")
     fun getUserByNickname(
         @Header("x-api-key") apiKey: String,
-        @Query("query") query: String
+        @Query("query") query: String?
     ): Call<UserResponse>
 }
