@@ -181,14 +181,17 @@ class ChatListFragment : Fragment() {
                                 TODO("Not yet implemented")
                             }
                         })
+
+                    if (auth.uid == currentUser?.uid) {
+                        binding.chatListTitle.text = "${currentUser?.name} 님 반갑습니다!"
+                    }
+
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
-
-
 
         })
     }
