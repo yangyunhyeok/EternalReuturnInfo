@@ -19,6 +19,7 @@ import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
+import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_TIME
@@ -65,15 +66,13 @@ class ChatListFragment : Fragment() {
         ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
     }
 
-
-
-
     private val chatLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val position = result.data?.getIntExtra(EXTRA_ER_POSITION, -1)
                 val message = result.data?.getStringExtra(EXTRA_MESSAGE)
                 val time = result.data?.getStringExtra(EXTRA_TIME)
+                val eRModel = result.data?.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
 
                 Log.d("choco5733 : 돌아왔을때", "$message $time $position")
                 viewModel.modifyItem(position!!, message!!, time!!)
@@ -102,16 +101,71 @@ class ChatListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initModel()
-        setDataFromDatabase()
+//        setDataFromChatting()
+//        setDataFromDatabase()
     }
 
+    private fun setDataFromChatting() = with(binding) {
+        database = Firebase.database.reference
+    }
 
 
     private fun initView() = with(binding) {
         chatListRecyclerview.adapter = chatListAdapter
         chatListRecyclerview.layoutManager = LinearLayoutManager(context)
         chatListRecyclerview.itemAnimator = null
+//        viewModel.addUser(ERModel(id = 1, name = "장재용", msg = "뭐요", time = "아앙기모디"))
+//        viewModel.addUser(ERModel(id = 1, name = "장재용", msg = "뭐요", time = "아앙기모디"))
+//        viewModel.addUser(ERModel(id = 1, name = "장재용2", msg = "뭐요", time = "아앙기모디"))
 
+        Log.d("choco5744", "${viewModel.currentList()}")
+        whatTheFuck()
+
+    }
+
+
+
+    private fun whatTheFuck() {
+        database = Firebase.database.reference
+    database.child("user").get().addOnSuccessListener {
+            // 리스트 초기화
+//                viewModel.clearList()
+            var senderRoom = ""
+            var receiverRoom = ""
+
+            for (child in it.children) {
+                val currentUser = child.getValue(ERModel::class.java)
+                senderRoom = currentUser?.uid + auth.currentUser?.uid
+
+
+                database.child("chats").child(senderRoom).child("messages")
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            Log.d("choco5744", "sender : ${senderRoom}")
+                            var message = Message()
+                            for (child in snapshot.children) {
+                                message = child.getValue(Message::class.java)!!
+                            }
+                            if (message.whereRU == true) {
+                                viewModel.addUser(
+                                    currentUser?.copy(
+                                        msg = message.message,
+                                        time = message.time,
+                                        readOrNot = message.readOrNot
+                                    )
+                                )
+
+                                Log.d("choco5744", "currentUser : ${currentUser}")
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+                    })
+            }
+
+        }
     }
 
     private fun initModel() = with(viewModel) {

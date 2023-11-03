@@ -8,11 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.ui.adapter.ChatAdapter
+import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
+import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
@@ -98,6 +102,11 @@ class ChatActivity : AppCompatActivity() {
         )
     }
 
+    private val chatListViewModel : ChatListViewModel by viewModels {
+        ChatListViewModelFactory()
+    }
+
+
     override fun onBackPressed() {
         refDb.removeEventListener(refEventListener)
         finish()
@@ -111,7 +120,10 @@ class ChatActivity : AppCompatActivity() {
         initView()
         loadChat()
         saveChat()
+
     }
+
+
 
     private fun initView() = with(binding) {
         // 리사이클러뷰 초기화
@@ -124,6 +136,8 @@ class ChatActivity : AppCompatActivity() {
         // 뒤로가기 클릭 시 채팅방에서 빠져나옴
         chatBackBtn.setOnClickListener{
             refDb.removeEventListener(refEventListener)
+//            val mainActivity = MainActivity()
+//            mainActivity.binding.tabLayout.getTabAt(3)?.select()
             finish()
         }
     }
@@ -139,6 +153,8 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverUid + senderUid
         // 받는이 방
         receiverRoom = senderUid + receiverUid
+
+
 
         // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
@@ -163,7 +179,24 @@ class ChatActivity : AppCompatActivity() {
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
 
+                // 전송 버튼을 누르면 whereRU를 true로 바꿔줘 채팅리스트에 추가
+                val map = HashMap<String, Any>()
+                map.put("whereRU", true)
+
+                database.child("chats").child(senderRoom).child("messages")
+                    .get().addOnSuccessListener {
+                        for (child in it.children) {
+                            val chat = child.getValue(Message::class.java)
+                            val key = child.key
+
+                            database.child("chats").child(senderRoom)
+                                .child("messages").child("$key").updateChildren(map)
+
+                        }
+                    }
+
             }
+
         }
     }
 
@@ -221,6 +254,7 @@ class ChatActivity : AppCompatActivity() {
                         EXTRA_TIME,
                         finalTime
                     )
+                    Log.d("choco5744", "finaltime : $finalTime")
                     putExtra(
                         EXTRA_ER_POSITION,
                         position

@@ -55,6 +55,7 @@
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="@color/white"
+                android:imeOptions="actionNext"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_ID_tv" />
@@ -84,6 +85,7 @@
                 android:inputType="textPassword"
                 android:padding="12dp"
                 android:textColor="@color/white"
+                android:imeOptions="actionDone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_PW_tv" />

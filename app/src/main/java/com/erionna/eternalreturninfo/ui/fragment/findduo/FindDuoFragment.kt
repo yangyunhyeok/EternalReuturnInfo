@@ -10,16 +10,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.model.User
 import com.erionna.eternalreturninfo.ui.activity.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.DialogListener
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
+import com.erionna.eternalreturninfo.ui.adapter.ChatListAdapter
 import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
+import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
+import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -51,6 +57,10 @@ class FindDuoFragment : Fragment() {
         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
+    private val viewModel: ChatListViewModel by lazy {
+        ViewModelProvider(this, ChatListViewModelFactory())[ChatListViewModel::class.java]
+    }
+
     private val adapter: FindduoAdapter by lazy {
         FindduoAdapter(
             requireContext(),
@@ -66,6 +76,7 @@ class FindDuoFragment : Fragment() {
                                     item
                                 )
                             )
+
                         }
                     })
                     customDialog.show()
@@ -73,6 +84,14 @@ class FindDuoFragment : Fragment() {
                     val mainActivity = activity as MainActivity
                     mainActivity.binding.tabLayout.getTabAt(4)?.select()
                 }
+            }
+        )
+    }
+
+    private val chatListAdapter by lazy {
+        ChatListAdapter(
+            onClickItem = { position, item ->
+
             }
         )
     }
@@ -99,7 +118,13 @@ class FindDuoFragment : Fragment() {
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
         initView()
+        initModel()
+    }
 
+    private fun initModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner) {
+            chatListAdapter.submitList(it)
+        }
     }
 
     override fun onDestroyView() {

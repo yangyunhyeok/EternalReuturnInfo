@@ -20,15 +20,27 @@ class ChatListViewModel(
         if (item == null) {
             return
         }
+
+        val sb = StringBuilder()
+        var time = ""
+        if (item.time != "") {
+            sb.append(item.time)
+            time = sb.substring(0,13)
+        } else {
+            time = ""
+        }
+
         val currentList = list.value.orEmpty().toMutableList()
         _list.value = currentList.apply {
             add(
                 item.copy(
-                    id = idGenerate.getAndIncrement()
+                    id = idGenerate.getAndIncrement(),
+                    time = time
                 )
             )
         }
     }
+
     fun currentList(): List<ERModel> {
         return list.value.orEmpty().toMutableList()
     }
