@@ -119,67 +119,74 @@ class ChatListFragment : Fragment() {
 
     private fun addChatList() {
         database = Firebase.database.reference
-            database.child("user").get().addOnSuccessListener {
-                // 리스트 초기화 for 회원가입시 중복리스트
-                viewModel.clearList()
-                var senderRoom = ""
-                var receiverRoom = ""
 
-                for (child in it.children) {
-                    val currentUser = child.getValue(ERModel::class.java)
+        database.child("user").get().addOnSuccessListener {
+            // 리스트 초기화 for 회원가입시 중복리스트
+            viewModel.clearList()
+            var senderRoom = ""
+            var receiverRoom = ""
 
-                    senderRoom = currentUser?.uid + auth.currentUser?.uid
-                    var message = Message()
+            for (child in it.children) {
+                val currentUser = child.getValue(ERModel::class.java)
 
-                    database.child("chats").child(senderRoom).child("messages")
-                        .addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                for (child in snapshot.children) {
-                                    message = child.getValue(Message::class.java)!!
-                                }
-                                if (message.whereRU == true) {
-                                    viewModel.addUser(
-                                        currentUser?.copy(
-                                            msg = message.message,
-                                            time = message.time,
-                                            readOrNot = message.readOrNot
-                                        )
-                                    )
-                                    Log.d("choco5744", "currentUser : ${currentUser}")
-                                }
+                senderRoom = currentUser?.uid + auth.currentUser?.uid
+                var message = Message()
+                var flag: Boolean = true
+                database.child("chats").child(senderRoom).child("messages")
+                    .addValueEventListener(object : ValueEventListener {
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (child in snapshot.children) {
+                                message = child.getValue(Message::class.java)!!
                             }
 
-                            override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
-                            }
-                        })
 
-                    database.child("chats").child(senderRoom).child("messages")
-                        .addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-
-                                for (child in snapshot.children) {
-                                    message = child.getValue(Message::class.java)!!
-                                }
-                                Log.d("choco5733 in msg", "$message")
-
-
-                                viewModel.modifyItem2(
+                            if (message.whereRU == true ) {
+                                viewModel.addUser(
                                     currentUser?.copy(
                                         msg = message.message,
                                         time = message.time,
                                         readOrNot = message.readOrNot
                                     )
                                 )
+//                                val map = hashMapOf<String, Any>()
+//                                map.put("whereRU", false)
+//                                database.child("chats").child(senderRoom).child("messages")
+//                                    .updateChildren(map)
                             }
+                        }
 
-                            override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+                    })
+
+                database.child("chats").child(senderRoom).child("messages")
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+
+                            for (child in snapshot.children) {
+                                message = child.getValue(Message::class.java)!!
                             }
-                        })
-                }
+                            Log.d("choco5733 in msg", "$message")
+
+
+                            viewModel.modifyItem2(
+                                currentUser?.copy(
+                                    msg = message.message,
+                                    time = message.time,
+                                    readOrNot = message.readOrNot
+                                )
+                            )
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+                    })
             }
         }
+    }
 
 
     private fun initModel() = with(viewModel) {
