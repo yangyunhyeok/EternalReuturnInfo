@@ -22,29 +22,21 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
-import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
 import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
 import com.erionna.eternalreturninfo.ui.activity.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.LoginPage
-import com.erionna.eternalreturninfo.ui.activity.WebView
 import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
-import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
-import com.erionna.eternalreturninfo.ui.adapter.VideoListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.util.Constants
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -293,16 +285,17 @@ class MyProfileFragment : Fragment() {
     fun ImgPacth(character: String) {
         val array: Array<String> = resources.getStringArray(R.array.character)
         when (character) {
-            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
-            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
-            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
-            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
-            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
-            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
-            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
-            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
-            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
-            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
+            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
+            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
+            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
+            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
+            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
+            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
+            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
+            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
+            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
+            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
+            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
         }
     }
 

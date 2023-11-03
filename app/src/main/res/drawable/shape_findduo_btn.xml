@@ -6,9 +6,9 @@
 
             <stroke
                 android:width="2dp"
-                android:color="@color/highlight_color2" />
+                android:color="@color/highlight_color" />
             <corners
-                android:radius="20dp" />
+                android:radius="0dp" />
             <padding
                 android:left="10dp"
                 android:top="10dp"
@@ -21,18 +21,13 @@
 
     <item>
         <shape>
-            <solid android:color="@color/black"/>
+            <solid android:color="@color/darkgray2"/>
 
             <stroke
                 android:width="2dp"
                 android:color="@color/gray" />
             <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp"/>
+                android:radius="2dp" />
         </shape>
     </item>
     <!-- default -->
