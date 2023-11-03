@@ -4,20 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -25,6 +22,7 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
@@ -33,8 +31,14 @@ import com.erionna.eternalreturninfo.ui.activity.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.LoginPage
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
 import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
+import com.erionna.eternalreturninfo.ui.adapter.VideoListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.util.Constants
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -361,16 +365,17 @@ class MyProfileFragment : Fragment() {
     fun ImgPacth(character: String) {
         val array: Array<String> = resources.getStringArray(R.array.character)
         when (character) {
-            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
-            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
-            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
-            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
-            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
-            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
-            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
-            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
-            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
-            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
+            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
+            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
+            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
+            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
+            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
+            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
+            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
+            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
+            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
+            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
+            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
         }
     }
 
@@ -395,7 +400,7 @@ class MyProfileFragment : Fragment() {
             Handler(Looper.getMainLooper()).postDelayed({
                 var uid = auth?.uid.toString()
                 Patch(uid)
-            }, 2000)
+            }
         }
     }
 
@@ -413,7 +418,7 @@ class MyProfileFragment : Fragment() {
                     FirebaseFirestore.getInstance()
                         .collection("EternalReturnInfo")
                         .document(auth!!.uid!!)
-                        .update("profile", uri.toString())
+                        .update("profile",uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
