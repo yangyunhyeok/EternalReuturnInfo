@@ -195,7 +195,7 @@ class ChatListFragment : Fragment() {
                         })
 
                     if (auth.uid == currentUser?.uid) {
-                        binding.chatListTitle.text = "${currentUser?.name} 님 반갑습니다!"
+                        binding.chatListTitle.text = "${currentUser?.name} 님\n반갑습니다!"
                     }
 
                 }
