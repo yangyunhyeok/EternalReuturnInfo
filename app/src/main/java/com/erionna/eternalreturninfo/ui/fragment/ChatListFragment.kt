@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.api.load
 import com.erionna.eternalreturninfo.databinding.ChatListFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
@@ -114,6 +115,17 @@ class ChatListFragment : Fragment() {
         chatListRecyclerview.itemAnimator = null
 
         Log.d("choco5744", "${viewModel.currentList()}")
+
+        database = Firebase.database.reference
+
+        database.child("user").get().addOnSuccessListener {
+            for(child in it.children) {
+                val currentUser = child.getValue(ERModel::class.java)
+                if(currentUser?.uid == auth.uid) {
+                    chatListMyProfilePicture.load(currentUser?.profilePicture.toString())
+                }
+            }
+        }
     }
 
 
