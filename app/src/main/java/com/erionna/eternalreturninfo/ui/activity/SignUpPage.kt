@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -32,6 +34,7 @@ class SignUpPage : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
     var ImageCheck = 0
+    var nickNameCheck = 0
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,14 +73,17 @@ class SignUpPage : AppCompatActivity() {
 
 
         binding.signupSignupBtn.setOnClickListener {
-            createAccount(
-                binding.signupIDEt.text.toString(),
-                binding.signupPWEt.text.toString(),
-                binding.signupPWCheckEt.text.toString(),
-                binding.signupNickNameEt.text.toString(),
-                selectCharacter,
+            nicknameCheck(binding.signupNickNameEt.text.toString())
+            Handler(Looper.getMainLooper()).postDelayed({
+                createAccount(
+                    binding.signupIDEt.text.toString(),
+                    binding.signupPWEt.text.toString(),
+                    binding.signupPWCheckEt.text.toString(),
+                    binding.signupNickNameEt.text.toString(),
+                    selectCharacter,
 //                selectedImageURI
-            )
+                )
+            }, 2000)
         }
     }
 
@@ -92,38 +98,52 @@ class SignUpPage : AppCompatActivity() {
     ) {
         if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty()) {
             if (password == passwordCheck) {
-                auth?.createUserWithEmailAndPassword(email, password)
-                    ?.addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                this, "계정 생성 완료.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            var baseImage = "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=59ee3b09-5ed8-4882-8b5d-fd620d042597&_gl=1*5tr4ei*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODk3Njk1NC42MC4xLjE2OTg5Nzc1MjQuNDMuMC4w"
-                            setDocument(
-                                SignUpData(
-                                    Email = email,
-                                    PW = password,
-                                    NickName = nickname,
-                                    Character = character,
-                                    profile = baseImage
+                Log.d("닉네임체크", "$nickNameCheck")
+                if (nickNameCheck == 0) {
+                    auth?.createUserWithEmailAndPassword(email, password)
+                        ?.addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    this, "계정 생성 완료.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                var baseImage =
+                                    "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=59ee3b09-5ed8-4882-8b5d-fd620d042597&_gl=1*5tr4ei*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODk3Njk1NC42MC4xLjE2OTg5Nzc1MjQuNDMuMC4w"
+                                setDocument(
+                                    SignUpData(
+                                        Email = email,
+                                        PW = password,
+                                        NickName = nickname,
+                                        Character = character,
+                                        profile = baseImage
+                                    )
                                 )
-                            )
-                            database.child("user").child(auth.uid!!)
-                                .setValue(ERModel(profilePicture = baseImage, email = email, password = password, name = nickname, uid = auth.uid!!))
-                            if(ImageCheck == 1){
-                                upload(selectedImageURI, email)
+                                database.child("user").child(auth.uid!!)
+                                    .setValue(
+                                        ERModel(
+                                            profilePicture = baseImage,
+                                            email = email,
+                                            password = password,
+                                            name = nickname,
+                                            uid = auth.uid!!
+                                        )
+                                    )
+                                if (ImageCheck == 1) {
+                                    upload(selectedImageURI, email)
+                                }
+                                var intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Toast.makeText(
+                                    this, "계정 생성 실패",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            var intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                this, "계정 생성 실패",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
-                    }
+                } else {
+                    Toast.makeText(this, "중복된 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(this, "같은 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show()
             }
@@ -175,11 +195,27 @@ class SignUpPage : AppCompatActivity() {
                     FirebaseFirestore.getInstance()
                         .collection("EternalReturnInfo")
                         .document(auth.uid!!)
-                        .update("profile",uri.toString())
+                        .update("profile", uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
             .addOnSuccessListener { Log.i("업로드 성공", "") }
+    }
+
+    fun nicknameCheck(nickname: String) {
+        db.collection("EternalReturnInfo")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    if (nickname == document.data["nickName"]) {
+                        nickNameCheck = 1;
+                        Log.d("닉네임체크2","$nickNameCheck")
+                    }
+                    Log.d("회원가입", "${document.id} => ${document.data["nickName"]}")
+                }
+            }
+            .addOnFailureListener { exception ->
+            }
     }
 
 }

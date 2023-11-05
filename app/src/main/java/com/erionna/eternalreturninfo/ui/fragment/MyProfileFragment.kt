@@ -247,7 +247,7 @@ class MyProfileFragment : Fragment() {
                 .create()
 
 
-            var nickName = dialogView.findViewById<EditText>(R.id.myprofile_edit_nickname_et)
+
             val characterSpinner = dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
             val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
             val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
@@ -259,14 +259,14 @@ class MyProfileFragment : Fragment() {
                 R.id.spinner_tv,
                 characterlist
             )
-            var uid = auth!!.uid
-            val docRef = db.collection("EternalReturnInfo").document("$uid")
-            docRef.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        nickName.setText(document["nickName"].toString())
-                    }
-                }
+//            var uid = auth!!.uid
+//            val docRef = db.collection("EternalReturnInfo").document("$uid")
+//            docRef.get()
+//                .addOnSuccessListener { document ->
+//                    if (document != null) {
+//                        nickName.setText(document["nickName"].toString())
+//                    }
+//                }
             var selectCharacter = characterlist[0]
             characterSpinner.adapter = adapter
 
@@ -292,7 +292,6 @@ class MyProfileFragment : Fragment() {
                     .update(
                         mapOf(
                             "character" to selectCharacter,
-                            "nickName" to nickName.text.toString()
                         )
                     )
                 alertDialog.dismiss()
