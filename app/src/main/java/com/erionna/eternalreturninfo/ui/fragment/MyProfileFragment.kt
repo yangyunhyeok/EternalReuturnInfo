@@ -4,17 +4,20 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -22,8 +25,8 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
-import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
+import com.erionna.eternalreturninfo.retrofit.CharacterStats
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
 import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
@@ -31,14 +34,9 @@ import com.erionna.eternalreturninfo.ui.activity.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.LoginPage
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
 import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
-import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
-import com.erionna.eternalreturninfo.ui.adapter.VideoListAdapter
+import com.erionna.eternalreturninfo.ui.adapter.MyprofileListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.util.Constants
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -55,7 +53,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.URL
 
 
 class MyProfileFragment : Fragment() {
@@ -133,16 +130,26 @@ class MyProfileFragment : Fragment() {
                     if (userstate_response.isSuccessful) {
                         val userStateResponse = userstate_response.body()
 
+
                         withContext(Dispatchers.Main) {
-
                             val user = userStateResponse?.userStats?.get(0)
+//                            binding.myprofileTvTop1.text =
+//                                (user?.top1?.times(100) ?: 0).toString() + "%"
+//                            binding.myprofileTvAverageRank.text =
+//                                "#" + (user?.averageRank ?: 0).toString()
+//                            binding.myprofileTvAverageKill.text =
+//                                (user?.averageKills ?: 0).toString()
 
-                            binding.myprofileTvTop1.text =
-                                (user?.top1?.times(100) ?: 0).toString() + "%"
-                            binding.myprofileTvAverageRank.text =
-                                "#" + (user?.averageRank ?: 0).toString()
-                            binding.myprofileTvAverageKill.text =
-                                (user?.averageKills ?: 0).toString()
+                            var dataList = mutableListOf<CharacterStats>()
+                            for(a in 0..2){
+                                dataList.add(CharacterStats(user!!.characterStats[a].characterCode,user.characterStats[a].totalGames,user.characterStats[a].usages,user.characterStats[a].maxKillings,user.characterStats[a].top3,user.characterStats[a].wins,user.characterStats[a].top3Rate,user.characterStats[a].averageRank))
+                            }
+                            Log.d("마이페이지 데이터리스트","$dataList")
+
+                            val array: Array<String> = resources.getStringArray(R.array.characterName)
+                            val adapter = MyprofileListAdapter(dataList, array)
+                            binding.myprofileCharacterRv.adapter = adapter
+                            binding.myprofileCharacterRv.layoutManager = LinearLayoutManager(requireContext())
                         }
 
                     } else {
@@ -155,6 +162,8 @@ class MyProfileFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+
+
 
         binding.myprofileMyboardRv.adapter = boardListAdapter
         binding.myprofileMyboardRv.layoutManager = LinearLayoutManager(requireContext())
@@ -218,7 +227,7 @@ class MyProfileFragment : Fragment() {
 
     private fun setOnClickListener() {
         val logoutBtn = binding.myprofileLogoutBtn
-        val characterBtn = binding.myprofileCharacterImg
+//        val characterBtn = binding.myprofileCharacterImg
         val profileBtn = binding.myprofileProfileImg
         val editBtn = binding.myprofileEditBtn
         profileBtn.setOnClickListener {
@@ -353,31 +362,31 @@ class MyProfileFragment : Fragment() {
                     var uri = Uri.parse(document["profile"].toString())
                     binding.myprofileEmailTv.text = document["email"].toString()
                     binding.myprofileNicknameTv.text = document["nickName"].toString()
-                    binding.myprofileMycharacterTv.text = document["character"].toString()
+//                    binding.myprofileMycharacterTv.text = document["character"].toString()
                     Glide.with(this).load(uri).into(binding.myprofileProfileImg);
-                    ImgPacth(document["character"].toString())
+//                    ImgPacth(document["character"].toString())
                     email = document["email"].toString()
                 }
             }
     }
 
     // 이미지 패치
-    fun ImgPacth(character: String) {
-        val array: Array<String> = resources.getStringArray(R.array.character)
-        when (character) {
-            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
-            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
-            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
-            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
-            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
-            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
-            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
-            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
-            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
-            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
-            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
-        }
-    }
+//    fun ImgPacth(character: String) {
+//        val array: Array<String> = resources.getStringArray(R.array.character)
+//        when (character) {
+//            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
+//            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
+//            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
+//            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
+//            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
+//            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
+//            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
+//            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
+//            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
+//            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
+//            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -400,7 +409,7 @@ class MyProfileFragment : Fragment() {
             Handler(Looper.getMainLooper()).postDelayed({
                 var uid = auth?.uid.toString()
                 Patch(uid)
-            }
+            }, 2000)
         }
     }
 
@@ -418,7 +427,7 @@ class MyProfileFragment : Fragment() {
                     FirebaseFirestore.getInstance()
                         .collection("EternalReturnInfo")
                         .document(auth!!.uid!!)
-                        .update("profile",uri.toString())
+                        .update("profile", uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
@@ -431,7 +440,7 @@ class MyProfileFragment : Fragment() {
     }
 
     fun updateCharacter(character: String) {
-        ImgPacth(character)
+//        ImgPacth(character)
     }
 
 

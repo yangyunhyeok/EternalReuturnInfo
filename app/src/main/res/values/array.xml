@@ -14,6 +14,80 @@
         <item>레온</item>
     </string-array>
 
+    <string-array name="characterName">
+        <item>선택</item>
+        <item>재키</item>
+        <item>아야</item>
+        <item>현우</item>
+        <item>매그너스</item>
+        <item>피오라</item>
+        <item>나딘</item>
+        <item>자히르</item>
+        <item>하트</item>
+        <item>아이솔</item>
+        <item>리 다이린</item>
+        <item>유키</item>
+        <item>혜진</item>
+        <item>쇼우</item>
+        <item>시셀라</item>
+        <item>키아라</item>
+        <item>아드리아나</item>
+        <item>실비아</item>
+        <item>쇼이치</item>
+        <item>엠마</item>
+        <item>레녹스</item>
+        <item>로지</item>
+        <item>루크</item>
+        <item>캐시</item>
+        <item>아델라</item>
+        <item>버니스</item>
+        <item>바바라</item>
+        <item>알렉스</item>
+        <item>수아</item>
+        <item>레온</item>
+        <item>일레븐</item>
+        <item>리오</item>
+        <item>윌리엄</item>
+        <item>니키</item>
+        <item>나타폰</item>
+        <item>얀</item>
+        <item>이바</item>
+        <item>다니엘</item>
+        <item>제니</item>
+        <item>카밀로</item>
+        <item>클로에</item>
+        <item>요한</item>
+        <item>비앙카</item>
+        <item>셀린</item>
+        <item>에키온</item>
+        <item>마이</item>
+        <item>에이든</item>
+        <item>라우라</item>
+        <item>띠아</item>
+        <item>펠릭스</item>
+        <item>엘레나</item>
+        <item>프리야</item>
+        <item>아디나</item>
+        <item>마커스</item>
+        <item>칼라</item>
+        <item>에스텔</item>
+        <item>피올로</item>
+        <item>마르티나</item>
+        <item>헤이즈</item>
+        <item>아이작</item>
+        <item>타지아</item>
+        <item>이렘</item>
+        <item>테오도르</item>
+        <item>이안</item>
+        <item>바냐</item>
+        <item>데비&amp;마를렌</item>
+        <item>아르다</item>
+        <item>아비게일</item>
+        <item>알론소</item>
+        <item>레니</item>
+
+    </string-array>
+
     <string-array name="server">
         <item>선택</item>
         <item>KR</item>
