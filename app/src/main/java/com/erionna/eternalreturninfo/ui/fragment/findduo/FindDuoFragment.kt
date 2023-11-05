@@ -109,6 +109,13 @@ class FindDuoFragment : Fragment() {
 
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+//        binding.findduoRecyclerview.adapter = adapter
+//        initView()
+//    }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()

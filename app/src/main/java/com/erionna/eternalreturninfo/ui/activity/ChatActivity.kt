@@ -8,11 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.ui.adapter.ChatAdapter
+import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
+import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
@@ -77,6 +81,9 @@ class ChatActivity : AppCompatActivity() {
     private val position by lazy {
         intent.getIntExtra(EXTRA_ER_POSITION, -1)
     }
+    private val data by lazy {
+        intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
+    }
 
     private lateinit var refDb: DatabaseReference
     private lateinit var refEventListener: ValueEventListener
@@ -87,7 +94,7 @@ class ChatActivity : AppCompatActivity() {
     private val chatAdapter by lazy {
         ChatAdapter(
             messageList,
-            onClickItem = { position ->
+            onClickItem = { _ ->
                 val imm =
                     this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.chatMsgEt.windowToken, 0)
@@ -95,33 +102,47 @@ class ChatActivity : AppCompatActivity() {
         )
     }
 
+    private val chatListViewModel : ChatListViewModel by viewModels {
+        ChatListViewModelFactory()
+    }
+
+
     override fun onBackPressed() {
         refDb.removeEventListener(refEventListener)
         finish()
         super.onBackPressed()
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initView()
+        loadChat()
+        saveChat()
 
-        // 채팅목록에서 전달받은 상대방 데이터 저장
-        val data = intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
-        Log.d("#choco5732", "$data")
+    }
+
+
+
+    private fun initView() = with(binding) {
+        // 리사이클러뷰 초기화
+        chatRecycler.adapter = chatAdapter
+        chatRecycler.layoutManager = LinearLayoutManager(this@ChatActivity)
 
         // 툴바에 채팅상대 이름 출력하기
-        binding.chatToolbarTitle.text = data?.name
+        chatToolbarTitle.text = data?.name
 
+        // 뒤로가기 클릭 시 채팅방에서 빠져나옴
+        chatBackBtn.setOnClickListener{
+            refDb.removeEventListener(refEventListener)
+            finish()
+        }
+    }
+
+    private fun saveChat() {
         receiverName = data?.name.toString()
         receiverUid = data?.uid.toString()
-        Log.d("#choco5732", "receiverName : $receiverName  , receverUid = $receiverUid")
-
-        // 리사이클러뷰 초기화
-        binding.chatRecycler.adapter = chatAdapter
-        binding.chatRecycler.layoutManager = LinearLayoutManager(this)
 
         // 로그인 한 사용자 uid
         val senderUid = auth.currentUser?.uid
@@ -130,7 +151,8 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverUid + senderUid
         // 받는이 방
         receiverRoom = senderUid + receiverUid
-        Log.d("#choco5732", "senderRoom : $senderRoom")
+
+
 
         // 메시지 저장하기
         binding.chatSendBtn.setOnClickListener {
@@ -142,7 +164,7 @@ class ChatActivity : AppCompatActivity() {
 
             // et에 입력한 메시지
             val message = binding.chatMsgEt.text.toString()
-            val messageObject = Message(id = "${idGenerate.getAndIncrement()}" + time, message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false)
+            val messageObject = Message(id = "${idGenerate.getAndIncrement()}" + time, message = message , sendId = senderUid, time = time, receiverId = receiverUid, readOrNot = false, whereRU = true)
 
             if (message != "") {
                 // 송수신 방 둘 다 저장
@@ -155,8 +177,51 @@ class ChatActivity : AppCompatActivity() {
                 // 메시지 전송 후 EditText 공백 처리
                 binding.chatMsgEt.setText("")
 
+                // 전송 버튼을 누르면 whereRU를 true로 바꿔줘 채팅리스트에 추가
+                val map = HashMap<String, Any>()
+                map.put("whereRU", true)
+
+//                database.child("chats").child(senderRoom).child("messages")
+//                    .get().addOnSuccessListener {
+//                        for (child in it.children) {
+//                            val chat = child.getValue(Message::class.java)
+//                            val key = child.key
+//
+//                            database.child("chats").child(senderRoom)
+//                                .child("messages").child("$key").updateChildren(map)
+//
+//                        }
+//                    }
+//
+//                database.child("chats").child(receiverRoom).child("messages")
+//                    .get().addOnSuccessListener {
+//                        for (child in it.children) {
+//                            val chat = child.getValue(Message::class.java)
+//                            val key = child.key
+//
+//                            database.child("chats").child(receiverRoom)
+//                                .child("messages").child("$key").updateChildren(map)
+//
+//                        }
+//                    }
+
             }
+
         }
+    }
+
+    private fun loadChat() {
+        receiverName = data?.name.toString()
+        receiverUid = data?.uid.toString()
+
+        // 로그인 한 사용자 uid
+        val senderUid = auth.currentUser?.uid
+
+        // 보낸이 방
+        senderRoom = receiverUid + senderUid
+        // 받는이 방
+        receiverRoom = senderUid + receiverUid
+
         var finalMessage = ""
         var finalTime = ""
 
@@ -168,8 +233,8 @@ class ChatActivity : AppCompatActivity() {
 
                 messageList.clear()
 
-                for (postSnapshot in snapShot.children) {
-                    val message = postSnapshot.getValue(Message::class.java)
+                for (child in snapShot.children) {
+                    val message = child.getValue(Message::class.java)
                     var readOrNot: Boolean = false
 
                     messageList.add(message!!)
@@ -185,7 +250,7 @@ class ChatActivity : AppCompatActivity() {
                     val map = HashMap<String, Any>()
                     map.put("readOrNot", true)
 
-                    val key = postSnapshot.key
+                    val key = child.key
                     database.child("chats").child(senderRoom)
                         .child("messages").child("$key").updateChildren(map)
                 }
@@ -199,6 +264,7 @@ class ChatActivity : AppCompatActivity() {
                         EXTRA_TIME,
                         finalTime
                     )
+                    Log.d("choco5744", "finaltime : $finalTime")
                     putExtra(
                         EXTRA_ER_POSITION,
                         position
