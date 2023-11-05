@@ -203,12 +203,13 @@ class SignUpPage : AppCompatActivity() {
     }
 
     fun nicknameCheck(nickname: String) {
+        nickNameCheck = 0
         db.collection("EternalReturnInfo")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     if (nickname == document.data["nickName"]) {
-                        nickNameCheck = 1;
+                        nickNameCheck = 1
                         Log.d("닉네임체크2","$nickNameCheck")
                     }
                     Log.d("회원가입", "${document.id} => ${document.data["nickName"]}")
