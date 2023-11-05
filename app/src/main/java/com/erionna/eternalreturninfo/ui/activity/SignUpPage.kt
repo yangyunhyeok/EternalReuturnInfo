@@ -63,38 +63,48 @@ class SignUpPage : AppCompatActivity() {
         }
 
         binding.signupBtnNicknameCheck.setOnClickListener {
-            GlobalScope.launch(Dispatchers.IO) {
-                try {
-                    val nickname = binding.signupNickNameEt.text.toString()
+            nicknameCheck(binding.signupNickNameEt.text.toString())
+            Handler(Looper.getMainLooper()).postDelayed({
+                GlobalScope.launch(Dispatchers.IO) {
+                    try {
+                        val nickname = binding.signupNickNameEt.text.toString()
 
-                    //수정 : 로그인한 사람 닉네임 가져오기
-                    val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
-                    val userID_response = userID_call.execute()
+                        //수정 : 로그인한 사람 닉네임 가져오기
+                        val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                        val userID_response = userID_call.execute()
 
-                    if (userID_response.isSuccessful) {
-                        val gameResponse = userID_response.body()
+                        if (userID_response.isSuccessful) {
+                            val gameResponse = userID_response.body()
 
-                        withContext(Dispatchers.Main) {
-                            if (gameResponse?.user == null) {
-                                binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color2))
-                                binding.signupTvCheckMessage.text = "닉네임이 존재하지 않습니다."
-                                signup_nickname = ""
-                            } else {
-                                binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color))
-                                binding.signupTvCheckMessage.text = "사용가능한 닉네임입니다."
-                                signup_nickname = gameResponse.user.nickname
+                            withContext(Dispatchers.Main) {
+                                if (gameResponse?.user == null) {
+                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color2))
+                                    binding.signupTvCheckMessage.text = "닉네임이 존재하지 않습니다."
+                                    signup_nickname = ""
+                                } else if(nickNameCheck == 1){
+                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color2))
+                                    binding.signupTvCheckMessage.text = "중복된 닉네임입니다."
+                                    signup_nickname = ""
+                                }else {
+                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color))
+                                    binding.signupTvCheckMessage.text = "사용가능한 닉네임입니다."
+                                    signup_nickname = gameResponse.user.nickname
+                                }
                             }
+                            Log.d("닉네임체크",signup_nickname)
+
                         }
 
+                    } catch (e: Exception) {
+                        // 오류 처리
+                        e.printStackTrace()
                     }
-
-                } catch (e: Exception) {
-                    // 오류 처리
-                    e.printStackTrace()
                 }
-            }
+            }, 2000)
+
         }
 
 
@@ -122,7 +132,6 @@ class SignUpPage : AppCompatActivity() {
 
 
         binding.signupSignupBtn.setOnClickListener {
-            nicknameCheck(signup_nickname)
             Handler(Looper.getMainLooper()).postDelayed({
                 createAccount(
                     binding.signupIDEt.text.toString(),
@@ -259,9 +268,7 @@ class SignUpPage : AppCompatActivity() {
                 for (document in result) {
                     if (nickname == document.data["nickName"]) {
                         nickNameCheck = 1
-                        Log.d("닉네임체크2","$nickNameCheck")
                     }
-                    Log.d("회원가입", "${document.id} => ${document.data["nickName"]}")
                 }
             }
             .addOnFailureListener { exception ->
