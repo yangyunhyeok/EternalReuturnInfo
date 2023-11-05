@@ -4,17 +4,20 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -23,20 +26,25 @@ import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
+import com.erionna.eternalreturninfo.retrofit.CharacterStats
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
 import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
 import com.erionna.eternalreturninfo.ui.activity.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.LoginPage
+import com.erionna.eternalreturninfo.ui.activity.MainActivity
 import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.adapter.MyprofileListAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
+import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -45,6 +53,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
@@ -55,6 +64,7 @@ class MyProfileFragment : Fragment() {
     private val PICK_IMAGE = 1111
     val storage = Firebase.storage
     var email: String? = null
+    private lateinit var database: DatabaseReference
 
     companion object {
         fun newInstance() = MyProfileFragment()
@@ -72,7 +82,7 @@ class MyProfileFragment : Fragment() {
 
                 val updateBoard = result.data?.getParcelableExtra<BoardModel>("updateBoard")
 
-                if(updateBoard != null){
+                if (updateBoard != null) {
                     boardViewModel.updateBoard(updateBoard)
                 }
 
@@ -86,10 +96,10 @@ class MyProfileFragment : Fragment() {
         _binding = MyprofileFragmentBinding.inflate(inflater, container, false)
         characterbinding = MyprofileCharacterDialogBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
         var uid = auth?.uid.toString()
         Patch(uid)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -101,7 +111,10 @@ class MyProfileFragment : Fragment() {
                 val nickname = BoardSingletone.LoginUser().name.toString()
 
                 //수정 : 로그인한 사람 닉네임 가져오기
-                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(
+                    Constants.MAIN_APIKEY,
+                    nickname
+                )
                 val userID_response = userID_call.execute()
 
                 if (userID_response.isSuccessful) {
@@ -110,19 +123,33 @@ class MyProfileFragment : Fragment() {
                     val seasonId = "19"
 
                     val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
-                        Constants.MAIN_APIKEY, userNum, seasonId)
+                        Constants.MAIN_APIKEY, userNum, seasonId
+                    )
                     val userstate_response = userstate_call.execute()
 
                     if (userstate_response.isSuccessful) {
                         val userStateResponse = userstate_response.body()
 
+
                         withContext(Dispatchers.Main) {
-
                             val user = userStateResponse?.userStats?.get(0)
+//                            binding.myprofileTvTop1.text =
+//                                (user?.top1?.times(100) ?: 0).toString() + "%"
+//                            binding.myprofileTvAverageRank.text =
+//                                "#" + (user?.averageRank ?: 0).toString()
+//                            binding.myprofileTvAverageKill.text =
+//                                (user?.averageKills ?: 0).toString()
 
-                            binding.myprofileTvTop1.text = (user?.top1?.times(100) ?: 0).toString() + "%"
-                            binding.myprofileTvAverageRank.text = "#"+(user?.averageRank ?: 0).toString()
-                            binding.myprofileTvAverageKill.text = (user?.averageKills ?: 0).toString()
+                            var dataList = mutableListOf<CharacterStats>()
+                            for(a in 0..2){
+                                dataList.add(CharacterStats(user!!.characterStats[a].characterCode,user.characterStats[a].totalGames,user.characterStats[a].usages,user.characterStats[a].maxKillings,user.characterStats[a].top3,user.characterStats[a].wins,user.characterStats[a].top3Rate,user.characterStats[a].averageRank))
+                            }
+                            Log.d("마이페이지 데이터리스트","$dataList")
+
+                            val array: Array<String> = resources.getStringArray(R.array.characterName)
+                            val adapter = MyprofileListAdapter(dataList, array)
+                            binding.myprofileCharacterRv.adapter = adapter
+                            binding.myprofileCharacterRv.layoutManager = LinearLayoutManager(requireContext())
                         }
 
                     } else {
@@ -136,6 +163,8 @@ class MyProfileFragment : Fragment() {
             }
         }
 
+
+
         binding.myprofileMyboardRv.adapter = boardListAdapter
         binding.myprofileMyboardRv.layoutManager = LinearLayoutManager(requireContext())
 
@@ -144,7 +173,7 @@ class MyProfileFragment : Fragment() {
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
 
                     val boardList = mutableListOf<BoardModel>()
 
@@ -158,7 +187,7 @@ class MyProfileFragment : Fragment() {
                     boardListAdapter.submitList(boardList)
                     boardListAdapter.notifyDataSetChanged()
 
-                }else{
+                } else {
                 }
             }
 
@@ -167,7 +196,8 @@ class MyProfileFragment : Fragment() {
             }
         })
 
-        boardListAdapter.setOnItemClickListener(object : BoardRecyclerViewAdapter.OnItemClickListener{
+        boardListAdapter.setOnItemClickListener(object :
+            BoardRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(boardItem: BoardModel) {
 
                 FBRef.postRef.child(boardItem.id).addListenerForSingleValueEvent(object :
@@ -196,9 +226,10 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun setOnClickListener() {
-        var logoutBtn = binding.myprofileLogoutBtn
-        var characterBtn = binding.myprofileCharacterImg
-        var profileBtn = binding.myprofileProfileImg
+        val logoutBtn = binding.myprofileLogoutBtn
+//        val characterBtn = binding.myprofileCharacterImg
+        val profileBtn = binding.myprofileProfileImg
+        val editBtn = binding.myprofileEditBtn
         profileBtn.setOnClickListener {
             selectProfile()
         }
@@ -208,24 +239,34 @@ class MyProfileFragment : Fragment() {
             startActivity(intent)
             requireActivity().finish()
         }
-
-
-        //실험체 이미지 선택
-        characterBtn.setOnClickListener {
+        //프로필 변경
+        editBtn.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
             val alertDialog = AlertDialog.Builder(requireActivity())
                 .setView(dialogView)
                 .create()
+
+
+            var nickName = dialogView.findViewById<EditText>(R.id.myprofile_edit_nickname_et)
             val characterSpinner = dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
             val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
-
+            val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
             val characterlist = resources.getStringArray(R.array.character)
+
             val adapter = ArrayAdapter<String>(
                 requireContext(),
                 R.layout.signup_spinner,
                 R.id.spinner_tv,
                 characterlist
             )
+            var uid = auth!!.uid
+            val docRef = db.collection("EternalReturnInfo").document("$uid")
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        nickName.setText(document["nickName"].toString())
+                    }
+                }
             var selectCharacter = characterlist[0]
             characterSpinner.adapter = adapter
 
@@ -243,24 +284,72 @@ class MyProfileFragment : Fragment() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
                 }
-            // 실험체 선택버튼
+            // 프로필 변경버튼
             button.setOnClickListener {
                 FirebaseFirestore.getInstance()
                     .collection("EternalReturnInfo")
                     .document(auth!!.uid!!)
-                    .update("character", selectCharacter)
-                    .addOnSuccessListener {
-                        Log.d("실험체", "성공")
-                        var uid = auth?.uid.toString()
-                        Patch(uid)
-                    }
-                    .addOnFailureListener {
-                        Log.d("실험체", "실패")
-                    }
+                    .update(
+                        mapOf(
+                            "character" to selectCharacter,
+                            "nickName" to nickName.text.toString()
+                        )
+                    )
                 alertDialog.dismiss()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    var uid = auth?.uid.toString()
+                    Patch(uid)
+                }, 2000)
+            }
+
+            // 회원 탈퇴
+            deleteBtn.setOnClickListener {
+                alertDialog.dismiss()
+                val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
+                val deleteDialog = AlertDialog.Builder(requireActivity())
+                    .setView(deleteDialogView)
+                    .create()
+
+                var yesBtn = deleteDialogView.findViewById<Button>(R.id.delete_yes_btn)
+                var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
+
+                yesBtn.setOnClickListener {
+                    email = auth!!.currentUser?.email
+                    // storage 인스턴스 생성
+                    val storage = Firebase.storage
+                    // storage 참조
+                    val storageRef = storage.getReference("image")
+                    // storage에서 삭제 할 파일명
+                    val fileName = email.toString()
+                    Log.d("스토리지", fileName)
+                    val mountainsRef = storageRef.child("${fileName}.jpg")
+                    mountainsRef.delete()
+                    database.child("user").child(auth!!.uid!!).removeValue()
+
+                    FirebaseFirestore.getInstance()
+                        .collection("EternalReturnInfo")
+                        .document(auth!!.uid!!)
+                        .delete()
+                    val user = Firebase.auth.currentUser!!
+                    user.delete()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("계정삭제", "User account deleted.")
+                            }
+                        }
+                    deleteDialog.dismiss()
+                    var intent = Intent(activity, LoginPage::class.java)
+                    (context as MainActivity).finish()
+                    startActivity(intent)
+                }
+                noBtn.setOnClickListener {
+                    deleteDialog.dismiss()
+                }
+                deleteDialog.show()
             }
             alertDialog.show()
         }
+
     }
 
     // 마이페이지 생성
@@ -273,31 +362,31 @@ class MyProfileFragment : Fragment() {
                     var uri = Uri.parse(document["profile"].toString())
                     binding.myprofileEmailTv.text = document["email"].toString()
                     binding.myprofileNicknameTv.text = document["nickName"].toString()
-                    binding.myprofileMycharacterTv.text = document["character"].toString()
+//                    binding.myprofileMycharacterTv.text = document["character"].toString()
                     Glide.with(this).load(uri).into(binding.myprofileProfileImg);
-                    ImgPacth(document["character"].toString())
+//                    ImgPacth(document["character"].toString())
                     email = document["email"].toString()
                 }
             }
     }
 
     // 이미지 패치
-    fun ImgPacth(character: String) {
-        val array: Array<String> = resources.getStringArray(R.array.character)
-        when (character) {
-            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
-            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
-            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
-            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
-            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
-            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
-            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
-            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
-            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
-            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
-            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
-        }
-    }
+//    fun ImgPacth(character: String) {
+//        val array: Array<String> = resources.getStringArray(R.array.character)
+//        when (character) {
+//            array[0] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_xiuk)
+//            array[1] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_01haze)
+//            array[2] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_02xiukai)
+//            array[3] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_03nadine)
+//            array[4] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_04nathapon)
+//            array[5] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_05nicty)
+//            array[6] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_06daniel)
+//            array[7] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_07tia)
+//            array[8] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_08laura)
+//            array[9] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_09lenox)
+//            array[10] -> binding.myprofileCharacterImg.setImageResource(R.drawable.ic_character_10leon)
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -316,9 +405,11 @@ class MyProfileFragment : Fragment() {
             val uri: Uri? = data?.data
             if (uri != null) {
                 upload(uri, email!!)
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
                 var uid = auth?.uid.toString()
                 Patch(uid)
-            }
+            }, 2000)
         }
     }
 
@@ -336,7 +427,7 @@ class MyProfileFragment : Fragment() {
                     FirebaseFirestore.getInstance()
                         .collection("EternalReturnInfo")
                         .document(auth!!.uid!!)
-                        .update("profile",uri.toString())
+                        .update("profile", uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
@@ -349,7 +440,7 @@ class MyProfileFragment : Fragment() {
     }
 
     fun updateCharacter(character: String) {
-        ImgPacth(character)
+//        ImgPacth(character)
     }
 
 

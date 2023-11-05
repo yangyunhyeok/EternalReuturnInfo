@@ -99,8 +99,7 @@ class SignUpPage : AppCompatActivity() {
                                 this, "계정 생성 완료.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            var baseImage =
-                                "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_character.jpg?alt=media&token=b0908050-66b9-4273-95e4-38645bd02477&_gl=1*1aipnfg*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODM4OTAyOS41My4xLjE2OTgzOTM5NzEuMS4wLjA."
+                            var baseImage = "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=59ee3b09-5ed8-4882-8b5d-fd620d042597&_gl=1*5tr4ei*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODk3Njk1NC42MC4xLjE2OTg5Nzc1MjQuNDMuMC4w"
                             setDocument(
                                 SignUpData(
                                     Email = email,
@@ -111,23 +110,13 @@ class SignUpPage : AppCompatActivity() {
                                 )
                             )
                             database.child("user").child(auth.uid!!)
-                                .setValue(
-                                    ERModel(
-                                        profilePicture = baseImage,
-                                        email = email,
-                                        password = password,
-                                        name = nickname,
-                                        uid = auth.uid!!
-                                    )
-                                )
-                            if (ImageCheck == 1) {
+                                .setValue(ERModel(profilePicture = baseImage, email = email, password = password, name = nickname, uid = auth.uid!!))
+                            if(ImageCheck == 1){
                                 upload(selectedImageURI, email)
                             }
-
-                            Toast.makeText(this, "$character", Toast.LENGTH_SHORT).show()
-                            finish()
                             var intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(
                                 this, "계정 생성 실패",
@@ -149,7 +138,6 @@ class SignUpPage : AppCompatActivity() {
             .document(auth.uid!!)
             .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "닉네임 값 저장 성공", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "닉네임 값 저장 실패", Toast.LENGTH_SHORT).show()
@@ -187,7 +175,7 @@ class SignUpPage : AppCompatActivity() {
                     FirebaseFirestore.getInstance()
                         .collection("EternalReturnInfo")
                         .document(auth.uid!!)
-                        .update("profile", uri.toString())
+                        .update("profile",uri.toString())
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
