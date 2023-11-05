@@ -161,15 +161,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/shape_login_btn"
                 android:ems="16"
-                android:padding="15dp"
                 android:hint="닉네임을 입력하세요"
+                android:padding="15dp"
+                android:textColor="@color/white"
                 android:textColorHint="#919191"
                 android:textSize="17dp"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/signup_btn_nickname_check"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_NickName_tv" />
 
@@ -219,7 +219,36 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_character_sp" />
+
+            <Button
+                android:id="@+id/signup_btn_nickname_check"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/shape_highlight_btn"
+                android:text="중복확인"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/signup_NickName_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/signup_NickName_et"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/signup_tv_check_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="10dp"
+                android:text="닉네임이 존재하지않습니다."
+                android:textColor="@color/highlight_color2"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/signup_NickName_et"
+                app:layout_constraintStart_toEndOf="@+id/signup_NickName_tv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <ImageView

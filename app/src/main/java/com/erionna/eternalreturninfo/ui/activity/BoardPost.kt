@@ -90,14 +90,14 @@ class BoardPost : AppCompatActivity() {
                     board = snapshot.getValue<BoardModel>()
 
                     boardPostTvContent.text = board?.content
-                    boardPostTvVisit.text = board?.views.toString()
+//                    boardPostTvVisit.text = board?.views.toString()
 
                     if(board?.author == BoardSingletone.manager().uid){
                         boardPostTvTitle.text = "[공지]  " + board?.title
                         val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
                         boardPostTvTitle.setTextColor(blueColor)
                     }else{
-                        boardPostTvTitle.text = "[일반]  " + board?.title
+                        boardPostTvTitle.text = board?.title
                         boardPostTvTitle.setTextColor(Color.WHITE)
                     }
 

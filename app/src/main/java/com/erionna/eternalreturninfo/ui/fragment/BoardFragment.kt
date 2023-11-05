@@ -3,11 +3,13 @@ package com.erionna.eternalreturninfo.ui.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.google.android.material.tabs.TabLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +22,15 @@ import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
 import com.erionna.eternalreturninfo.ui.activity.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.BoardSearch
 import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.adapter.BoardViewPagerAdapter
+import com.erionna.eternalreturninfo.ui.adapter.MainViewPagerAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import okhttp3.internal.filterList
 
 
 class BoardFragment : Fragment() {
@@ -35,12 +41,8 @@ class BoardFragment : Fragment() {
     private var _binding: BoardFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val listAdapter by lazy {
-        BoardRecyclerViewAdapter()
-    }
-
-    private val noticeListAdapter by lazy {
-        BoardRecyclerViewAdapter()
+    private val viewPagerAdapter by lazy {
+        BoardViewPagerAdapter(requireActivity())
     }
 
     private val boardViewModel: BoardListViewModel by activityViewModels()
@@ -53,20 +55,6 @@ class BoardFragment : Fragment() {
                 if (board != null) {
                     boardViewModel.addBoard(board)
                 }
-            }
-        }
-
-
-    private val loadBoardLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                val updateBoard = result.data?.getParcelableExtra<BoardModel>("updateBoard")
-
-                if(updateBoard != null){
-                    boardViewModel.updateBoard(updateBoard)
-                }
-
             }
         }
 
@@ -83,6 +71,7 @@ class BoardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initModel()
+
     }
 
     override fun onDestroyView() {
@@ -91,34 +80,17 @@ class BoardFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        boardRv.adapter = listAdapter
-        boardRv.layoutManager = LinearLayoutManager(requireContext())
 
-        listAdapter.setOnItemClickListener(object : BoardRecyclerViewAdapter.OnItemClickListener{
-            override fun onItemClick(boardItem: BoardModel) {
 
-                FBRef.postRef.child(boardItem.id).addListenerForSingleValueEvent(object :
-                    ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            val intent = Intent(requireContext(), BoardDeleted::class.java)
-                            startActivity(intent)
-                        } else {
-                            val views = boardItem.views + 1
-                            FBRef.postRef.child(boardItem.id).child("views").setValue(views)
-                            val intent = Intent(requireContext(), BoardPost::class.java)
-                            intent.putExtra("ID", boardItem.id)
-                            loadBoardLauncher.launch(intent)
-                        }
-                    }
+        boardViewpager.adapter = viewPagerAdapter
 
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        // 데이터 읽기 실패 처리
-                    }
-                })
+        TabLayoutMediator(tabLayout, boardViewpager) { tab, position ->
+            tab.setText(viewPagerAdapter.getTitle(position))
+        }.attach()
 
-            }
-        })
+        boardViewpager.run {
+            isUserInputEnabled = false
+        }
 
 
         boardFab.setOnClickListener {
@@ -144,7 +116,9 @@ class BoardFragment : Fragment() {
                             unsortedBoardList.add(board)
                         }
                     }
+
                     boardViewModel.initBoard(unsortedBoardList)
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -156,16 +130,9 @@ class BoardFragment : Fragment() {
         }
 
     }
+
     private fun initModel() = with(boardViewModel) {
-        boardList.observe(viewLifecycleOwner) {
 
-            val (noticeItems, nonNoticeItems) = it.partition { it.author == BoardSingletone.manager().uid }
-            val sortedNonNoticeItems = nonNoticeItems.sortedBy { it.date }
-            val combinedList = sortedNonNoticeItems + noticeItems
-
-            listAdapter.submitList(
-                combinedList.reversed()
-            )
-        }
     }
+
 }

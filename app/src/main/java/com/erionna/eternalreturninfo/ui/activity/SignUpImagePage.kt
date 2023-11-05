@@ -19,7 +19,6 @@ class SignUpImagePage : AppCompatActivity() {
         binding = SignupImageActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         binding.signupimgNextBtn.setOnClickListener {
             val intent = Intent(this,SignUpPage::class.java)
             intent.putExtra("uri",selectedImageURI)

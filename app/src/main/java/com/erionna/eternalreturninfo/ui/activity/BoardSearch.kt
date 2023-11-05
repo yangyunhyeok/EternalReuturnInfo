@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardSearchActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.FBRef
@@ -24,6 +28,7 @@ import com.google.firebase.database.ktx.getValue
 class BoardSearch : AppCompatActivity() {
 
     private lateinit var binding: BoardSearchActivityBinding
+    private var isBackgroundChanged = false;
 
     private val boardViewModel by lazy {
         ViewModelProvider(this, BoardListViewModelFactory()).get(BoardListViewModel::class.java)
@@ -57,22 +62,34 @@ class BoardSearch : AppCompatActivity() {
             boardSearchEtSearch.setText("")
         }
 
-        boardSearchEtSearch.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                if (event.action == KeyEvent.ACTION_DOWN) {
+        boardSearchEtSearch.setOnFocusChangeListener { view, b ->
 
-                    postCount = 0
-                    boardViewModel.clearSearchBoard()
+            if(b){
+                boardSearchEtSearch.setBackgroundResource(R.drawable.shape_board_search_clicked)
+                boardSearchIbClear.visibility = View.VISIBLE
 
-                    val searchText = boardSearchEtSearch.text.toString()
-                    Search(searchText)
-
-                }
-                true
             } else {
-                false
+                boardSearchEtSearch.setBackgroundResource(R.drawable.shape_board_search)
+                boardSearchIbClear.visibility = View.INVISIBLE
             }
+
         }
+
+        boardSearchEtSearch.setOnEditorActionListener { v, actionId, event ->
+            if (event != null) { // event 객체가 null이 아닌 경우에만 처리
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (event.action == KeyEvent.ACTION_DOWN) {
+                        postCount = 0
+                        boardViewModel.clearSearchBoard()
+                        val searchText = boardSearchEtSearch.text.toString()
+                        Search(searchText)
+                    }
+                }
+            }
+            true
+        }
+
+
 
         listAdapter.setOnItemClickListener(object : BoardRecyclerViewAdapter.OnItemClickListener{
             override fun onItemClick(boardItem: BoardModel) {
@@ -122,9 +139,9 @@ class BoardSearch : AppCompatActivity() {
 
         if(postCount == 0){
             boardSearchTvResult.visibility = View.VISIBLE
-        }else{
-            boardSearchTvResult.visibility = View.INVISIBLE
+            boardSearchTvResult.text = "검색 결과가 없습니다."
         }
+
     }
 
     fun SearchFirebase(query: Query)= with(binding){

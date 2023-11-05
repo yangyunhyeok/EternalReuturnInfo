@@ -11,6 +11,11 @@
     <string name="main_tab_search_title">전적검색</string>
     <string name="main_see_more">더보기</string>
     <string name="main_notice">공지</string>
+    <string name="board_total">전체</string>
+    <string name="board_notice">공지</string>
+    <string name="board_ask">질문</string>
+    <string name="board_tips">공략</string>
+    <string name="board_daily">일상</string>
     <string name="board_save">등록</string>
     <string name="board_comment">댓글</string>
     <string name="board_title_message">제목을 입력해주세요</string>
