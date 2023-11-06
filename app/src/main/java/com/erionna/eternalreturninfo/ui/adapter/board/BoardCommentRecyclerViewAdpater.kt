@@ -1,11 +1,9 @@
-package com.erionna.eternalreturninfo.ui.adapter
+package com.erionna.eternalreturninfo.ui.adapter.board
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +14,9 @@ import com.erionna.eternalreturninfo.model.CommentModel
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.activity.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.board.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
-import com.erionna.eternalreturninfo.ui.activity.DialogListener
+import com.erionna.eternalreturninfo.ui.activity.board.DialogListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -27,7 +25,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.coroutines.coroutineContext
 
 class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardCommentRecyclerViewAdpater.ViewHolder>(
 

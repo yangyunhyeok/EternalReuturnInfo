@@ -1,15 +1,17 @@
-package com.erionna.eternalreturninfo.ui.adapter
+package com.erionna.eternalreturninfo.ui.adapter.board
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.erionna.eternalreturninfo.R
+import com.erionna.eternalreturninfo.databinding.BoardMyProfileRvItemBinding
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.ERModel
@@ -72,21 +74,19 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
 
             FBRef.userRef.child(item?.author.toString()).addValueEventListener(object :
                 ValueEventListener {
+                @SuppressLint("SuspiciousIndentation")
                 override fun onDataChange(snapshot: DataSnapshot) {
 
                     if(snapshot.exists()){
                         val author = snapshot.getValue<ERModel>()
 
+                        boardPostIvProfile.load(author?.profilePicture)
                         boardPostTvUser.text = author?.name
 
-                        if(author?.uid == BoardSingletone.manager().uid){
-                            boardPostTvTitle.text = "[공지]  " + item.title
-                            val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
-                            boardPostTvTitle.setTextColor(blueColor)
-                        }else{
-                            boardPostTvTitle.text = "[일반]  " + item.title
-                            boardPostTvTitle.setTextColor(Color.WHITE)
-                        }
+                    }else{
+
+                        boardPostIvProfile.load(R.drawable.ic_baseimage)
+                        boardPostTvUser.text = "탈퇴한 회원"
 
                     }
 
@@ -97,17 +97,30 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
 
             })
 
+            if(item.category == "공지"){
+                boardPostCategory.setBackgroundResource(R.drawable.shape_board_category_notice)
+                boardPostCategory.text = "공지"
+            }else{
+                boardPostCategory.setBackgroundResource(R.drawable.shape_board_category)
+                boardPostCategory.text = item.category
+            }
 
-            boardPostTvDate.text = formatTimeOrDate(item.date)
+            boardPostTvTitle.text = item.title
+
+
+//            boardPostTvDate.text = formatTimeOrDate(item.date)
+            boardPostTvContent.text = item.content
 
             if(item.comments.size == 0){
                 boardPostBtnComment.visibility = View.INVISIBLE
+                boardPostIvComment.visibility = View.INVISIBLE
             }else{
+                boardPostIvComment.visibility = View.VISIBLE
                 boardPostBtnComment.visibility = View.VISIBLE
                 boardPostBtnComment.text = item.comments.size.toString()
             }
 
-            itemView.setOnClickListener {
+            boardPostLayout.setOnClickListener {
                 onItemClickListener?.onItemClick(item)
             }
 
@@ -133,3 +146,5 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     }
 
 }
+
+

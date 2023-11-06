@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- For selected tab -->
+    <item
+        android:drawable="@drawable/shape_board_drawable_selected_tab"
+        android:state_selected="true"/>
+
+    <!-- For unselected tab -->
+    <item
+        android:drawable="@drawable/shape_board_drawable_unselected_tab"
+        android:state_selected="false"/>
+</selector>

@@ -9,6 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.erionna.eternalreturninfo.databinding.MainFragmentBinding
@@ -21,6 +24,8 @@ import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
 import com.erionna.eternalreturninfo.ui.adapter.VideoListAdapter
 import com.erionna.eternalreturninfo.ui.fragment.LinePagerIndicatorDecoration
 import com.erionna.eternalreturninfo.ui.fragment.SnapPagerScrollListener
+import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
+import com.erionna.eternalreturninfo.ui.viewmodel.MainListViewModel
 import com.erionna.eternalreturninfo.util.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,6 +41,8 @@ class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private val mainViewModel: MainListViewModel by activityViewModels()
+
     private val noticeListAdapter by lazy {
         NoticeBannerListAdapter()
     }
@@ -44,8 +51,7 @@ class MainFragment : Fragment() {
         VideoListAdapter()
     }
 
-    private val resItems: ArrayList<VideoModel> = ArrayList()
-    private var query:String =""
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,105 +89,11 @@ class MainFragment : Fragment() {
         binding.mainBannerNotice.addOnScrollListener(listener)
         binding.mainBannerNotice.addItemDecoration(LinePagerIndicatorDecoration())
 
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val call = RetrofitInstance.eternal_api.getNews("locale=ko_KR")
-                val response = call.execute()
-
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-
-                    if (responseBody != null) {
-                        val articles = responseBody.articles
-
-                        val list = mutableListOf<Notice>()
-                        articles.mapNotNull { list.add(Notice(it.thumbnail_url, it.i18ns["ko_KR"]?.title, it.i18ns["ko_KR"]?.summary, it.i18ns["ko_KR"]?.created_at_for_humans, it.url))}
-
-                        withContext(Dispatchers.Main) {
-
-                            noticeListAdapter.submitList(list)
-
-                            noticeListAdapter.setOnItemClickListener(object : NoticeBannerListAdapter.OnItemClickListener{
-                                override fun onItemClick(item: Notice, position:Int) {
-                                    val intent = Intent(requireContext(), com.erionna.eternalreturninfo.ui.activity.WebView::class.java)
-                                    intent.putExtra("url", list[position].url)
-                                    startActivity(intent)
-                                }
-                            })
-                        }
-
-                    }
-                } else {
-                    println("API 요청 실패: ${response.code()}")
-                }
-
-                val nickname = fetchNonNullableNickname()
-
-                //수정 : 로그인한 사람 닉네임 가져오기
-                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
-                val userID_response = userID_call.execute()
-
-                if (userID_response.isSuccessful) {
-                    val gameResponse = userID_response.body()
-                    val userNum = gameResponse?.user?.userNum.toString()
-                    val seasonId = "19"
-
-                    val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(Constants.MAIN_APIKEY, userNum, seasonId)
-                    val userstate_response = userstate_call.execute()
-
-                    if (userstate_response.isSuccessful) {
-                        val userStateResponse = userstate_response.body()
-
-                        withContext(Dispatchers.Main) {
-
-                            val user = userStateResponse?.userStats?.get(0)
-
-                            binding.mainTvRp.text = (user?.mmr ?: 0).toString() + " PR"
-                            binding.mainTvRank.text = "${(user?.rank ?: 0)}위 (상위 ${(user?.rankPercent?.times(100) ?: 0)}%)"
-                            binding.mainTvTotalWin.text = (user?.totalWins ?: 0).toString()
-                            binding.mainTvTop1.text = (user?.top1?.times(100) ?: 0).toString()
-                            binding.mainTvTotalGames.text = (user?.totalGames ?: 0).toString()
-                            binding.mainTvAverageKill.text = (user?.averageKills ?: 0).toString()
-                            binding.mainTvTop2.text = (user?.top2?.times(100) ?: 0).toString()
-                            binding.mainTvAverageRank.text = (user?.averageRank ?: 0).toString()
-                            binding.mainTvAverageAssiants.text = (user?.averageAssistants ?: 0).toString()
-                            binding.mainTvTop3.text = (user?.top3?.times(100) ?: 0).toString()
-
-                            binding.mainPbTop1.setProgress(user?.top1?.times(100)?.toInt() ?: 0)
-                            binding.mainPbTop2.setProgress(user?.top2?.times(100)?.toInt() ?: 0)
-                            binding.mainPbTop3.setProgress(user?.top3?.times(100)?.toInt() ?: 0)
-                            binding.mainPbAverageKill.setProgress(user?.averageKills?.toInt() ?: 0)
-                            binding.mainPbAverageAssiants.setProgress(user?.averageAssistants?.toInt() ?: 0)
-                            binding.mainPbAverageRank.setProgress(user?.averageRank?.toInt() ?: 0)
-                        }
-
-                    } else {
-                        Log.d("userStateResponse", "${userstate_response}")
-                    }
-                } else {
-                    Log.d("gameResponse", "${response}")
-                }
-
-            } catch (e: Exception) {
-                // 오류 처리
-                e.printStackTrace()
-            }
-        }
-
         initView()
+        initModel()
     }
 
-    private suspend fun fetchNonNullableNickname(): String {
-        var nickname: String? = null
-        while (nickname == null) {
-            nickname = BoardSingletone.LoginUser().name
-            if (nickname == null) {
-                // 닉네임이 null인 경우 잠시 대기하거나 다른 작업 수행
-                delay(1000)
-            }
-        }
-        return nickname
-    }
+
 
     override fun onDestroyView() {
         _binding = null
@@ -189,10 +101,14 @@ class MainFragment : Fragment() {
     }
     private fun initView() = with(binding){
 
-        GlobalScope.launch(Dispatchers.Main) {
-            query = "이터널리턴"
-            fetchItemResults()
-        }
+
+        noticeListAdapter.setOnItemClickListener(object : NoticeBannerListAdapter.OnItemClickListener{
+            override fun onItemClick(item: Notice, position:Int) {
+                val intent = Intent(requireContext(), WebView::class.java)
+                intent.putExtra("url", item.url)
+                startActivity(intent)
+            }
+        })
 
         videoListAdapter.setOnItemClickListener(object : VideoListAdapter.OnItemClickListener{
             override fun onItemClick(item: VideoModel, position: Int) {
@@ -213,35 +129,42 @@ class MainFragment : Fragment() {
 
     }
 
-    private lateinit var currenttoken: String
+    private fun initModel() = with(mainViewModel){
+        noticeList.observe(viewLifecycleOwner){
+            noticeListAdapter.submitList(it)
+        }
 
-    private suspend fun fetchItemResults() {
-        try {
-            val response = RetrofitInstance.api.getYouTubeVideos(
-                query = query,
-                maxResults = 10,
-                videoOrder = "relevance"
-            )
+        videoList.observe(viewLifecycleOwner){
+            videoListAdapter.submitList(it)
+        }
 
-            resItems.clear()
+        userRecordList.observe(viewLifecycleOwner){ user ->
 
-            if (response.isSuccessful) {
-                val youtubeVideo = response.body()!!
-                Log.d("youtubeVideo", youtubeVideo.toString())
-                youtubeVideo?.items?.forEach { snippet ->
-                    val title = snippet.snippet.title
-                    val url = snippet.snippet.thumbnails.medium.url
-                    resItems.add(VideoModel(id= snippet.id.videoId, title = title, thumbnail = url,  url = "https://www.youtube.com/watch?v=${snippet.id}"))
-                }
-            }else{
+            fun percent(number: Float?): Float? {
+                return number?.times(100)
             }
 
-            currenttoken = response.body()!!.nextPageToken
+            binding.mainTvRp.text = (user?.mmr ?: 0).toString() + " PR"
+            binding.mainTvRank.text =
+                "${(user?.rank ?: 0)}위 (상위 ${(user?.rankPercent?.times(100) ?: 0)}%)"
+            binding.mainTvTotalWin.text = (user?.totalWins ?: 0).toString()
+            binding.mainTvTop1.text = (percent(user?.top1) ?: 0).toString()
+            binding.mainTvTotalGames.text = (user?.totalGames ?: 0).toString()
+            binding.mainTvAverageKill.text = (user?.averageKills ?: 0).toString()
+            binding.mainTvTop2.text = (percent(user?.top2) ?: 0).toString()
+            binding.mainTvAverageRank.text = (user?.averageRank ?: 0).toString()
+            binding.mainTvAverageAssiants.text = (user?.averageAssistants ?: 0).toString()
+            binding.mainTvTop3.text = (percent(user?.top3) ?: 0).toString()
 
-            videoListAdapter.submitList(resItems.toMutableList())
-
-        } catch (e: Exception) {
-            Log.e("#error check", "Error: ${e.message}")
+            binding.mainPbTop1.setProgress(percent(user?.top1)?.toInt() ?: 0)
+            binding.mainPbTop2.setProgress(percent(user?.top2)?.toInt() ?: 0)
+            binding.mainPbTop3.setProgress(percent(user?.top3)?.toInt() ?: 0)
+            binding.mainPbAverageKill.setProgress(user?.averageKills?.toInt() ?: 0)
+            binding.mainPbAverageAssiants.setProgress(user?.averageAssistants?.toInt() ?: 0)
+            binding.mainPbAverageRank.setProgress(user?.averageRank?.toInt() ?: 0)
         }
+
     }
+
+
 }

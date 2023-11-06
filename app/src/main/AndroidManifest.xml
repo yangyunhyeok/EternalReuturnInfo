@@ -28,19 +28,19 @@
             android:name=".ui.fragment.signin.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.BoardDeleted"
+            android:name=".ui.activity.board.BoardDeleted"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.BoardSearch"
+            android:name=".ui.activity.board.BoardSearch"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.BoardUpdate"
+            android:name=".ui.activity.board.BoardUpdate"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.BoardPost"
+            android:name=".ui.activity.board.BoardPost"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.BoardAdd"
+            android:name=".ui.activity.board.BoardAdd"
             android:exported="false" />
         <activity
             android:name=".ui.activity.ChatActivity"
