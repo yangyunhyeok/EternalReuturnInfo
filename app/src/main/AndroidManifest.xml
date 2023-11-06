@@ -19,13 +19,7 @@
             android:name=".ui.fragment.findduo.FindduoPopupWindow"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.WebView"
-            android:exported="false" />
-        <activity
-            android:name=".ui.fragment.signup.SignUpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.fragment.signin.LoginActivity"
+            android:name=".ui.activity.main.WebView"
             android:exported="false" />
         <activity
             android:name=".ui.activity.board.BoardDeleted"
@@ -43,13 +37,13 @@
             android:name=".ui.activity.board.BoardAdd"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.ChatActivity"
+            android:name=".ui.activity.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.intro.SplashActivity"
+            android:name=".ui.activity.Intro.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,13 +52,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.SignUpImagePage"
+            android:name=".ui.activity.login.SignUpImagePage"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.SignUpPage"
+            android:name=".ui.activity.login.SignUpPage"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.LoginPage"
+            android:name=".ui.activity.login.LoginPage"
             android:exported="false" />
     </application>
 
