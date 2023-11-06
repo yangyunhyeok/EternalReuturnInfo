@@ -1,7 +1,6 @@
 package com.erionna.eternalreturninfo.ui.fragment.findduo
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,15 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.model.User
+import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
 import com.erionna.eternalreturninfo.ui.activity.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.DialogListener
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
-import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
+import com.erionna.eternalreturninfo.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,6 +25,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FindDuoFragment : Fragment() {
     companion object {
@@ -58,7 +60,7 @@ class FindDuoFragment : Fragment() {
             onClickUser = { position, item ->
                 Log.d("choco5733", "$item")
                 if (item.uid != mAuth.uid) {
-                    val customDialog = BoardDialog(requireContext(), item.name ?: "",object :
+                    val customDialog = BoardDialog(requireContext(), item.name ?: "", object :
                         DialogListener {
                         override fun onOKButtonClicked() {
                             startActivity(
@@ -137,47 +139,52 @@ class FindDuoFragment : Fragment() {
         val databasePath = "user"
 
         // 데이터베이스에서 모든 사용자 정보 가져오기
-        mDbRef.child(databasePath).orderByChild("timestamp").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val filteredUsersList = ArrayList<ERModel>() // 필터링된 사용자 목록
+        mDbRef.child(databasePath).orderByChild("timestamp")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val filteredUsersList = ArrayList<ERModel>() // 필터링된 사용자 목록
 
-                if (snapshot.exists()) {
-                    for (userSnapshot in snapshot.children) {
-                        val user = userSnapshot.getValue(ERModel::class.java)
+                    if (snapshot.exists()) {
+                        for (userSnapshot in snapshot.children) {
+                            val user = userSnapshot.getValue(ERModel::class.java)
 
-                        // 유저의 필드 중 하나라도 null이 아니면 필터링 대상에 포함
-                        if (user != null &&
-                            !user.server.isNullOrEmpty() &&
-                            !user.name.isNullOrEmpty() &&
-                            !user.gender.isNullOrEmpty() &&
-                            !user.tier.isNullOrEmpty()
-                        ) {
-                            filteredUsersList.add(user)
+                            // 유저의 필드 중 하나라도 null이 아니면 필터링 대상에 포함
+                            if (user != null &&
+                                !user.server.isNullOrEmpty() &&
+                                !user.name.isNullOrEmpty() &&
+                                !user.gender.isNullOrEmpty() &&
+                                !user.tier.isNullOrEmpty()
+                            ) {
+                                filteredUsersList.add(user)
+                            }
                         }
+
+                        // 리스트를 역순으로 뒤집음
+                        filteredUsersList.reverse()
+
+                        //가져온 네임값을 기반으로 승률, 평균순위 입력
+
+
+                        // RecyclerView 어댑터의 데이터 소스에 필터링된 사용자 정보 추가
+                        adapter.items.clear()
+                        adapter.items.addAll(filteredUsersList)
+                        // RecyclerView 갱신
+                        adapter.notifyDataSetChanged()
+
+                        val filteredUserCount = filteredUsersList.size
+                        binding.findduoTotalNumber.text =
+                            filteredUserCount.toString() // 필터링된 사용자 수 표시
+                    } else {
+                        // 데이터가 존재하지 않는 경우
+                        Log.d(TAG, "No user data found")
                     }
-
-                    // 리스트를 역순으로 뒤집음
-                    filteredUsersList.reverse()
-
-                    // RecyclerView 어댑터의 데이터 소스에 필터링된 사용자 정보 추가
-                    adapter.items.clear()
-                    adapter.items.addAll(filteredUsersList)
-                    // RecyclerView 갱신
-                    adapter.notifyDataSetChanged()
-
-                    val filteredUserCount = filteredUsersList.size
-                    binding.findduoTotalNumber.text = filteredUserCount.toString() // 필터링된 사용자 수 표시
-                } else {
-                    // 데이터가 존재하지 않는 경우
-                    Log.d(TAG, "No user data found")
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // 데이터 가져오기가 실패한 경우
-                Log.e(TAG, "Data retrieval failed: $error")
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // 데이터 가져오기가 실패한 경우
+                    Log.e(TAG, "Data retrieval failed: $error")
+                }
+            })
     }
 
     //롱 클릭 시 아이템 삭제
@@ -197,28 +204,29 @@ class FindDuoFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun deleteItem(item:ERModel){
+    private fun deleteItem(item: ERModel) {
         val userDatabaseRef = mDbRef.child("user")
 
-        userDatabaseRef.orderByChild("name").equalTo(item.name).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (childSnapshot in snapshot.children) {
-                    val updates = HashMap<String, Any>()
-                    updates["server"] = ""
-                    updates["gender"] = ""
-                    updates["tier"] = ""
-                    updates["most"] = ""
+        userDatabaseRef.orderByChild("name").equalTo(item.name)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (childSnapshot in snapshot.children) {
+                        val updates = HashMap<String, Any>()
+                        updates["server"] = ""
+                        updates["gender"] = ""
+                        updates["tier"] = ""
+                        updates["most"] = ""
 
-                    childSnapshot.ref.updateChildren(updates)
+                        childSnapshot.ref.updateChildren(updates)
+                    }
+
+                    loadAllUserDataFromFirebase()
                 }
 
-                loadAllUserDataFromFirebase()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Error deleting specific fields: $error")
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "Error deleting specific fields: $error")
+                }
+            })
     }
 
 

@@ -8,12 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoListItemBinding
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.model.User
-import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
 import com.erionna.eternalreturninfo.util.Constants
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +28,10 @@ class FindduoAdapter(
     var items = ArrayList<ERModel>()
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
     fun removeItem(position: Int) {
@@ -59,9 +60,13 @@ class FindduoAdapter(
 
         // 이미지 설정을 위해 ImgPatch 클래스의 메서드 호출
         ImgPatch().setCharacterImage(currentItem.most, holder.binding.fdliMost)
-        ImgPatch2().setTierImage(currentItem.tier,holder.binding.fdliTierimage)
+        ImgPatch2().setTierImage(currentItem.tier, holder.binding.fdliTierimage)
 
+        // currentItem의 name 값을 바탕으로 api 연결
         StatePacth().setState(currentItem.name,holder.binding.fdliWinrate,holder.binding.fdliAvgrank)
+   //     holder.winrate.text = currentItem.winrate
+    //    holder.avgrank.text = currentItem.avgrank
+
 
         holder.binding.fdliContainer.setOnClickListener {
             onClickUser(
@@ -75,6 +80,7 @@ class FindduoAdapter(
             true
         }
     }
+
     inner class ItemViewHolder(
         var binding: FindDuoListItemBinding,
         private val onClickUser: (Int, ERModel) -> Unit,
@@ -82,11 +88,14 @@ class FindduoAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        var server= binding.fdliServer
-        var name= binding.fdliName
-        var gender= binding.fdliGender
-        var tier= binding.fdliTier
-        var most= binding.fdliMost
+        var server = binding.fdliServer
+        var name = binding.fdliName
+        var gender = binding.fdliGender
+        var tier = binding.fdliTier
+        var most = binding.fdliMost
+        var winrate = binding.fdliWinrate
+        var avgrank = binding.fdliAvgrank
+        var tierimage = binding.fdliTierimage
 
         override fun onClick(view: View) {
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
@@ -191,8 +200,8 @@ class FindduoAdapter(
         }
     }
 
-    class ImgPatch2{
-        fun setTierImage(tier:String?,imageView: ImageView){
+    class ImgPatch2 {
+        fun setTierImage(tier: String?, imageView: ImageView) {
             val resources = imageView.context.resources
             val array = resources.getStringArray(R.array.tier)
             val imageArray = arrayOf(
@@ -215,15 +224,18 @@ class FindduoAdapter(
         }
     }
 
-    class StatePacth{
+    class StatePacth {
 
-        fun setState(name:String?, textView: TextView, textView2: TextView){
+        fun setState(name: String?, textView: TextView, textView2: TextView) {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val nickname = name
 
                     //카드에 배치된 사람 닉네임 가져오기
-                    val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                    val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(
+                        Constants.MAIN_APIKEY,
+                        nickname
+                    )
                     val userID_response = userID_call.execute()
 
                     if (userID_response.isSuccessful) {
@@ -232,7 +244,8 @@ class FindduoAdapter(
                         val seasonId = "19"
 
                         val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
-                            Constants.MAIN_APIKEY, userNum, seasonId)
+                            Constants.MAIN_APIKEY, userNum, seasonId
+                        )
                         val userstate_response = userstate_call.execute()
 
                         if (userstate_response.isSuccessful) {
@@ -243,7 +256,7 @@ class FindduoAdapter(
                                 val user = userStateResponse?.userStats?.get(0)
 
                                 textView.text = (user?.top1?.times(100) ?: 0).toString() + "%"
-                                textView2.text = "#"+(user?.averageRank ?: 0).toString()
+                                textView2.text = "#" + (user?.averageRank ?: 0).toString()
                             }
 
                         } else {

@@ -17,6 +17,9 @@ data class ERModel (
     var msg: String? = null,
     val profilePicture: String? = null,
     var readOrNot: Boolean? = null,
-    var time: String? = null
+    var time: String? = null,
+
+    var winrate :String? = null,
+    var avgrank :String? = null
 
 ) : Parcelable
