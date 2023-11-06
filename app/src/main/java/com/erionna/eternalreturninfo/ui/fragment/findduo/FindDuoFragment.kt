@@ -1,7 +1,6 @@
 package com.erionna.eternalreturninfo.ui.fragment.findduo
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,15 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.model.User
-import com.erionna.eternalreturninfo.ui.activity.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
-import com.erionna.eternalreturninfo.ui.activity.board.DialogListener
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
-import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
+import com.erionna.eternalreturninfo.ui.activity.board.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.board.DialogListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,10 +23,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FindDuoFragment : Fragment() {
     companion object {
@@ -112,13 +104,6 @@ class FindDuoFragment : Fragment() {
         initView()
 
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-//        binding.findduoRecyclerview.adapter = adapter
-//        initView()
-//    }
 
     override fun onDestroyView() {
         _binding = null
@@ -230,6 +215,5 @@ class FindDuoFragment : Fragment() {
                 }
             })
     }
-
 
 }
