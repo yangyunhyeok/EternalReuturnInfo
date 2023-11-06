@@ -12,10 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.ui.activity.ChatActivity
-import com.erionna.eternalreturninfo.ui.activity.MainActivity
+import com.erionna.eternalreturninfo.ui.activity.chat.ChatActivity
+import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
 import com.erionna.eternalreturninfo.ui.activity.board.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.board.DialogListener
+import com.erionna.eternalreturninfo.ui.adapter.findduo.FindduoAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
