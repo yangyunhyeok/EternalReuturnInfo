@@ -15,7 +15,7 @@ import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.ui.activity.board.BoardDialog
-import com.erionna.eternalreturninfo.ui.activity.ChatActivity
+import com.erionna.eternalreturninfo.ui.activity.chat.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.board.DialogListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
