@@ -64,8 +64,8 @@ class FindduoAdapter(
 
         // currentItem의 name 값을 바탕으로 api 연결
         StatePacth().setState(currentItem.name,holder.binding.fdliWinrate,holder.binding.fdliAvgrank)
-   //     holder.winrate.text = currentItem.winrate
-    //    holder.avgrank.text = currentItem.avgrank
+        //     holder.winrate.text = currentItem.winrate
+        //    holder.avgrank.text = currentItem.avgrank
 
 
         holder.binding.fdliContainer.setOnClickListener {
@@ -85,8 +85,7 @@ class FindduoAdapter(
         var binding: FindDuoListItemBinding,
         private val onClickUser: (Int, ERModel) -> Unit,
         private val onLongClickUser: (Int, ERModel) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    ) : RecyclerView.ViewHolder(binding.root){
 
         var server = binding.fdliServer
         var name = binding.fdliName
@@ -97,25 +96,9 @@ class FindduoAdapter(
         var avgrank = binding.fdliAvgrank
         var tierimage = binding.fdliTierimage
 
-        override fun onClick(view: View) {
-            val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
-            val item = items[position]
-
-            itemClickListener?.onItemClick(item)
-        }
-
-
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(item: ERModel)
-    }
 
-    private var itemClickListener: OnItemClickListener? = null
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        itemClickListener = listener
-    }
 
     class ImgPatch {
         fun setCharacterImage(character: String?, imageView: ImageView) {
