@@ -109,7 +109,7 @@ class SignUpPage : AppCompatActivity() {
 
 
         // 실험체 스피너
-        val characterlist = resources.getStringArray(R.array.character)
+        val characterlist = resources.getStringArray(R.array.characterName)
         val adapter =
             ArrayAdapter<String>(this, R.layout.signup_spinner, R.id.spinner_tv, characterlist)
         var selectCharacter = characterlist[0]
