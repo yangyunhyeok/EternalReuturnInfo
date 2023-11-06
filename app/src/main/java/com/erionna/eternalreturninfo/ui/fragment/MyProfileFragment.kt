@@ -100,6 +100,7 @@ class MyProfileFragment : Fragment() {
         database = Firebase.database.reference
         var uid = auth?.uid.toString()
         Patch(uid)
+        setOnClickListener()
         return binding.root
     }
 
@@ -163,9 +164,12 @@ class MyProfileFragment : Fragment() {
                                 .document(auth!!.uid!!)
                                 .update(
                                     mapOf(
-                                        "character" to selectCharacter,
+                                        "character" to selectCharacter
                                     )
                                 )
+                            database.child("user").child(auth!!.uid!!).updateChildren(mapOf(
+                                "character" to selectCharacter
+                            ))
                             alertDialog.dismiss()
                             Handler(Looper.getMainLooper()).postDelayed({
                                 var uid = auth?.uid.toString()
@@ -353,14 +357,17 @@ class MyProfileFragment : Fragment() {
 
     }
 
-//    private fun setOnClickListener() {
+    private fun setOnClickListener() {
+        val profileBtn = binding.myprofileProfileImg
+        profileBtn.setOnClickListener {
+            selectProfile()
+        }
+
 //        val logoutBtn = binding.myprofileLogoutBtn
-////        val characterBtn = binding.myprofileCharacterImg
-//        val profileBtn = binding.myprofileProfileImg
+//        val characterBtn = binding.myprofileCharacterImg
 //        val editBtn = binding.myprofileEditBtn
-//        profileBtn.setOnClickListener {
-//            selectProfile()
-//        }
+//
+//
 //        logoutBtn.setOnClickListener {
 //            Firebase.auth.signOut()
 //            var intent = Intent(activity, LoginPage::class.java)
@@ -387,14 +394,14 @@ class MyProfileFragment : Fragment() {
 //                R.id.spinner_tv,
 //                characterlist
 //            )
-////            var uid = auth!!.uid
-////            val docRef = db.collection("EternalReturnInfo").document("$uid")
-////            docRef.get()
-////                .addOnSuccessListener { document ->
-////                    if (document != null) {
-////                        nickName.setText(document["nickName"].toString())
-////                    }
-////                }
+//            var uid = auth!!.uid
+//            val docRef = db.collection("EternalReturnInfo").document("$uid")
+//            docRef.get()
+//                .addOnSuccessListener { document ->
+//                    if (document != null) {
+//                        nickName.setText(document["nickName"].toString())
+//                    }
+//                }
 //            var selectCharacter = characterlist[0]
 //            characterSpinner.adapter = adapter
 //
@@ -412,22 +419,7 @@ class MyProfileFragment : Fragment() {
 //                    override fun onNothingSelected(parent: AdapterView<*>?) {
 //                    }
 //                }
-//            // 프로필 변경버튼
-//            button.setOnClickListener {
-//                FirebaseFirestore.getInstance()
-//                    .collection("EternalReturnInfo")
-//                    .document(auth!!.uid!!)
-//                    .update(
-//                        mapOf(
-//                            "character" to selectCharacter,
-//                        )
-//                    )
-//                alertDialog.dismiss()
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    var uid = auth?.uid.toString()
-//                    Patch(uid)
-//                }, 2000)
-//            }
+//
 //
 //            //회원 탈퇴
 //            deleteBtn.setOnClickListener {
@@ -476,8 +468,8 @@ class MyProfileFragment : Fragment() {
 //            }
 //            alertDialog.show()
 //        }
-//
-//    }
+
+    }
 
     // 마이페이지 생성
     fun Patch(uid: String) {
@@ -555,6 +547,9 @@ class MyProfileFragment : Fragment() {
                         .collection("EternalReturnInfo")
                         .document(auth!!.uid!!)
                         .update("profile", uri.toString())
+                    database.child("user").child(auth!!.uid!!).updateChildren(mapOf(
+                        "profilePicture" to uri.toString()
+                    ))
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }

@@ -46,7 +46,7 @@ class SignUpPage : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
     var ImageCheck = 0
-
+    var baseImage = "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
     var nickNameCheck = 0
     private var signup_nickname:String = ""
 
@@ -95,7 +95,6 @@ class SignUpPage : AppCompatActivity() {
                                 }
                             }
                             Log.d("닉네임체크",signup_nickname)
-
                         }
 
                     } catch (e: Exception) {
@@ -166,8 +165,6 @@ class SignUpPage : AppCompatActivity() {
                                     this, "계정 생성 완료.",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                var baseImage =
-                                    "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
                                 setDocument(
                                     SignUpData(
                                         Email = email,
@@ -255,6 +252,10 @@ class SignUpPage : AppCompatActivity() {
                         .collection("EternalReturnInfo")
                         .document(auth.uid!!)
                         .update("profile", uri.toString())
+                    database.child("user").child(auth.uid!!).updateChildren(mapOf(
+                        "profilePicture" to uri.toString()
+                    ))
+
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
