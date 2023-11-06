@@ -91,8 +91,8 @@ class BoardPost : AppCompatActivity() {
                     boardPostTvContent.text = board?.content
 //                    boardPostTvVisit.text = board?.views.toString()
 
-                    if(board?.author == BoardSingletone.manager().uid){
-                        boardPostTvTitle.text = "[공지]  " + board?.title
+                    if(board?.category == "공지"){
+                        boardPostTvTitle.text = board?.title
                         val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
                         boardPostTvTitle.setTextColor(blueColor)
                     }else{

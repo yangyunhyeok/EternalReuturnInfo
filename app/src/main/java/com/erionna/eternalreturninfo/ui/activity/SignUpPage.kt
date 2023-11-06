@@ -152,6 +152,7 @@ class SignUpPage : AppCompatActivity() {
                     auth?.createUserWithEmailAndPassword(email, password)
                         ?.addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
+                                BoardSingletone.Login()
                                 Toast.makeText(
                                     this, "계정 생성 완료.",
                                     Toast.LENGTH_SHORT
