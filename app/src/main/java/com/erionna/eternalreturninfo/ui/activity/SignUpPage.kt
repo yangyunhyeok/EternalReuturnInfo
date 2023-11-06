@@ -109,7 +109,7 @@ class SignUpPage : AppCompatActivity() {
 
 
         // 실험체 스피너
-        val characterlist = resources.getStringArray(R.array.character)
+        val characterlist = resources.getStringArray(R.array.characterName)
         val adapter =
             ArrayAdapter<String>(this, R.layout.signup_spinner, R.id.spinner_tv, characterlist)
         var selectCharacter = characterlist[0]
@@ -161,6 +161,7 @@ class SignUpPage : AppCompatActivity() {
                     auth?.createUserWithEmailAndPassword(email, password)
                         ?.addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
+                                BoardSingletone.Login()
                                 Toast.makeText(
                                     this, "계정 생성 완료.",
                                     Toast.LENGTH_SHORT

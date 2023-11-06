@@ -6,4 +6,10 @@
         <item>질문</item>
         <item>공략</item>
     </string-array>
+
+    <string-array name="board_user_option">
+        <item>일상</item>
+        <item>질문</item>
+        <item>공략</item>
+    </string-array>
 </resources>

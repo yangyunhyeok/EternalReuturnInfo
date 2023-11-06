@@ -138,7 +138,7 @@ class FindduoPopupWindow(private val context: Context) {
 
         //선호 실험체 스피너
 
-        val mostList = context.resources.getStringArray(R.array.most)
+        val mostList = context.resources.getStringArray(R.array.characterName)
         val mostAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             context,
             R.layout.findduo_spinner,
@@ -174,7 +174,7 @@ class FindduoPopupWindow(private val context: Context) {
                 updateUserInFirebase(selectGender, "gender")
                 updateUserInFirebase(selectMost, "most")
                 addTimestampToFirebase()
-                updateMostInFirestore(selectMost)
+              //  updateMostInFirestore(selectMost)
                 dismissPopup()
             } else {
                 Toast.makeText(context, "모든 옵션을 선택해주세요", Toast.LENGTH_SHORT).show()

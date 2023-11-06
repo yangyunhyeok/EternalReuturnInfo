@@ -67,8 +67,6 @@ class BoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initModel()
-
     }
 
     override fun onDestroyView() {
@@ -123,8 +121,5 @@ class BoardFragment : Fragment() {
 
     }
 
-    private fun initModel() = with(boardViewModel) {
-
-    }
 
 }
