@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.model.MainTabs
-import com.erionna.eternalreturninfo.ui.fragment.BoardFragment
+import com.erionna.eternalreturninfo.ui.fragment.board.BoardFragment
 import com.erionna.eternalreturninfo.ui.fragment.ChatListFragment
 import com.erionna.eternalreturninfo.ui.fragment.MyProfileFragment
 import com.erionna.eternalreturninfo.ui.fragment.findduo.FindDuoFragment

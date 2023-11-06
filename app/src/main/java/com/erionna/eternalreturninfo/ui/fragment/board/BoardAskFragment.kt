@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.BoardRvFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
-import com.erionna.eternalreturninfo.ui.activity.BoardPost
-import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.activity.board.BoardDeleted
+import com.erionna.eternalreturninfo.ui.activity.board.BoardPost
+import com.erionna.eternalreturninfo.ui.adapter.board.BoardRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -44,11 +44,15 @@ class BoardAskFragment : Fragment() {
                 result.data?.getParcelableExtra("updateBoard", BoardModel::class.java)?.let { updateBoard ->
                     boardViewModel.updateBoard(updateBoard)
                 }
+
+
             } else {
                 result.data?.getParcelableExtra<BoardModel>("updateBoard")?.let { updateBoard ->
                     boardViewModel.updateBoard(updateBoard)
                 }
             }
+
+        }else{
 
         }
     }

@@ -1,15 +1,9 @@
-package com.erionna.eternalreturninfo.ui.activity
+package com.erionna.eternalreturninfo.ui.activity.board
 
-import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.erionna.eternalreturninfo.databinding.BoardAddActivity2Binding
-import com.erionna.eternalreturninfo.databinding.BoardAddActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef

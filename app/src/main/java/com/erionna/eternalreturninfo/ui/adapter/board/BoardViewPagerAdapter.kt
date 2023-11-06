@@ -1,20 +1,15 @@
-package com.erionna.eternalreturninfo.ui.adapter
+package com.erionna.eternalreturninfo.ui.adapter.board
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.model.MainTabs
-import com.erionna.eternalreturninfo.ui.fragment.BoardFragment
-import com.erionna.eternalreturninfo.ui.fragment.ChatListFragment
-import com.erionna.eternalreturninfo.ui.fragment.MyProfileFragment
 import com.erionna.eternalreturninfo.ui.fragment.board.BoardAskFragment
 import com.erionna.eternalreturninfo.ui.fragment.board.BoardDailyFragment
 import com.erionna.eternalreturninfo.ui.fragment.board.BoardNoticeFragment
 import com.erionna.eternalreturninfo.ui.fragment.board.BoardTipsFragment
 import com.erionna.eternalreturninfo.ui.fragment.board.BoardTotalFragment
-import com.erionna.eternalreturninfo.ui.fragment.findduo.FindDuoFragment
-import com.erionna.eternalreturninfo.ui.fragment.main.MainFragment
 
 class BoardViewPagerAdapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 

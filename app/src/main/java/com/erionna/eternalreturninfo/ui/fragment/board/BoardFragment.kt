@@ -1,36 +1,27 @@
-package com.erionna.eternalreturninfo.ui.fragment
+package com.erionna.eternalreturninfo.ui.fragment.board
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.BoardFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
-import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.activity.BoardAdd
-import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
-import com.erionna.eternalreturninfo.ui.activity.BoardPost
-import com.erionna.eternalreturninfo.ui.activity.BoardSearch
-import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
-import com.erionna.eternalreturninfo.ui.adapter.BoardViewPagerAdapter
-import com.erionna.eternalreturninfo.ui.adapter.MainViewPagerAdapter
+import com.erionna.eternalreturninfo.ui.activity.board.BoardAdd
+import com.erionna.eternalreturninfo.ui.activity.board.BoardSearch
+import com.erionna.eternalreturninfo.ui.adapter.board.BoardViewPagerAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import okhttp3.internal.filterList
 
 
 class BoardFragment : Fragment() {
@@ -41,20 +32,26 @@ class BoardFragment : Fragment() {
     private var _binding: BoardFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewPagerAdapter by lazy {
-        BoardViewPagerAdapter(requireActivity())
-    }
-
     private val boardViewModel: BoardListViewModel by activityViewModels()
 
     private val addBoardLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val board = result.data?.getParcelableExtra<BoardModel>("board")
 
-                if (board != null) {
-                    boardViewModel.addBoard(board)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val board = result.data?.getParcelableExtra("board", BoardModel::class.java)
+                    if (board != null) {
+                        boardViewModel.addBoard(board)
+                    }
+                } else {
+                    val board = result.data?.getParcelableExtra<BoardModel>("board")
+                    if (board != null) {
+                        boardViewModel.addBoard(board)
+                    }
                 }
+
+            }else{
+
             }
         }
 
@@ -81,17 +78,12 @@ class BoardFragment : Fragment() {
 
     private fun initView() = with(binding) {
 
+        val adapter = BoardViewPagerAdapter(requireActivity())
+        boardViewpager.adapter = adapter
 
-        boardViewpager.adapter = viewPagerAdapter
-
-        TabLayoutMediator(tabLayout, boardViewpager) { tab, position ->
-            tab.setText(viewPagerAdapter.getTitle(position))
+        TabLayoutMediator(boardTabLayout, boardViewpager) { tab, position ->
+            tab.setText(adapter.getTitle(position))
         }.attach()
-
-        boardViewpager.run {
-            isUserInputEnabled = false
-        }
-
 
         boardFab.setOnClickListener {
             val intent = Intent(requireContext(), BoardAdd::class.java)
