@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -28,12 +29,13 @@ import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.CharacterStats
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
-import com.erionna.eternalreturninfo.ui.activity.BoardDeleted
-import com.erionna.eternalreturninfo.ui.activity.BoardPost
+import com.erionna.eternalreturninfo.ui.activity.board.BoardDeleted
+import com.erionna.eternalreturninfo.ui.activity.board.BoardPost
 import com.erionna.eternalreturninfo.ui.activity.LoginPage
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
-import com.erionna.eternalreturninfo.ui.adapter.BoardRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.adapter.board.BoardRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.adapter.MyprofileListAdapter
+import com.erionna.eternalreturninfo.ui.adapter.board.BoardMyProfileRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.util.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -70,7 +72,7 @@ class MyProfileFragment : Fragment() {
     }
 
     private val boardListAdapter by lazy {
-        BoardRecyclerViewAdapter()
+        BoardMyProfileRecyclerViewAdapter()
     }
 
     private val boardViewModel: BoardListViewModel by activityViewModels()
@@ -103,7 +105,134 @@ class MyProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClickListener()
+
+        binding.myprofileBtnSetting.setOnClickListener {
+            val popup = PopupMenu(binding.root.context, binding.myprofileBtnSetting) // View 변경
+            popup.menuInflater.inflate(R.menu.menu_myprofile, popup.menu)
+            popup.setOnMenuItemClickListener { menu ->
+                when (menu.itemId) {
+                    R.id.menu_myprofile_update -> {
+
+                        val dialogView = layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
+                        val alertDialog = AlertDialog.Builder(requireActivity())
+                            .setView(dialogView)
+                            .create()
+
+
+
+                        val characterSpinner = dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
+                        val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
+                        val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
+                        val characterlist = resources.getStringArray(R.array.character)
+
+                        val adapter = ArrayAdapter<String>(
+                            requireContext(),
+                            R.layout.signup_spinner,
+                            R.id.spinner_tv,
+                            characterlist
+                        )
+//            var uid = auth!!.uid
+//            val docRef = db.collection("EternalReturnInfo").document("$uid")
+//            docRef.get()
+//                .addOnSuccessListener { document ->
+//                    if (document != null) {
+//                        nickName.setText(document["nickName"].toString())
+//                    }
+//                }
+                        var selectCharacter = characterlist[0]
+                        characterSpinner.adapter = adapter
+
+                        characterSpinner.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    selectCharacter = characterlist[position]
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                }
+                            }
+                        // 프로필 변경버튼
+                        button.setOnClickListener {
+                            FirebaseFirestore.getInstance()
+                                .collection("EternalReturnInfo")
+                                .document(auth!!.uid!!)
+                                .update(
+                                    mapOf(
+                                        "character" to selectCharacter,
+                                    )
+                                )
+                            alertDialog.dismiss()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                var uid = auth?.uid.toString()
+                                Patch(uid)
+                            }, 2000)
+                        }
+
+                        alertDialog.show()
+
+                    }
+
+                    R.id.menu_logout -> {
+                        Firebase.auth.signOut()
+                        var intent = Intent(activity, LoginPage::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
+
+                    R.id.menu_withdraw -> {
+                        val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
+                        val deleteDialog = AlertDialog.Builder(requireActivity())
+                            .setView(deleteDialogView)
+                            .create()
+
+                        var yesBtn = deleteDialogView.findViewById<Button>(R.id.delete_yes_btn)
+                        var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
+
+                        yesBtn.setOnClickListener {
+                            email = auth!!.currentUser?.email
+                            // storage 인스턴스 생성
+                            val storage = Firebase.storage
+                            // storage 참조
+                            val storageRef = storage.getReference("image")
+                            // storage에서 삭제 할 파일명
+                            val fileName = email.toString()
+                            Log.d("스토리지", fileName)
+                            val mountainsRef = storageRef.child("${fileName}.jpg")
+                            mountainsRef.delete()
+                            database.child("user").child(auth!!.uid!!).removeValue()
+
+                            FirebaseFirestore.getInstance()
+                                .collection("EternalReturnInfo")
+                                .document(auth!!.uid!!)
+                                .delete()
+                            val user = Firebase.auth.currentUser!!
+                            user.delete()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.d("계정삭제", "User account deleted.")
+                                    }
+                                }
+                            deleteDialog.dismiss()
+                            var intent = Intent(activity, LoginPage::class.java)
+                            (context as MainActivity).finish()
+                            startActivity(intent)
+                        }
+                        noBtn.setOnClickListener {
+                            deleteDialog.dismiss()
+                        }
+                        deleteDialog.show()
+                    }
+                }
+                false
+            }
+            popup.show()
+        }
+
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -196,7 +325,7 @@ class MyProfileFragment : Fragment() {
         })
 
         boardListAdapter.setOnItemClickListener(object :
-            BoardRecyclerViewAdapter.OnItemClickListener {
+            BoardMyProfileRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(boardItem: BoardModel) {
 
                 FBRef.postRef.child(boardItem.id).addListenerForSingleValueEvent(object :
@@ -224,131 +353,131 @@ class MyProfileFragment : Fragment() {
 
     }
 
-    private fun setOnClickListener() {
-        val logoutBtn = binding.myprofileLogoutBtn
-//        val characterBtn = binding.myprofileCharacterImg
-        val profileBtn = binding.myprofileProfileImg
-        val editBtn = binding.myprofileEditBtn
-        profileBtn.setOnClickListener {
-            selectProfile()
-        }
-        logoutBtn.setOnClickListener {
-            Firebase.auth.signOut()
-            var intent = Intent(activity, LoginPage::class.java)
-            startActivity(intent)
-            requireActivity().finish()
-        }
-        //프로필 변경
-        editBtn.setOnClickListener {
-            val dialogView = layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
-            val alertDialog = AlertDialog.Builder(requireActivity())
-                .setView(dialogView)
-                .create()
-
-
-
-            val characterSpinner = dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
-            val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
-            val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
-            val characterlist = resources.getStringArray(R.array.character)
-
-            val adapter = ArrayAdapter<String>(
-                requireContext(),
-                R.layout.signup_spinner,
-                R.id.spinner_tv,
-                characterlist
-            )
-//            var uid = auth!!.uid
-//            val docRef = db.collection("EternalReturnInfo").document("$uid")
-//            docRef.get()
-//                .addOnSuccessListener { document ->
-//                    if (document != null) {
-//                        nickName.setText(document["nickName"].toString())
+//    private fun setOnClickListener() {
+//        val logoutBtn = binding.myprofileLogoutBtn
+////        val characterBtn = binding.myprofileCharacterImg
+//        val profileBtn = binding.myprofileProfileImg
+//        val editBtn = binding.myprofileEditBtn
+//        profileBtn.setOnClickListener {
+//            selectProfile()
+//        }
+//        logoutBtn.setOnClickListener {
+//            Firebase.auth.signOut()
+//            var intent = Intent(activity, LoginPage::class.java)
+//            startActivity(intent)
+//            requireActivity().finish()
+//        }
+//        //프로필 변경
+//        editBtn.setOnClickListener {
+//            val dialogView = layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
+//            val alertDialog = AlertDialog.Builder(requireActivity())
+//                .setView(dialogView)
+//                .create()
+//
+//
+//
+//            val characterSpinner = dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
+//            val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
+//            val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
+//            val characterlist = resources.getStringArray(R.array.character)
+//
+//            val adapter = ArrayAdapter<String>(
+//                requireContext(),
+//                R.layout.signup_spinner,
+//                R.id.spinner_tv,
+//                characterlist
+//            )
+////            var uid = auth!!.uid
+////            val docRef = db.collection("EternalReturnInfo").document("$uid")
+////            docRef.get()
+////                .addOnSuccessListener { document ->
+////                    if (document != null) {
+////                        nickName.setText(document["nickName"].toString())
+////                    }
+////                }
+//            var selectCharacter = characterlist[0]
+//            characterSpinner.adapter = adapter
+//
+//            characterSpinner.onItemSelectedListener =
+//                object : AdapterView.OnItemSelectedListener {
+//                    override fun onItemSelected(
+//                        parent: AdapterView<*>?,
+//                        view: View?,
+//                        position: Int,
+//                        id: Long
+//                    ) {
+//                        selectCharacter = characterlist[position]
+//                    }
+//
+//                    override fun onNothingSelected(parent: AdapterView<*>?) {
 //                    }
 //                }
-            var selectCharacter = characterlist[0]
-            characterSpinner.adapter = adapter
-
-            characterSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        selectCharacter = characterlist[position]
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
-                }
-            // 프로필 변경버튼
-            button.setOnClickListener {
-                FirebaseFirestore.getInstance()
-                    .collection("EternalReturnInfo")
-                    .document(auth!!.uid!!)
-                    .update(
-                        mapOf(
-                            "character" to selectCharacter,
-                        )
-                    )
-                alertDialog.dismiss()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    var uid = auth?.uid.toString()
-                    Patch(uid)
-                }, 2000)
-            }
-
-            // 회원 탈퇴
-            deleteBtn.setOnClickListener {
-                alertDialog.dismiss()
-                val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
-                val deleteDialog = AlertDialog.Builder(requireActivity())
-                    .setView(deleteDialogView)
-                    .create()
-
-                var yesBtn = deleteDialogView.findViewById<Button>(R.id.delete_yes_btn)
-                var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
-
-                yesBtn.setOnClickListener {
-                    email = auth!!.currentUser?.email
-                    // storage 인스턴스 생성
-                    val storage = Firebase.storage
-                    // storage 참조
-                    val storageRef = storage.getReference("image")
-                    // storage에서 삭제 할 파일명
-                    val fileName = email.toString()
-                    Log.d("스토리지", fileName)
-                    val mountainsRef = storageRef.child("${fileName}.jpg")
-                    mountainsRef.delete()
-                    database.child("user").child(auth!!.uid!!).removeValue()
-
-                    FirebaseFirestore.getInstance()
-                        .collection("EternalReturnInfo")
-                        .document(auth!!.uid!!)
-                        .delete()
-                    val user = Firebase.auth.currentUser!!
-                    user.delete()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.d("계정삭제", "User account deleted.")
-                            }
-                        }
-                    deleteDialog.dismiss()
-                    var intent = Intent(activity, LoginPage::class.java)
-                    (context as MainActivity).finish()
-                    startActivity(intent)
-                }
-                noBtn.setOnClickListener {
-                    deleteDialog.dismiss()
-                }
-                deleteDialog.show()
-            }
-            alertDialog.show()
-        }
-
-    }
+//            // 프로필 변경버튼
+//            button.setOnClickListener {
+//                FirebaseFirestore.getInstance()
+//                    .collection("EternalReturnInfo")
+//                    .document(auth!!.uid!!)
+//                    .update(
+//                        mapOf(
+//                            "character" to selectCharacter,
+//                        )
+//                    )
+//                alertDialog.dismiss()
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    var uid = auth?.uid.toString()
+//                    Patch(uid)
+//                }, 2000)
+//            }
+//
+//            //회원 탈퇴
+//            deleteBtn.setOnClickListener {
+//                alertDialog.dismiss()
+//                val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
+//                val deleteDialog = AlertDialog.Builder(requireActivity())
+//                    .setView(deleteDialogView)
+//                    .create()
+//
+//                var yesBtn = deleteDialogView.findViewById<Button>(R.id.delete_yes_btn)
+//                var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
+//
+//                yesBtn.setOnClickListener {
+//                    email = auth!!.currentUser?.email
+//                    // storage 인스턴스 생성
+//                    val storage = Firebase.storage
+//                    // storage 참조
+//                    val storageRef = storage.getReference("image")
+//                    // storage에서 삭제 할 파일명
+//                    val fileName = email.toString()
+//                    Log.d("스토리지", fileName)
+//                    val mountainsRef = storageRef.child("${fileName}.jpg")
+//                    mountainsRef.delete()
+//                    database.child("user").child(auth!!.uid!!).removeValue()
+//
+//                    FirebaseFirestore.getInstance()
+//                        .collection("EternalReturnInfo")
+//                        .document(auth!!.uid!!)
+//                        .delete()
+//                    val user = Firebase.auth.currentUser!!
+//                    user.delete()
+//                        .addOnCompleteListener { task ->
+//                            if (task.isSuccessful) {
+//                                Log.d("계정삭제", "User account deleted.")
+//                            }
+//                        }
+//                    deleteDialog.dismiss()
+//                    var intent = Intent(activity, LoginPage::class.java)
+//                    (context as MainActivity).finish()
+//                    startActivity(intent)
+//                }
+//                noBtn.setOnClickListener {
+//                    deleteDialog.dismiss()
+//                }
+//                deleteDialog.show()
+//            }
+//            alertDialog.show()
+//        }
+//
+//    }
 
     // 마이페이지 생성
     fun Patch(uid: String) {

@@ -1,11 +1,10 @@
-package com.erionna.eternalreturninfo.ui.activity
+package com.erionna.eternalreturninfo.ui.activity.board
 
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Window
 import com.erionna.eternalreturninfo.databinding.BoardDialogBinding
 

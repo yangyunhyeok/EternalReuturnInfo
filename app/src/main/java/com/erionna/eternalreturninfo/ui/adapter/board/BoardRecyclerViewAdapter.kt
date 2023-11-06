@@ -1,17 +1,17 @@
-package com.erionna.eternalreturninfo.ui.adapter
+package com.erionna.eternalreturninfo.ui.adapter.board
 
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.erionna.eternalreturninfo.R
+import com.erionna.eternalreturninfo.databinding.BoardMyProfileRvItemBinding
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.ERModel
@@ -80,10 +80,10 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
                     if(snapshot.exists()){
                         val author = snapshot.getValue<ERModel>()
 
-                            boardPostIvProfile.load(author?.profilePicture)
-                            boardPostTvUser.text = author?.name
+                        boardPostIvProfile.load(author?.profilePicture)
+                        boardPostTvUser.text = author?.name
 
-                            if(author?.uid == BoardSingletone.manager().uid){
+                        if(author?.uid == BoardSingletone.manager().uid){
                             boardPostTvTitle.text = "[공지]  " + item.title
                             val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
                             boardPostTvTitle.setTextColor(blueColor)
@@ -148,3 +148,5 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     }
 
 }
+
+

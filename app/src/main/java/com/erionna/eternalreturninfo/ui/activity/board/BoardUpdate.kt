@@ -1,9 +1,8 @@
-package com.erionna.eternalreturninfo.ui.activity
+package com.erionna.eternalreturninfo.ui.activity.board
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.erionna.eternalreturninfo.databinding.BoardAddActivity2Binding
-import com.erionna.eternalreturninfo.databinding.BoardAddActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.FBRef
 

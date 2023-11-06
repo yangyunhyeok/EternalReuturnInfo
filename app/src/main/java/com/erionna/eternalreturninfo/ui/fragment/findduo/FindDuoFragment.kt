@@ -1,7 +1,6 @@
 package com.erionna.eternalreturninfo.ui.fragment.findduo
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,15 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.model.User
-import com.erionna.eternalreturninfo.ui.activity.BoardDialog
+import com.erionna.eternalreturninfo.ui.activity.board.BoardDialog
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
-import com.erionna.eternalreturninfo.ui.activity.DialogListener
+import com.erionna.eternalreturninfo.ui.activity.board.DialogListener
 import com.erionna.eternalreturninfo.ui.activity.MainActivity
-import com.erionna.eternalreturninfo.ui.fragment.signin.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
