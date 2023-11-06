@@ -83,14 +83,10 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
                         boardPostIvProfile.load(author?.profilePicture)
                         boardPostTvUser.text = author?.name
 
-                        if(author?.uid == BoardSingletone.manager().uid){
-                            boardPostTvTitle.text = "[공지]  " + item.title
-                            val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
-                            boardPostTvTitle.setTextColor(blueColor)
-                        }else{
-                            boardPostTvTitle.text = item.title
-                            boardPostTvTitle.setTextColor(Color.WHITE)
-                        }
+                    }else{
+
+                        boardPostIvProfile.load(R.drawable.ic_baseimage)
+                        boardPostTvUser.text = "탈퇴한 회원"
 
                     }
 
@@ -108,6 +104,8 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
                 boardPostCategory.setBackgroundResource(R.drawable.shape_board_category)
                 boardPostCategory.text = item.category
             }
+
+            boardPostTvTitle.text = item.title
 
 
 //            boardPostTvDate.text = formatTimeOrDate(item.date)

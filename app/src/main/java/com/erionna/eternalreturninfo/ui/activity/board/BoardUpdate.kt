@@ -2,8 +2,10 @@ package com.erionna.eternalreturninfo.ui.activity.board
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardAddActivity2Binding
 import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 
 class BoardUpdate : AppCompatActivity() {
@@ -44,6 +46,14 @@ class BoardUpdate : AppCompatActivity() {
                     category = "공략"
                 }
             }
+        }
+
+        if(BoardSingletone.LoginUser().uid != BoardSingletone.manager().uid){
+            val spinnerItems = resources.getStringArray(R.array.board_user_option)
+            boardAddSpinner.setItems(spinnerItems.toList())
+        }else{
+            val spinnerItems = resources.getStringArray(R.array.board_option)
+            boardAddSpinner.setItems(spinnerItems.toList())
         }
 
         boardAddSpinner.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newText ->
