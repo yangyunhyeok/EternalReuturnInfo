@@ -1,4 +1,4 @@
-package com.erionna.eternalreturninfo.ui.activity
+package com.erionna.eternalreturninfo.ui.activity.board
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

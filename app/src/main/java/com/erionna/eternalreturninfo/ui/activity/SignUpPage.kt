@@ -2,6 +2,7 @@ package com.erionna.eternalreturninfo.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -12,10 +13,17 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.SignupInformationActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.model.SignUpData
+import com.erionna.eternalreturninfo.retrofit.BoardSingletone
+import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
+import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
+import com.erionna.eternalreturninfo.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -24,6 +32,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SignUpPage : AppCompatActivity() {
     private lateinit var binding: SignupInformationActivityBinding
@@ -34,7 +46,9 @@ class SignUpPage : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
     var ImageCheck = 0
+
     var nickNameCheck = 0
+    private var signup_nickname:String = ""
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +60,41 @@ class SignUpPage : AppCompatActivity() {
 
         binding.signupProfileImg.setOnClickListener {
             selectProfile()
+        }
+
+        binding.signupBtnNicknameCheck.setOnClickListener {
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val nickname = binding.signupNickNameEt.text.toString()
+
+                    //수정 : 로그인한 사람 닉네임 가져오기
+                    val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                    val userID_response = userID_call.execute()
+
+                    if (userID_response.isSuccessful) {
+                        val gameResponse = userID_response.body()
+
+                        withContext(Dispatchers.Main) {
+                            if (gameResponse?.user == null) {
+                                binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color2))
+                                binding.signupTvCheckMessage.text = "닉네임이 존재하지 않습니다."
+                                signup_nickname = ""
+                            } else {
+                                binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color))
+                                binding.signupTvCheckMessage.text = "사용가능한 닉네임입니다."
+                                signup_nickname = gameResponse.user.nickname
+                            }
+                        }
+
+                    }
+
+                } catch (e: Exception) {
+                    // 오류 처리
+                    e.printStackTrace()
+                }
+            }
         }
 
 
@@ -73,13 +122,13 @@ class SignUpPage : AppCompatActivity() {
 
 
         binding.signupSignupBtn.setOnClickListener {
-            nicknameCheck(binding.signupNickNameEt.text.toString())
+            nicknameCheck(signup_nickname)
             Handler(Looper.getMainLooper()).postDelayed({
                 createAccount(
                     binding.signupIDEt.text.toString(),
                     binding.signupPWEt.text.toString(),
                     binding.signupPWCheckEt.text.toString(),
-                    binding.signupNickNameEt.text.toString(),
+                    signup_nickname,
                     selectCharacter,
 //                selectedImageURI
                 )

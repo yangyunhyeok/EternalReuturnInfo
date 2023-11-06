@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".ui.activity.BoardSearch">
+    tools:context=".ui.activity.board.BoardSearch">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -42,47 +42,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <EditText
+            android:id="@+id/board_search_et_search"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/shape_board_search"
+            android:hint="Search post"
+            android:inputType="text"
+            android:padding="15dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/light_gray"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/board_search_et_search"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="50dp"
-                android:background="@android:color/transparent"
-                android:hint="Search post"
-                android:inputType="text"
-                android:textColor="@color/white"
-                android:textColorHint="@color/light_gray"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/board_search_ib_clear"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/ic_board_cancel"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:visibility="invisible"
+            android:id="@+id/board_search_ib_clear"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="36dp"
+            android:background="@drawable/ic_board_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,13 +103,13 @@
         app:layout_constraintTop_toBottomOf="@+id/board_search_tv_post_count" />
 
     <TextView
-        android:visibility="invisible"
+        android:visibility="visible"
         android:id="@+id/board_search_tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="검색 결과가 없습니다."
-        android:textColor="@color/white"
+        android:text="검색어를 입력해주세요."
+        android:textColor="@color/light_gray"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

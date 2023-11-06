@@ -1,4 +1,4 @@
-package com.erionna.eternalreturninfo.ui.activity
+package com.erionna.eternalreturninfo.ui.activity.board
 
 import android.content.Intent
 import android.graphics.Color
@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,10 +18,10 @@ import com.erionna.eternalreturninfo.model.CommentModel
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.adapter.BoardCommentRecyclerViewAdpater
+import com.erionna.eternalreturninfo.ui.activity.ChatActivity
+import com.erionna.eternalreturninfo.ui.adapter.board.BoardCommentRecyclerViewAdpater
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModelFactory
-import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -90,14 +89,14 @@ class BoardPost : AppCompatActivity() {
                     board = snapshot.getValue<BoardModel>()
 
                     boardPostTvContent.text = board?.content
-                    boardPostTvVisit.text = board?.views.toString()
+//                    boardPostTvVisit.text = board?.views.toString()
 
                     if(board?.author == BoardSingletone.manager().uid){
                         boardPostTvTitle.text = "[공지]  " + board?.title
                         val blueColor = ContextCompat.getColor(binding.root.context, R.color.blue)
                         boardPostTvTitle.setTextColor(blueColor)
                     }else{
-                        boardPostTvTitle.text = "[일반]  " + board?.title
+                        boardPostTvTitle.text = board?.title
                         boardPostTvTitle.setTextColor(Color.WHITE)
                     }
 
