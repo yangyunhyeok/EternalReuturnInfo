@@ -151,6 +151,7 @@ class LoginPage : AppCompatActivity() {
                                 BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             } else {
                             }
                         }
