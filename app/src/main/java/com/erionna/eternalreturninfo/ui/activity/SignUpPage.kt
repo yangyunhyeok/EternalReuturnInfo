@@ -166,7 +166,7 @@ class SignUpPage : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 var baseImage =
-                                    "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=59ee3b09-5ed8-4882-8b5d-fd620d042597&_gl=1*5tr4ei*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5ODk3Njk1NC42MC4xLjE2OTg5Nzc1MjQuNDMuMC4w"
+                                    "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
                                 setDocument(
                                     SignUpData(
                                         Email = email,
