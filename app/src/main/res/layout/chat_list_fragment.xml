@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/chat_list_toolbar"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="75dp"
         android:background="@color/black"
         app:layout_constraintBottom_toTopOf="@id/chat_list_chat_tv"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +21,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="75dp">
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -37,19 +37,17 @@
                 android:id="@+id/chat_list_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/chat_list_my_profile_picture"
-                app:layout_constraintHorizontal_bias="0.94"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="@color/highlight_color"
+                android:layout_marginTop="2dp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/chat_list_my_profile_picture"
+                app:layout_constraintStart_toStartOf="@+id/chat_list_my_profile_picture"
+                app:layout_constraintTop_toBottomOf="@+id/chat_list_my_profile_picture" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/chat_list_my_profile_picture"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginEnd="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
