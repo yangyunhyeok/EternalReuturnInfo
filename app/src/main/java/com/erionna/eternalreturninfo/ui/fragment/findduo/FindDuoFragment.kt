@@ -32,19 +32,9 @@ class FindDuoFragment : Fragment() {
 
     private var _binding: FindDuoFragmentBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var mDbRef: DatabaseReference
-
     private lateinit var mAuth: FirebaseAuth
-
     private var mUID = ""
-
-    //파이어스터오랑 연동하기위한 코드
-
-    private val firestore = FirebaseFirestore.getInstance()
-
-    //팝업창이랑 연결
-
     private lateinit var findduoPopupWindow: FindduoPopupWindow
 
 
@@ -86,13 +76,9 @@ class FindDuoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FindDuoFragmentBinding.inflate(inflater, container, false)
-
         mAuth = FirebaseAuth.getInstance()
-        // db 초기화
         mDbRef = FirebaseDatabase.getInstance().reference
-        // mUID 초기화
         mUID = mAuth.currentUser?.uid ?: ""
-
         return binding.root
     }
 
@@ -100,9 +86,7 @@ class FindDuoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
-
         initView()
-
     }
 
     override fun onDestroyView() {
@@ -111,31 +95,24 @@ class FindDuoFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-
         findduoPopupWindow = FindduoPopupWindow(requireContext())
-
         binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
-
         adapter.notifyDataSetChanged()
-
         loadAllUserDataFromFirebase()
     }
 
     private fun loadAllUserDataFromFirebase() {
-        // Firebase Realtime Database 경로
         val databasePath = "user"
 
-        // 데이터베이스에서 모든 사용자 정보 가져오기
         mDbRef.child(databasePath).orderByChild("timestamp")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val filteredUsersList = ArrayList<ERModel>() // 필터링된 사용자 목록
+                    val filteredUsersList = ArrayList<ERModel>()
 
                     if (snapshot.exists()) {
                         for (userSnapshot in snapshot.children) {
                             val user = userSnapshot.getValue(ERModel::class.java)
 
-                            // 유저의 필드 중 하나라도 null이 아니면 필터링 대상에 포함
                             if (user != null &&
                                 !user.server.isNullOrEmpty() &&
                                 !user.name.isNullOrEmpty() &&
@@ -146,35 +123,25 @@ class FindDuoFragment : Fragment() {
                             }
                         }
 
-                        // 리스트를 역순으로 뒤집음
                         filteredUsersList.reverse()
 
-                        //가져온 네임값을 기반으로 승률, 평균순위 입력
-
-
-                        // RecyclerView 어댑터의 데이터 소스에 필터링된 사용자 정보 추가
                         adapter.items.clear()
                         adapter.items.addAll(filteredUsersList)
-                        // RecyclerView 갱신
                         adapter.notifyDataSetChanged()
 
                         val filteredUserCount = filteredUsersList.size
                         binding.findduoTotalNumber.text =
-                            filteredUserCount.toString() // 필터링된 사용자 수 표시
+                            filteredUserCount.toString()
                     } else {
-                        // 데이터가 존재하지 않는 경우
                         Log.d(TAG, "No user data found")
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // 데이터 가져오기가 실패한 경우
                     Log.e(TAG, "Data retrieval failed: $error")
                 }
             })
     }
-
-    //롱 클릭 시 아이템 삭제
 
     private fun deleteSpecificFieldsFromDatabase(item: ERModel) {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())

@@ -2,7 +2,6 @@ package com.erionna.eternalreturninfo.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -13,16 +12,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.SignupInformationActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.model.SignUpData
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
-import com.erionna.eternalreturninfo.ui.adapter.NoticeBannerListAdapter
 import com.erionna.eternalreturninfo.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
