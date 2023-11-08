@@ -37,24 +37,6 @@ class BoardDailyFragment : Fragment() {
         BoardRecyclerViewAdapter()
     }
 
-    private val loadBoardLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getParcelableExtra("updateBoard", BoardModel::class.java)?.let { updateBoard ->
-                    boardViewModel.updateBoard(updateBoard)
-                }
-            } else {
-                result.data?.getParcelableExtra<BoardModel>("updateBoard")?.let { updateBoard ->
-                    boardViewModel.updateBoard(updateBoard)
-                }
-            }
-
-        }else{
-
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,6 +59,25 @@ class BoardDailyFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
+
+        val loadBoardLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra("updateBoard", BoardModel::class.java)?.let { updateBoard ->
+                        boardViewModel.updateBoard(updateBoard)
+                    }
+                } else {
+                    result.data?.getParcelableExtra<BoardModel>("updateBoard")?.let { updateBoard ->
+                        boardViewModel.updateBoard(updateBoard)
+                    }
+                }
+
+            }else{
+
+            }
+        }
+
         boardNoticeRv.adapter = listAdapter
         boardNoticeRv.layoutManager = LinearLayoutManager(requireContext())
 

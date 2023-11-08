@@ -56,25 +56,6 @@ class MyProfileFragment : Fragment() {
         fun newInstance() = MyProfileFragment()
     }
 
-    private val boardListAdapter by lazy {
-        BoardMyProfileRecyclerViewAdapter()
-    }
-
-    private val boardViewModel: BoardListViewModel by activityViewModels()
-
-    private val loadBoardLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                val updateBoard = result.data?.getParcelableExtra<BoardModel>("updateBoard")
-
-                if (updateBoard != null) {
-                    boardViewModel.updateBoard(updateBoard)
-                }
-
-            }
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
