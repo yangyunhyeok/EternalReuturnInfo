@@ -32,15 +32,6 @@ class LoginPage : AppCompatActivity() {
     var mGoogleSignInClient: GoogleSignInClient? = null
     var db = Firebase.firestore
 
-
-//      ??
-//    override fun onStart() {
-//        auth = FirebaseAuth.getInstance()
-//        super.onStart()
-//        val currentUser = auth!!.currentUser
-//        updateUI(currentUser)
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,12 +54,6 @@ class LoginPage : AppCompatActivity() {
             Login(binding.loginIDEt.text.toString(), binding.loginPWEt.text.toString())
         }
 
-        //회원가입 버튼
-        binding.loginSignupBtn.setOnClickListener {
-            val intent = Intent(this, SignUpPage::class.java)
-            startActivity(intent)
-        }
-
         //비밀번호찾기 다이얼로그 버튼
         binding.loginLostBtn.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.findpw_dialog, null)
@@ -80,7 +65,7 @@ class LoginPage : AppCompatActivity() {
 
             // 비밀번호찾기 이메일 전송 버튼
             button.setOnClickListener {
-                if(Email.isNotEmpty()) {
+                if (Email.isNotEmpty()) {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -98,36 +83,23 @@ class LoginPage : AppCompatActivity() {
                             }
                         }
                     alertDialog.dismiss()
-                }else{
+                } else {
                     Toast.makeText(this, R.string.login_lostpw_null, Toast.LENGTH_SHORT).show()
                 }
             }
             alertDialog.show()
         }
 
+        //회원가입 버튼
+        binding.loginSignupBtn.setOnClickListener {
+            val intent = Intent(this, SignUpPage::class.java)
+            startActivity(intent)
+        }
+
         //구글로그인 다이얼로그 버튼
         binding.loginSnsLoginBtn.setOnClickListener {
             val intent = mGoogleSignInClient!!.signInIntent
             startActivityForResult(intent, 100)
-        }
-    }
-
-    // 구글 로그인
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val google = task.getResult(ApiException::class.java)
-            val credential = GoogleAuthProvider.getCredential(google.idToken, null)
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
-                    }
-                }
         }
     }
 
@@ -163,8 +135,23 @@ class LoginPage : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val TAG = "GoogleActivity"
+    // 구글 로그인
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val google = task.getResult(ApiException::class.java)
+            val credential = GoogleAuthProvider.getCredential(google.idToken, null)
+            FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
     }
 
 }

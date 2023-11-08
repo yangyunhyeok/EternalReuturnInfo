@@ -7,6 +7,23 @@
     tools:context=".ui.activity.login.SignUpPage"
     android:background="@color/black">
 
+    <ImageView
+        android:id="@+id/signup_logo_img"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_white_logo" />
+
+    <View
+        android:id="@+id/signup_line_view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#717171"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_logo_img"></View>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -155,6 +172,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_PWCheck_et" />
 
+            <TextView
+                android:id="@+id/signup_tv_check_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="10dp"
+                android:text="닉네임이 존재하지않습니다."
+                android:textColor="@color/highlight_color2"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/signup_NickName_et"
+                app:layout_constraintStart_toEndOf="@+id/signup_NickName_tv" />
+
             <EditText
                 android:id="@+id/signup_NickName_et"
                 android:layout_width="0dp"
@@ -172,6 +203,20 @@
                 app:layout_constraintEnd_toStartOf="@+id/signup_btn_nickname_check"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_NickName_tv" />
+
+            <Button
+                android:id="@+id/signup_btn_nickname_check"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/shape_highlight_btn"
+                android:text="중복확인"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/signup_NickName_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/signup_NickName_et"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/signup_character_tv"
@@ -220,53 +265,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_character_sp" />
 
-            <Button
-                android:id="@+id/signup_btn_nickname_check"
-                android:layout_width="80dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="32dp"
-                android:background="@drawable/shape_highlight_btn"
-                android:text="중복확인"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/signup_NickName_et"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/signup_NickName_et"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/signup_tv_check_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginBottom="10dp"
-                android:text="닉네임이 존재하지않습니다."
-                android:textColor="@color/highlight_color2"
-                android:textSize="14dp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/signup_NickName_et"
-                app:layout_constraintStart_toEndOf="@+id/signup_NickName_tv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <ImageView
-        android:id="@+id/signup_logo_img"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_white_logo" />
 
-    <View
-        android:id="@+id/signup_line_view"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#717171"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_logo_img"></View>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

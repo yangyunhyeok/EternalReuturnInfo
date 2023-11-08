@@ -1,6 +1,5 @@
 package com.erionna.eternalreturninfo.ui.activity.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -47,7 +46,6 @@ class SignUpPage : AppCompatActivity() {
     var nickNameCheck = 0
     private var signup_nickname:String = ""
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SignupInformationActivityBinding.inflate(layoutInflater)
@@ -103,7 +101,6 @@ class SignUpPage : AppCompatActivity() {
 
         }
 
-
         // 실험체 스피너
         val characterlist = resources.getStringArray(R.array.characterName)
         val adapter =
@@ -126,7 +123,6 @@ class SignUpPage : AppCompatActivity() {
                 }
             }
 
-
         binding.signupSignupBtn.setOnClickListener {
             Handler(Looper.getMainLooper()).postDelayed({
                 createAccount(
@@ -135,12 +131,10 @@ class SignUpPage : AppCompatActivity() {
                     binding.signupPWCheckEt.text.toString(),
                     signup_nickname,
                     selectCharacter,
-//                selectedImageURI
                 )
             }, 2000)
         }
     }
-
 
     private fun createAccount(
         email: String,
@@ -148,11 +142,9 @@ class SignUpPage : AppCompatActivity() {
         passwordCheck: String,
         nickname: String,
         character: String,
-//        uri: Uri
     ) {
         if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty()) {
             if (password == passwordCheck) {
-                Log.d("닉네임체크", "$nickNameCheck")
                 if (nickNameCheck == 0) {
                     auth?.createUserWithEmailAndPassword(email, password)
                         ?.addOnCompleteListener(this) { task ->
