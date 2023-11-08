@@ -1,12 +1,15 @@
 buildscript {
+    val toastyVersion by extra("1.5.2")
     dependencies {
         classpath("com.google.gms:google-services:4.4.0")
     }
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io")
     }
 }
+
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

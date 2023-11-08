@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="24dp"
+            android:background="@drawable/ic_white_logo" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/findduo_total_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textColor="@color/highlight_color"
+        android:textColorHint="@color/highlight_color"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/findduo_text1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/findduo_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="명의 플레이어가 듀오를 찾고 있습니다."
+        android:textColor="@color/text_color"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/findduo_total_number"
+        app:layout_constraintStart_toEndOf="@+id/findduo_total_number"
+        app:layout_constraintTop_toTopOf="@+id/findduo_total_number" />
+
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/findduo_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findduo_register_btn" />
+
+    <Button
+        android:id="@+id/findduo_register_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_highlight_btn2"
+        android:text="나도 등록할래!"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/findduo_text1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/findduo_text1"
+        app:layout_constraintTop_toTopOf="@+id/findduo_text1" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

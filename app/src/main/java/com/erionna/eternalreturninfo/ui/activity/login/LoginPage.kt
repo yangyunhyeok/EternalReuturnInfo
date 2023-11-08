@@ -42,6 +42,7 @@ class LoginPage : AppCompatActivity() {
         googlebinding = GoogleDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         //구글로그인 기본 설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("48907367773-37le51fs370ruk8eirjkmi11k6qmg30k.apps.googleusercontent.com")

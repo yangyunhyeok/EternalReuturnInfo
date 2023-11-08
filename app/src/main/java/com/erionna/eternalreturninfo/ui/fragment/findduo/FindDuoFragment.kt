@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
+import com.erionna.eternalreturninfo.databinding.FindDuoFragmentJyBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.ui.activity.chat.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
@@ -33,7 +34,7 @@ class FindDuoFragment : Fragment() {
 
     }
 
-    private var _binding: FindDuoFragmentBinding? = null
+    private var _binding: FindDuoFragmentJyBinding? = null
     private val binding get() = _binding!!
     private lateinit var mDbRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
@@ -78,7 +79,7 @@ class FindDuoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FindDuoFragmentBinding.inflate(inflater, container, false)
+        _binding = FindDuoFragmentJyBinding.inflate(inflater, container, false)
         mAuth = FirebaseAuth.getInstance()
         mDbRef = FirebaseDatabase.getInstance().reference
         mUID = mAuth.currentUser?.uid ?: ""
