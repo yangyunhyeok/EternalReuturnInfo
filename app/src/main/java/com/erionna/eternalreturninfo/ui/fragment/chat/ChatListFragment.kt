@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -99,13 +98,7 @@ class ChatListFragment : Fragment() {
         initView()
         initModel()
         addChatList()
-//        setDataFromDatabase()
     }
-
-    private fun setDataFromChatting() = with(binding) {
-        database = Firebase.database.reference
-    }
-
 
     private fun initView() = with(binding) {
         chatListRecyclerview.adapter = chatListAdapter
@@ -126,7 +119,11 @@ class ChatListFragment : Fragment() {
         }
     }
 
-
+    private fun initModel() = with(viewModel) {
+        list.observe(viewLifecycleOwner) {
+            chatListAdapter.submitList(it)
+        }
+    }
 
     private fun addChatList() {
         database = Firebase.database.reference
@@ -203,106 +200,6 @@ class ChatListFragment : Fragment() {
                 TODO("Not yet implemented")
             }
 
-        })
-    }
-
-
-    private fun initModel() = with(viewModel) {
-        list.observe(viewLifecycleOwner) {
-            chatListAdapter.submitList(it)
-        }
-    }
-
-    private fun setDataFromDatabase() = with(binding) {
-
-        database = Firebase.database.reference
-        // 회원 정보 가져오기
-        database.child("user").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // 리스트 초기화
-                viewModel.clearList()
-                var senderRoom: String
-                var receiverRoom: String
-
-                for (child in snapshot.children) {
-                    val currentUser = child.getValue(ERModel::class.java)
-                    senderRoom = auth.currentUser?.uid + currentUser?.uid
-                    receiverRoom = currentUser?.uid + auth.currentUser?.uid
-                    Log.d("choco5733" , "senderRoom : ${senderRoom}")
-                    Log.d("choco5733" , "receiverRoom : ${receiverRoom}")
-
-                    var message = Message()
-                    var convertTime = ""
-                    var sb = StringBuilder()
-
-                    database.child("chats").child(receiverRoom).child("messages")
-                        .get().addOnSuccessListener {
-                            for (child in it.children) {
-                                message = child.getValue(Message::class.java)!!
-                            }
-                            Log.d("choco5733 in msg", "$message")
-
-                            if (auth.currentUser?.uid != currentUser?.uid) {
-                                if (message.time != "") {
-                                    sb.append(message.time)
-                                    convertTime = sb.substring(0, 13)
-                                } else {
-                                    convertTime = message.time!!
-                                }
-
-                                viewModel.addUser(
-                                    currentUser?.copy(
-                                        msg = "${message.message}",
-                                        time = convertTime,
-                                        readOrNot = message.readOrNot
-                                    )
-                                )
-                            } else {
-                                // 현재 접속자 상단에 표시
-                                binding.chatListTitle.text = " ${currentUser?.name} 님 반갑습니다!"
-                                Log.d("choco5733 currentuser", "${currentUser?.name}")
-                            }
-                        }
-
-
-                        database.child("chats").child(receiverRoom).child("messages")
-                            .addValueEventListener(object : ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-
-                                    for (child in snapshot.children) {
-                                        message = child.getValue(Message::class.java)!!
-                                    }
-                                    Log.d("choco5733 in msg", "$message")
-
-                                    if (auth.currentUser?.uid != currentUser?.uid) {
-                                        if (message.time != "") {
-                                            sb.append(message.time)
-                                            convertTime = sb.substring(0, 13)
-                                        } else {
-                                            convertTime = message.time!!
-                                        }
-
-                                        viewModel.modifyItem2(
-                                            currentUser?.copy(
-                                                msg = "${message.message}",
-                                                time = convertTime,
-                                                readOrNot = message.readOrNot
-                                            )
-                                        )
-                                    }
-
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    TODO("Not yet implemented")
-                                }
-                            })
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-                // 가져오기 실패 시
-                Toast.makeText(requireContext(), "가져오기 실패", Toast.LENGTH_SHORT).show()
-            }
         })
     }
 }

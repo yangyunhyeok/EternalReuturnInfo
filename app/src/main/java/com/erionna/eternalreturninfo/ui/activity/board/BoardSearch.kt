@@ -26,7 +26,6 @@ import com.google.firebase.database.ktx.getValue
 class BoardSearch : AppCompatActivity() {
 
     private lateinit var binding: BoardSearchActivityBinding
-    private var isBackgroundChanged = false;
 
     private val boardViewModel by lazy {
         ViewModelProvider(this, BoardListViewModelFactory()).get(BoardListViewModel::class.java)
