@@ -50,7 +50,7 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/board_tabLayout"
-                app:tabBackground="@drawable/tab_selector"
+                app:tabBackground="@drawable/tab_board_selector"
                 app:tabTextColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

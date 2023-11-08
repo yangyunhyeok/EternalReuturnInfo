@@ -1,11 +1,13 @@
 package com.erionna.eternalreturninfo.ui.activity.board
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
@@ -24,7 +26,6 @@ import com.google.firebase.database.ktx.getValue
 class BoardSearch : AppCompatActivity() {
 
     private lateinit var binding: BoardSearchActivityBinding
-    private var isBackgroundChanged = false;
 
     private val boardViewModel by lazy {
         ViewModelProvider(this, BoardListViewModelFactory()).get(BoardListViewModel::class.java)
@@ -71,18 +72,17 @@ class BoardSearch : AppCompatActivity() {
 
         }
 
-        boardSearchEtSearch.setOnEditorActionListener { v, actionId, event ->
-            if (event != null) { // event 객체가 null이 아닌 경우에만 처리
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if (event.action == KeyEvent.ACTION_DOWN) {
-                        postCount = 0
-                        boardViewModel.clearSearchBoard()
-                        val searchText = boardSearchEtSearch.text.toString()
-                        Search(searchText)
-                    }
-                }
+        boardSearchEtSearch.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                postCount = 0
+                boardViewModel.clearSearchBoard()
+                val searchText = boardSearchEtSearch.text.toString()
+                Search(searchText)
+
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(boardSearchEtSearch.windowToken, 0)
             }
-            true
+            false
         }
 
 

@@ -35,8 +35,12 @@ import com.erionna.eternalreturninfo.ui.activity.login.LoginPage
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
 import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyprofileListAdapter
 import com.erionna.eternalreturninfo.ui.adapter.board.BoardMyProfileRecyclerViewAdapter
+import com.erionna.eternalreturninfo.ui.adapter.board.BoardViewPagerAdapter
+import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyProfileViewPagerAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.erionna.eternalreturninfo.util.Constants
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -106,6 +110,31 @@ class MyProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val adapter = MyProfileViewPagerAdapter(requireActivity())
+        binding.myprofileViewpager2.adapter = adapter
+
+        TabLayoutMediator(binding.myprofileTabLayout, binding.myprofileViewpager2) { tab, position ->
+            tab.setText(adapter.getTitle(position))
+        }.attach()
+
+        binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val maxScroll = appBarLayout.totalScrollRange
+            val percentage = Math.abs(verticalOffset).toFloat() / maxScroll.toFloat()
+
+            if (percentage == 1.0f) {
+                binding.myprofileTvUsername.visibility = View.VISIBLE
+                binding.myprofileBtnSetting.visibility = View.INVISIBLE
+                binding.myprofileTvUsername.text = BoardSingletone.LoginUser().name
+            }else if(percentage == 0.0f){
+                binding.myprofileBtnSetting.visibility = View.VISIBLE
+                binding.myprofileTvUsername.visibility = View.INVISIBLE
+            }else {
+                binding.myprofileBtnSetting.visibility = View.INVISIBLE
+                binding.myprofileTvUsername.visibility = View.INVISIBLE
+            }
+
+        })
+
         binding.myprofileBtnSetting.setOnClickListener {
             val popup = PopupMenu(binding.root.context, binding.myprofileBtnSetting) // View 변경
             popup.menuInflater.inflate(R.menu.menu_myprofile, popup.menu)
@@ -117,8 +146,6 @@ class MyProfileFragment : Fragment() {
                         val alertDialog = AlertDialog.Builder(requireActivity())
                             .setView(dialogView)
                             .create()
-
-
 
                         val characterSpinner = dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
                         val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
@@ -235,124 +262,6 @@ class MyProfileFragment : Fragment() {
             }
             popup.show()
         }
-
-
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val nickname = BoardSingletone.LoginUser().name.toString()
-
-                //수정 : 로그인한 사람 닉네임 가져오기
-                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(
-                    Constants.MAIN_APIKEY,
-                    nickname
-                )
-                val userID_response = userID_call.execute()
-
-                if (userID_response.isSuccessful) {
-                    val gameResponse = userID_response.body()
-                    val userNum = gameResponse?.user?.userNum.toString()
-                    val seasonId = "19"
-
-                    val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
-                        Constants.MAIN_APIKEY, userNum, seasonId
-                    )
-                    val userstate_response = userstate_call.execute()
-
-                    if (userstate_response.isSuccessful) {
-                        val userStateResponse = userstate_response.body()
-
-
-                        withContext(Dispatchers.Main) {
-                            val user = userStateResponse?.userStats?.get(0)
-//                            binding.myprofileTvTop1.text =
-//                                (user?.top1?.times(100) ?: 0).toString() + "%"
-//                            binding.myprofileTvAverageRank.text =
-//                                "#" + (user?.averageRank ?: 0).toString()
-//                            binding.myprofileTvAverageKill.text =
-//                                (user?.averageKills ?: 0).toString()
-
-                            var dataList = mutableListOf<CharacterStats>()
-                            for(a in 0..2){
-                                dataList.add(CharacterStats(user!!.characterStats[a].characterCode,user.characterStats[a].totalGames,user.characterStats[a].usages,user.characterStats[a].maxKillings,user.characterStats[a].top3,user.characterStats[a].wins,user.characterStats[a].top3Rate,user.characterStats[a].averageRank))
-                            }
-                            Log.d("마이페이지 데이터리스트","$dataList")
-
-                            val array: Array<String> = resources.getStringArray(R.array.characterName)
-                            val adapter = MyprofileListAdapter(dataList, array)
-                            binding.myprofileCharacterRv.adapter = adapter
-                            binding.myprofileCharacterRv.layoutManager = LinearLayoutManager(requireContext())
-                        }
-
-                    } else {
-                        Log.d("userStateResponse", "${userstate_response}")
-                    }
-                }
-
-            } catch (e: Exception) {
-                // 오류 처리
-                e.printStackTrace()
-            }
-        }
-
-
-
-        binding.myprofileMyboardRv.adapter = boardListAdapter
-        binding.myprofileMyboardRv.layoutManager = LinearLayoutManager(requireContext())
-
-        val query = FBRef.postRef.orderByChild("author").equalTo(BoardSingletone.LoginUser().uid)
-
-        query.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                if (dataSnapshot.exists()) {
-
-                    val boardList = mutableListOf<BoardModel>()
-
-                    for (snapshot in dataSnapshot.children) {
-                        val searchBoard = snapshot.getValue<BoardModel>()
-                        if (searchBoard != null) {
-                            boardList.add(searchBoard)
-                        }
-                    }
-
-                    boardListAdapter.submitList(boardList)
-                    boardListAdapter.notifyDataSetChanged()
-
-                } else {
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // 검색이 실패한 경우
-            }
-        })
-
-        boardListAdapter.setOnItemClickListener(object :
-            BoardMyProfileRecyclerViewAdapter.OnItemClickListener {
-            override fun onItemClick(boardItem: BoardModel) {
-
-                FBRef.postRef.child(boardItem.id).addListenerForSingleValueEvent(object :
-                    ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            val intent = Intent(requireContext(), BoardDeleted::class.java)
-                            startActivity(intent)
-                        } else {
-                            val views = boardItem.views + 1
-                            FBRef.postRef.child(boardItem.id).child("views").setValue(views)
-                            val intent = Intent(requireContext(), BoardPost::class.java)
-                            intent.putExtra("ID", boardItem.id)
-                            loadBoardLauncher.launch(intent)
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        // 데이터 읽기 실패 처리
-                    }
-                })
-
-            }
-        })
 
     }
 
@@ -555,14 +464,6 @@ class MyProfileFragment : Fragment() {
             .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
 
-
-    fun GooglePatch() {
-
-    }
-
-    fun updateCharacter(character: String) {
-//        ImgPacth(character)
-    }
 
 
 }
