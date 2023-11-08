@@ -68,14 +68,13 @@
 
     <TextView
         android:id="@+id/chat_list_msg"
-        android:layout_width="0dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="@string/chat_list_msg"
         android:textColor="@color/grey"
-        app:layout_constraintEnd_toStartOf="@+id/chat_list_date"
         app:layout_constraintStart_toStartOf="@+id/chat_list_name"
         app:layout_constraintTop_toBottomOf="@+id/chat_list_name" />
 
