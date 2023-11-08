@@ -34,27 +34,6 @@ class BoardFragment : Fragment() {
 
     private val boardViewModel: BoardListViewModel by activityViewModels()
 
-    private val addBoardLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    val board = result.data?.getParcelableExtra("board", BoardModel::class.java)
-                    if (board != null) {
-                        boardViewModel.addBoard(board)
-                    }
-                } else {
-                    val board = result.data?.getParcelableExtra<BoardModel>("board")
-                    if (board != null) {
-                        boardViewModel.addBoard(board)
-                    }
-                }
-
-            }else{
-
-            }
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,6 +54,27 @@ class BoardFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
+
+        val addBoardLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val board = result.data?.getParcelableExtra("board", BoardModel::class.java)
+                        if (board != null) {
+                            boardViewModel.addBoard(board)
+                        }
+                    } else {
+                        val board = result.data?.getParcelableExtra<BoardModel>("board")
+                        if (board != null) {
+                            boardViewModel.addBoard(board)
+                        }
+                    }
+
+                }else{
+
+                }
+            }
 
         val adapter = BoardViewPagerAdapter(requireActivity())
         boardViewpager.adapter = adapter
