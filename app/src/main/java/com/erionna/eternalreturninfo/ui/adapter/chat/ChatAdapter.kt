@@ -81,8 +81,6 @@ class ChatAdapter(
             val database = FirebaseDatabase.getInstance().reference
             var recevierRoom: String = item.sendId + item.receiverId
 
-
-            // 수정한 코드
             database.child("chats").child(recevierRoom).child("messages")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapShot: DataSnapshot) {
