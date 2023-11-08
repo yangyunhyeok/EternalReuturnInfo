@@ -110,7 +110,10 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
 
-    //spinner
+    // spinner
     implementation("com.github.skydoves:powerspinner:1.2.6")
+
+    // powerMenu
+    implementation ("com.github.skydoves:powermenu:2.2.4")
 
 }

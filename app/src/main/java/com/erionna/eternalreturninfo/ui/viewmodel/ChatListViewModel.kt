@@ -71,12 +71,6 @@ class ChatListViewModel(
         _list.value = currentList
     }
 
-    fun deleteUser(user: String) {
-        val currentList = list.value.orEmpty().toMutableList()
-        currentList.remove(ERModel(name=user))
-        _list.value = currentList
-    }
-
     fun modifyItem(position: Int, message: String, time: String) {
         val currentList = list.value.orEmpty().toMutableList()
 
