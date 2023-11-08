@@ -76,10 +76,13 @@ class ChatActivity : AppCompatActivity() {
     private val position by lazy {
         intent.getIntExtra(EXTRA_ER_POSITION, -1)
     }
+
+    // data
     private val data by lazy {
         intent.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
     }
 
+    // reference
     private lateinit var refDb: DatabaseReference
     private lateinit var refEventListener: ValueEventListener
 
@@ -113,8 +116,6 @@ class ChatActivity : AppCompatActivity() {
         loadChat()
 
     }
-
-
 
     private fun initView() = with(binding) {
         // 리사이클러뷰 초기화
@@ -240,7 +241,7 @@ class ChatActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("choco5733", error.message)
             }
         }
 

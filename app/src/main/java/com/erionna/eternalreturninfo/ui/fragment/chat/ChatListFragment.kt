@@ -137,7 +137,7 @@ class ChatListFragment : Fragment() {
         database.child("user").addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                // 리스트 초기화 for 회원가입시 중복리스트
+                // 리스트 초기화 for 회원가입시 리스트 중복추가 문제 해결
                 viewModel.clearList()
                 var senderRoom = ""
                 var receiverRoom = ""
@@ -166,7 +166,7 @@ class ChatListFragment : Fragment() {
                             }
 
                             override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
+                                Log.e("choco5733 in chatList", error.message)
                             }
 
                         })
@@ -191,7 +191,7 @@ class ChatListFragment : Fragment() {
                             }
 
                             override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
+                                Log.e("choco5733", error.message)
                             }
                         })
 
@@ -203,7 +203,7 @@ class ChatListFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("choco5733", error.message)
             }
 
         })

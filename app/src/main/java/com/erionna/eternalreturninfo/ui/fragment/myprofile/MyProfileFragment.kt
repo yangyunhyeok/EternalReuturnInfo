@@ -114,6 +114,8 @@ class MyProfileFragment : Fragment() {
                 .addItem(PowerMenuItem("회원 탈퇴"))
                 .setMenuRadius(20f) // sets the corner radius.
                 .setTextSize(15)
+                .setWidth(430)
+//                .setWidth(400)
                 .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 //                .setTextGravity(Gravity.CENTER)
 //                .setDivider(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.darkgray)))
@@ -126,7 +128,9 @@ class MyProfileFragment : Fragment() {
                 .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
                 .build()
 
-            powerMenu.showAtLocation(view, 1000, 280)
+            powerMenu.showAtLocation(view, 610, 240)
+//            powerMenu.showAtLocation(view, 640, 240)
+//            powerMenu.showAtLocation(view, 550, 240)
         }
     }
 
