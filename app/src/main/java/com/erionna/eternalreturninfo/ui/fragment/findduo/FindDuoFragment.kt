@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.ui.activity.ChatActivity
@@ -144,17 +146,23 @@ class FindDuoFragment : Fragment() {
     }
 
     private fun deleteSpecificFieldsFromDatabase(item: ERModel) {
+        val dialogView = layoutInflater.inflate(R.layout.findduo_remove_dialog, null)
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("카드 삭제")
-        alertDialogBuilder.setMessage("정말로 카드를 삭제하시겠습니까?")
-        alertDialogBuilder.setPositiveButton("예") { dialog, _ ->
-            deleteItem(item)
-            dialog.dismiss()
-        }
-        alertDialogBuilder.setNegativeButton("아니오") { dialog, _ ->
-            dialog.dismiss()
-        }
+        alertDialogBuilder.setView(dialogView)
         val alertDialog = alertDialogBuilder.create()
+
+        val btnYes = dialogView.findViewById<Button>(R.id.findduo_remove_btn_yes)
+        val btnNo = dialogView.findViewById<Button>(R.id.findduo_remove_btn_no)
+
+        btnYes.setOnClickListener {
+            deleteItem(item)
+            alertDialog.dismiss()
+        }
+
+        btnNo.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
         alertDialog.show()
     }
 

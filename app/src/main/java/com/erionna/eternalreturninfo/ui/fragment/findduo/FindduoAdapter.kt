@@ -91,8 +91,6 @@ class FindduoAdapter(
 
     }
 
-
-
     class ImgPatch {
         fun setCharacterImage(character: String?, imageView: ImageView) {
             val resources = imageView.context.resources
