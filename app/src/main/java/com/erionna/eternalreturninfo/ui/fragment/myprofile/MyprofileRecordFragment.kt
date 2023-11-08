@@ -57,7 +57,6 @@ class MyprofileRecordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-//        initModel()
 
     }
 
@@ -94,18 +93,11 @@ class MyprofileRecordFragment : Fragment() {
 
                         withContext(Dispatchers.Main) {
                             val user = userStateResponse?.userStats?.get(0)
-//                            binding.myprofileTvTop1.text =
-//                                (user?.top1?.times(100) ?: 0).toString() + "%"
-//                            binding.myprofileTvAverageRank.text =
-//                                "#" + (user?.averageRank ?: 0).toString()
-//                            binding.myprofileTvAverageKill.text =
-//                                (user?.averageKills ?: 0).toString()
 
                             var dataList = mutableListOf<CharacterStats>()
                             for(a in 0..2){
                                 dataList.add(CharacterStats(user!!.characterStats[a].characterCode,user.characterStats[a].totalGames,user.characterStats[a].usages,user.characterStats[a].maxKillings,user.characterStats[a].top3,user.characterStats[a].wins,user.characterStats[a].top3Rate,user.characterStats[a].averageRank))
                             }
-                            Log.d("마이페이지 데이터리스트","$dataList")
 
                             val array: Array<String> = resources.getStringArray(R.array.characterName)
                             val adapter = MyprofileListAdapter(dataList, array)
@@ -124,8 +116,4 @@ class MyprofileRecordFragment : Fragment() {
             }
         }
     }
-
-//    private fun initModel() = with(boardViewModel) {
-//
-//    }
 }
