@@ -51,21 +51,14 @@ class FindduoAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val currentItem = items[position]
 
-        // currentItem에서 데이터를 추출하고 뷰에 설정
         holder.server.text = currentItem.server
         holder.name.text = currentItem.name
         holder.gender.text = currentItem.gender
         holder.tier.text = currentItem.tier
 
-        // 이미지 설정을 위해 ImgPatch 클래스의 메서드 호출
         ImgPatch().setCharacterImage(currentItem.most, holder.binding.fdliMost)
         ImgPatch2().setTierImage(currentItem.tier, holder.binding.fdliTierimage)
-
-        // currentItem의 name 값을 바탕으로 api 연결
         StatePacth().setState(currentItem.name,holder.binding.fdliWinrate,holder.binding.fdliAvgrank)
-        //     holder.winrate.text = currentItem.winrate
-        //    holder.avgrank.text = currentItem.avgrank
-
 
         holder.binding.fdliContainer.setOnClickListener {
             onClickUser(
@@ -96,8 +89,6 @@ class FindduoAdapter(
         var tierimage = binding.fdliTierimage
 
     }
-
-
 
     class ImgPatch {
         fun setCharacterImage(character: String?, imageView: ImageView) {
@@ -213,7 +204,6 @@ class FindduoAdapter(
                 try {
                     val nickname = name
 
-                    //카드에 배치된 사람 닉네임 가져오기
                     val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(
                         Constants.MAIN_APIKEY,
                         nickname
@@ -247,7 +237,6 @@ class FindduoAdapter(
                     }
 
                 } catch (e: Exception) {
-                    // 오류 처리
                     e.printStackTrace()
                 }
             }
