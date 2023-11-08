@@ -28,10 +28,6 @@ class FindduoPopupWindow(private val context: Context) {
     private val binding get() = _binding!!
     private lateinit var mDbRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
-    private var mUID = ""
-
-    //파이어스터오랑 연동하기위한 코드
-    private val firestore = FirebaseFirestore.getInstance()
 
     fun showPopup(anchorView: View) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -39,7 +35,6 @@ class FindduoPopupWindow(private val context: Context) {
         mAuth = Firebase.auth
         mDbRef = Firebase.database.reference
 
-        // PopupWindow
         popupWindow = PopupWindow(
             binding.root,
             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -47,14 +42,13 @@ class FindduoPopupWindow(private val context: Context) {
             true
         )
         popupWindow?.apply {
-            elevation = 10.0f // 고도
-            val alphaColor = Color.argb(80, 0, 0, 0) // 여기서 80은 투명도를 나타냄 (0은 완전 투명, 255는 완전 불투명)
+            elevation = 10.0f
+            val alphaColor = Color.argb(80, 0, 0, 0)
             setBackgroundDrawable(ColorDrawable(alphaColor))
             isOutsideTouchable = true
-            animationStyle = android.R.style.Animation_InputMethod // 애니메이션
+            animationStyle = android.R.style.Animation_InputMethod
         }
 
-        //서버 스피너
 
         val serverList = context.resources.getStringArray(R.array.server)
         val serverAdpater = ArrayAdapter<String>(
@@ -82,8 +76,6 @@ class FindduoPopupWindow(private val context: Context) {
             }
         }
 
-        //티어 스피너
-
         val tierList = context.resources.getStringArray(R.array.tier)
         val tierAdapter =
             ArrayAdapter<String>(context, R.layout.findduo_spinner, R.id.findduo_spinner_tv, tierList)
@@ -107,8 +99,6 @@ class FindduoPopupWindow(private val context: Context) {
                 }
             }
 
-        //성별 스피너
-
         val genderList = context.resources.getStringArray(R.array.gender)
         val genderAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             context,
@@ -130,13 +120,10 @@ class FindduoPopupWindow(private val context: Context) {
                 ) {
                     selectGender = genderList[position]
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     selectServer = "선택"
                 }
             }
-
-        //선호 실험체 스피너
 
         val mostList = context.resources.getStringArray(R.array.characterName)
         val mostAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -162,7 +149,6 @@ class FindduoPopupWindow(private val context: Context) {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     selectServer = "선택"
-
                 }
 
             }
@@ -174,20 +160,16 @@ class FindduoPopupWindow(private val context: Context) {
                 updateUserInFirebase(selectGender, "gender")
                 updateUserInFirebase(selectMost, "most")
                 addTimestampToFirebase()
-              //  updateMostInFirestore(selectMost)
                 dismissPopup()
             } else {
                 Toast.makeText(context, "모든 옵션을 선택해주세요", Toast.LENGTH_SHORT).show()
             }
         }
-
-        // PopupWindow 표시
         popupWindow?.showAtLocation(anchorView, Gravity.CENTER, 0, 0)
     }
 
     private fun addTimestampToFirebase() {
-        val timestamp = System.currentTimeMillis() // 현재 시간을 밀리초로 얻기
-
+        val timestamp = System.currentTimeMillis()
         updateUserInFirebase(timestamp.toString(), "timestamp")
     }
 
@@ -196,51 +178,18 @@ class FindduoPopupWindow(private val context: Context) {
     }
 
     private fun updateUserInFirebase(finalSelection: String?, s: String) {
-
-        // 사용자의 Firebase UID
         val userId = mAuth.currentUser?.uid
 
-        // 사용자의 Firebase UID가 없으면 함수를 종료
         if (userId == null) {
             Log.w(ContentValues.TAG, "User UID is null")
             return
         }
 
-        // 업데이트할 데이터를 맵으로 구성
         val updateData = mapOf(
             s to finalSelection
         )
 
-        // Firebase Realtime Database 경로
         val databasePath = "user/$userId"
-
-        // 데이터베이스에 업데이트할 내용을 설정
         mDbRef.child(databasePath).updateChildren(updateData)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // 업데이트가 성공한 경우
-                    Log.d(ContentValues.TAG, "User info updated successfully")
-                    // 여기에 추가적인 작업을 수행할 수 있습니다.
-                } else {
-                    // 업데이트가 실패한 경우
-                    Log.e(ContentValues.TAG, "User info update failed: ${task.exception}")
-                }
-            }
-    }
-
-    private fun updateMostInFirestore(finalSelection: String?) {
-        val userId = mAuth.currentUser?.uid
-        if (userId != null) {
-            val userRef = firestore.collection("EternalReturnInfo").document(userId)
-
-            // Firestore의 'most' 필드 업데이트
-            userRef.update("character", finalSelection)
-                .addOnSuccessListener {
-                    Log.d(ContentValues.TAG, "Firestore 'most' 업데이트 성공")
-                }
-                .addOnFailureListener { e ->
-                    Log.e(ContentValues.TAG, "Firestore 'most' 업데이트 실패: $e")
-                }
-        }
     }
 }

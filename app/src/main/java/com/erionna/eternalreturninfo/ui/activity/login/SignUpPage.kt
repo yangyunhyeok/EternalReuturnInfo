@@ -1,7 +1,8 @@
-package com.erionna.eternalreturninfo.ui.activity.login
+package com.erionna.eternalreturninfo.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -12,10 +13,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.SignupInformationActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
+import com.erionna.eternalreturninfo.model.Notice
 import com.erionna.eternalreturninfo.model.SignUpData
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.RetrofitInstance
@@ -92,6 +95,7 @@ class SignUpPage : AppCompatActivity() {
                                 }
                             }
                             Log.d("닉네임체크",signup_nickname)
+
                         }
 
                     } catch (e: Exception) {
@@ -162,6 +166,8 @@ class SignUpPage : AppCompatActivity() {
                                     this, "계정 생성 완료.",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                var baseImage =
+                                    "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
                                 setDocument(
                                     SignUpData(
                                         Email = email,
