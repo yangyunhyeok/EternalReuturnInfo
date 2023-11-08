@@ -8,14 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.ChatActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.model.Message
 import com.erionna.eternalreturninfo.ui.adapter.chat.ChatAdapter
-import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModel
-import com.erionna.eternalreturninfo.ui.viewmodel.ChatListViewModelFactory
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_MODEL
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_ER_POSITION
 import com.erionna.eternalreturninfo.util.Constants.Companion.EXTRA_MESSAGE
@@ -100,11 +97,6 @@ class ChatActivity : AppCompatActivity() {
         )
     }
 
-    private val chatListViewModel : ChatListViewModel by viewModels {
-        ChatListViewModelFactory()
-    }
-
-
     override fun onBackPressed() {
         refDb.removeEventListener(refEventListener)
         finish()
@@ -116,8 +108,8 @@ class ChatActivity : AppCompatActivity() {
         binding = ChatActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-        loadChat()
         saveChat()
+        loadChat()
 
     }
 
@@ -178,30 +170,6 @@ class ChatActivity : AppCompatActivity() {
                 // 전송 버튼을 누르면 whereRU를 true로 바꿔줘 채팅리스트에 추가
                 val map = HashMap<String, Any>()
                 map.put("whereRU", true)
-
-//                database.child("chats").child(senderRoom).child("messages")
-//                    .get().addOnSuccessListener {
-//                        for (child in it.children) {
-//                            val chat = child.getValue(Message::class.java)
-//                            val key = child.key
-//
-//                            database.child("chats").child(senderRoom)
-//                                .child("messages").child("$key").updateChildren(map)
-//
-//                        }
-//                    }
-//
-//                database.child("chats").child(receiverRoom).child("messages")
-//                    .get().addOnSuccessListener {
-//                        for (child in it.children) {
-//                            val chat = child.getValue(Message::class.java)
-//                            val key = child.key
-//
-//                            database.child("chats").child(receiverRoom)
-//                                .child("messages").child("$key").updateChildren(map)
-//
-//                        }
-//                    }
 
             }
 
