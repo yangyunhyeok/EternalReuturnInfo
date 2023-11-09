@@ -62,19 +62,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/findduo_register_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/findduo_text1" />
 
-    <Button
-        android:id="@+id/findduo_register_btn"
+    <TextView
+        android:id="@+id/findduo_text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_highlight_btn2"
-        android:text="나도 등록할래!"
-        android:textStyle="bold"
+        android:text="@string/find_duo_register"
+        android:textColor="@color/highlight_color"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/findduo_text1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/findduo_text1"
+        app:layout_constraintStart_toEndOf="@id/findduo_text1"
         app:layout_constraintTop_toTopOf="@+id/findduo_text1" />
+
+<!--    <Button-->
+<!--        android:id="@+id/findduo_register_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/shape_highlight_btn2"-->
+<!--        android:text="나도 등록할래!"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/findduo_text1"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/findduo_text1"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/findduo_text1" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

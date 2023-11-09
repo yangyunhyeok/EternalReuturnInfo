@@ -100,7 +100,8 @@ class FindDuoFragment : Fragment() {
 
     private fun initView() = with(binding) {
         findduoPopupWindow = FindduoPopupWindow(requireContext())
-        binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
+//        binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
+        binding.findduoText2.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
         adapter.notifyDataSetChanged()
         loadAllUserDataFromFirebase()
     }

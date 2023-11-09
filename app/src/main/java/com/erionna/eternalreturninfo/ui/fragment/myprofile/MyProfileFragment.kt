@@ -107,13 +107,12 @@ class MyProfileFragment : Fragment() {
         })
 
         binding.myprofileBtnSetting.setOnClickListener {
-
             val powerMenu = PowerMenu.Builder(requireContext())
                 .addItem(PowerMenuItem("프로필 수정"))
                 .addItem(PowerMenuItem("로그아웃"))
                 .addItem(PowerMenuItem("회원 탈퇴"))
                 .setMenuRadius(20f) // sets the corner radius.
-                .setTextSize(15)
+                .setTextSize(18)
                 .setWidth(430)
 //                .setWidth(400)
                 .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
@@ -131,6 +130,7 @@ class MyProfileFragment : Fragment() {
             powerMenu.showAtLocation(view, 610, 240)
 //            powerMenu.showAtLocation(view, 640, 240)
 //            powerMenu.showAtLocation(view, 550, 240)
+
         }
     }
 
