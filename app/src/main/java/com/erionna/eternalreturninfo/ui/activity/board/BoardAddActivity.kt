@@ -4,20 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.erionna.eternalreturninfo.R
-import com.erionna.eternalreturninfo.databinding.BoardAddActivity2Binding
+import com.erionna.eternalreturninfo.databinding.BoardAddActivityBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import java.util.Calendar
 
-class BoardAdd : AppCompatActivity() {
+class BoardAddActivity : AppCompatActivity() {
 
-    private lateinit var binding: BoardAddActivity2Binding
+    private lateinit var binding: BoardAddActivityBinding
     private var category = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = BoardAddActivity2Binding.inflate(layoutInflater)
+        binding = BoardAddActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initView()
@@ -56,11 +56,11 @@ class BoardAdd : AppCompatActivity() {
             val category = category
 
             if(title.isEmpty()){
-                Toast.makeText(this@BoardAdd, "제목을 입력해주세요!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@BoardAddActivity, "제목을 입력해주세요!", Toast.LENGTH_SHORT).show()
             }else if(content.isEmpty()) {
-                Toast.makeText(this@BoardAdd, "내용을 입력해주세요!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@BoardAddActivity, "내용을 입력해주세요!", Toast.LENGTH_SHORT).show()
             }else if(category.isEmpty()){
-                Toast.makeText(this@BoardAdd, "옵션을 선택해주세요!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@BoardAddActivity, "옵션을 선택해주세요!", Toast.LENGTH_SHORT).show()
             }
             else if(title.isNotEmpty() && content.isNotEmpty() && category.isNotEmpty()){
 
@@ -70,9 +70,9 @@ class BoardAdd : AppCompatActivity() {
                 val newBoard = BoardModel(key, category, title, content, BoardSingletone.LoginUser().uid, date, mapOf(), 0)
 
                 FBRef.postRef.child(key).setValue(newBoard).addOnSuccessListener {
-                    Toast.makeText(this@BoardAdd, "게시글 추가!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@BoardAddActivity, "게시글 추가!", Toast.LENGTH_SHORT).show()
                 }.addOnFailureListener { e ->
-                    Toast.makeText(this@BoardAdd, "게시글 추가 실패!" + e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@BoardAddActivity, "게시글 추가 실패!" + e.message, Toast.LENGTH_SHORT).show()
                 }
 
                 intent.putExtra("board", newBoard)

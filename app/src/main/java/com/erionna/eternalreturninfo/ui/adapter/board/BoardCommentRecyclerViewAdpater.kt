@@ -86,7 +86,7 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
                         boardCommentTvUser.text = author?.name
 
                         if(author?.profilePicture?.isEmpty() == true){
-                            boardCommentIbProfile.setImageResource(R.drawable.ic_xiuk)
+                            boardCommentIbProfile.setImageResource(R.drawable.ic_baseimage)
                         }else{
                             boardCommentIbProfile.load(author?.profilePicture)
                         }

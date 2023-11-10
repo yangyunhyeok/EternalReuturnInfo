@@ -31,7 +31,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BoardPost : AppCompatActivity() {
+class BoardPostActivity : AppCompatActivity() {
 
     private lateinit var binding: BoardPostActivityBinding
 
@@ -58,7 +58,7 @@ class BoardPost : AppCompatActivity() {
         initModel()
     }
 
-    private fun progressbar(isLoading:Boolean){
+    private fun setProgressbar(isLoading:Boolean){
 
         if(isLoading){
             binding.boardPostProgressbar.visibility = View.VISIBLE
@@ -76,20 +76,19 @@ class BoardPost : AppCompatActivity() {
 
 
         boardPostRvComment.adapter = listAdapter
-        boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPost)
+        boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPostActivity)
 
         id = intent.getStringExtra("ID") ?: ""
 
         FBRef.postRef.child(id).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                progressbar(isLoading = true)
+                setProgressbar(isLoading = true)
 
                 if(snapshot.exists()){
                     board = snapshot.getValue<BoardModel>()
 
                     boardPostTvContent.text = board?.content
-//                    boardPostTvVisit.text = board?.views.toString()
 
                     if(board?.category == "공지"){
                         boardPostTvTitle.text = board?.title
@@ -107,8 +106,8 @@ class BoardPost : AppCompatActivity() {
                                 val user = snapshot.getValue<ERModel>()
                                 boardPostTvUser.text = user?.name
 
-                                if(user?.profilePicture?.isEmpty() == true){
-                                    boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
+                                if(user?.profilePicture?.isNullOrEmpty() == true){
+                                    boardPostIbProfile.setImageResource(R.drawable.ic_baseimage)
                                 }else{
                                     boardPostIbProfile.load(user?.profilePicture)
                                 }
@@ -122,14 +121,12 @@ class BoardPost : AppCompatActivity() {
                                         popup.setOnMenuItemClickListener { menu ->
                                             when (menu.itemId) {
                                                 R.id.menu_comment_update -> {
-                                                    val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
+                                                    val updateIntent = Intent(this@BoardPostActivity, BoardUpdateActivity::class.java)
                                                     updateIntent.putExtra("updateBoard", board)
                                                     startActivity(updateIntent)
                                                 }
                                                 R.id.menu_comment_delete -> {
                                                     finish()
-
-                                                    Log.d("board.id", board?.id.toString())
                                                     FBRef.postRef.child(board?.id.toString()).removeValue()
                                                 }
                                             }
@@ -141,11 +138,11 @@ class BoardPost : AppCompatActivity() {
                                     boardPostIbMenu.visibility = View.INVISIBLE
 
                                     boardPostIbProfile.setOnClickListener {
-                                        val customDialog = BoardDialog(this@BoardPost, user?.name ?: "",object : DialogListener {
+                                        val customDialog = BoardDialog(this@BoardPostActivity, user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
                                                 startActivity(
                                                     ChatActivity.newIntent(
-                                                        this@BoardPost,
+                                                        this@BoardPostActivity,
                                                         ERModel(
                                                             uid = user?.uid,
                                                             profilePicture = user?.profilePicture,
@@ -186,7 +183,7 @@ class BoardPost : AppCompatActivity() {
                     }
                 }
 
-                progressbar(isLoading = false)
+                setProgressbar(isLoading = false)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -194,8 +191,8 @@ class BoardPost : AppCompatActivity() {
 
         })
 
-        if(BoardSingletone.LoginUser().profilePicture == null){
-            boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
+        if(BoardSingletone.LoginUser().profilePicture.isNullOrEmpty()){
+            boardPostIbProfile.setImageResource(R.drawable.ic_baseimage)
         }else{
             boardPostIbCommentProfile.load(BoardSingletone.LoginUser().profilePicture)
         }
@@ -255,7 +252,7 @@ class BoardPost : AppCompatActivity() {
     }
 
     private fun initModel() = with(binding) {
-        boardViewModel.commentList.observe(this@BoardPost){ commentList ->
+        boardViewModel.commentList.observe(this@BoardPostActivity){ commentList ->
             listAdapter.submitList(commentList)
             boardPostBtnComment.text = commentList.size.toString()
         }

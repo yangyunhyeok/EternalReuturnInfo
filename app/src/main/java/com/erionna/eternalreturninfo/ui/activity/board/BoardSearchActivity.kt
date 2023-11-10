@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -23,7 +22,7 @@ import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 
-class BoardSearch : AppCompatActivity() {
+class BoardSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: BoardSearchActivityBinding
 
@@ -49,7 +48,7 @@ class BoardSearch : AppCompatActivity() {
     private fun initView() = with(binding) {
 
         boardSearchRv.adapter = listAdapter
-        boardSearchRv.layoutManager = LinearLayoutManager(this@BoardSearch)
+        boardSearchRv.layoutManager = LinearLayoutManager(this@BoardSearchActivity)
 
         boardSearchIbBack.setOnClickListener {
             finish()
@@ -99,12 +98,12 @@ class BoardSearch : AppCompatActivity() {
 
                             val views = board?.views?.plus(1)
                             FBRef.postRef.child(boardItem.id).child("views").setValue(views)
-                            val intent = Intent(this@BoardSearch, BoardPost::class.java)
+                            val intent = Intent(this@BoardSearchActivity, BoardPostActivity::class.java)
                             intent.putExtra("ID", boardItem.id)
                             startActivity(intent)
 
                         } else {
-                            val intent = Intent(this@BoardSearch, BoardDeleted::class.java)
+                            val intent = Intent(this@BoardSearchActivity, BoardDeletedActivity::class.java)
                             startActivity(intent)
                         }
                     }
@@ -119,7 +118,7 @@ class BoardSearch : AppCompatActivity() {
     }
 
     private fun initModel() = with(binding) {
-        boardViewModel.searchBoardList.observe(this@BoardSearch){ searchBoardList ->
+        boardViewModel.searchBoardList.observe(this@BoardSearchActivity){ searchBoardList ->
             val newBoardList = searchBoardList.reversed()
             listAdapter.submitList(newBoardList.toMutableList())
         }

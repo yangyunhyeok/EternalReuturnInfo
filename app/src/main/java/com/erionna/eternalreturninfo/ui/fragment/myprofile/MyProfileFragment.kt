@@ -1,6 +1,5 @@
 package com.erionna.eternalreturninfo.ui.fragment.myprofile
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,21 +14,16 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.Spinner
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
-import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.ui.activity.login.LoginPage
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
-import com.erionna.eternalreturninfo.ui.adapter.board.BoardMyProfileRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyProfileViewPagerAdapter
-import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth

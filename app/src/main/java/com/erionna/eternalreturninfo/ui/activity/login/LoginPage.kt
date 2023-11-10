@@ -92,7 +92,7 @@ class LoginPage : AppCompatActivity() {
 
         //회원가입 버튼
         binding.loginSignupBtn.setOnClickListener {
-            val intent = Intent(this, SignUpPage::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 
