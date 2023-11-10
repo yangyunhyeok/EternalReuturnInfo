@@ -67,7 +67,6 @@ class LoginPage : AppCompatActivity() {
             val Email = dialogView.findViewById<EditText>(R.id.findpw_id_et).text
             val button = dialogView.findViewById<Button>(R.id.findpw_findpw_btn)
 
-            val de = null
             // 비밀번호 찾기 이메일 전송 버튼
             button.setOnClickListener {
                 if (Email.isNotEmpty()) {
