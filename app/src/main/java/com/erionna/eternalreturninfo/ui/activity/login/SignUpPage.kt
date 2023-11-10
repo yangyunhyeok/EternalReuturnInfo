@@ -236,7 +236,13 @@ class SignUpPage : AppCompatActivity() {
             .addOnSuccessListener {
             }
             .addOnFailureListener {
-                Toast.makeText(this, "닉네임 값 저장 실패", Toast.LENGTH_SHORT).show()
+                MotionToast.darkColorToast(
+                    this, "ERROR", "닉네임 값 저장 실패",
+                    MotionToastStyle.ERROR,
+                    MotionToast.GRAVITY_BOTTOM,
+                    MotionToast.SHORT_DURATION,
+                    font = null
+                )
             }
     }
 

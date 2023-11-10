@@ -114,7 +114,6 @@ class MyProfileFragment : Fragment() {
                 .setMenuRadius(20f) // sets the corner radius.
                 .setTextSize(18)
                 .setWidth(430)
-//                .setWidth(400)
                 .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 //                .setTextGravity(Gravity.CENTER)
 //                .setDivider(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.darkgray)))
@@ -126,11 +125,7 @@ class MyProfileFragment : Fragment() {
                 .setCircularEffect(CircularEffect.BODY)
                 .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
                 .build()
-
-            powerMenu.showAtLocation(view, 610, 240)
-//            powerMenu.showAtLocation(view, 640, 240)
-//            powerMenu.showAtLocation(view, 550, 240)
-
+                .showAsDropDown(it)
         }
     }
 

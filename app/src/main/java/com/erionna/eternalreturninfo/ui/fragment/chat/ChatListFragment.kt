@@ -71,7 +71,7 @@ class ChatListFragment : Fragment() {
                 val eRModel = result.data?.getParcelableExtra<ERModel>(EXTRA_ER_MODEL)
 
                 Log.d("choco5733 : 돌아왔을때", "$message $time $position")
-                viewModel.modifyItem(position!!, message!!, time!!)
+                viewModel.modifyItemForCallBack(position!!, message!!, time!!)
             }
         }
 
@@ -181,7 +181,7 @@ class ChatListFragment : Fragment() {
                                 Log.d("choco5733 in msg", "$message")
 
 
-                                viewModel.modifyItem2(
+                                viewModel.modifyItemForChatList(
                                     currentUser?.copy(
                                         msg = message.message,
                                         time = message.time,

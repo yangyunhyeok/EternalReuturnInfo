@@ -117,10 +117,6 @@ dependencies {
 
     // MotionToast
     implementation("com.github.Spikeysanju:MotionToast:1.4")
-//    // Toasty
-//    implementation ("com.github.GrenderG:Toasty:1.5.2")
-//
-//    implementation ("com.github.Spikeysanju:ZoomRecylerLayout:1.0")
 
 
 }

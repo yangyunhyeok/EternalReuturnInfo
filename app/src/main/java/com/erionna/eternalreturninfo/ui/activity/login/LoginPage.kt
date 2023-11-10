@@ -67,28 +67,38 @@ class LoginPage : AppCompatActivity() {
             val Email = dialogView.findViewById<EditText>(R.id.findpw_id_et).text
             val button = dialogView.findViewById<Button>(R.id.findpw_findpw_btn)
 
-            // 비밀번호찾기 이메일 전송 버튼
+            // 비밀번호 찾기 이메일 전송 버튼
             button.setOnClickListener {
                 if (Email.isNotEmpty()) {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    Email.toString() + R.string.login_lostpw_success,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MotionToast.darkColorToast(
+                                    this, "", Email.toString() + getString(R.string.login_success),
+                                    MotionToastStyle.SUCCESS,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
                             } else {
-                                Toast.makeText(
-                                    this,
-                                    R.string.login_lostpw_fail,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MotionToast.darkColorToast(
+                                    this, "CHECK", getString(R.string.login_lostpw_fail),
+                                    MotionToastStyle.WARNING,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
                             }
                         }
                     alertDialog.dismiss()
                 } else {
-                    Toast.makeText(this, R.string.login_lostpw_null, Toast.LENGTH_SHORT).show()
+                    MotionToast.darkColorToast(
+                        this, "CHECK", getString(R.string.login_lostpw_null),
+                        MotionToastStyle.WARNING,
+                        MotionToast.GRAVITY_BOTTOM,
+                        MotionToast.SHORT_DURATION,
+                        font = null
+                    )
                 }
             }
             alertDialog.show()
@@ -124,9 +134,6 @@ class LoginPage : AppCompatActivity() {
                                     font = null
                                     )
 
-//                                Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT)
-//                                    .show()
-
                                 BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
@@ -145,10 +152,6 @@ class LoginPage : AppCompatActivity() {
                         font = null
                     )
 
-//                    Toast.makeText(
-//                        this, R.string.login_fail,
-//                        Toast.LENGTH_SHORT
-//                    ).show()
                 }
             }
         } else {
@@ -160,9 +163,6 @@ class LoginPage : AppCompatActivity() {
                 font = null
             )
 
-
-
-//            Toast.makeText(this, R.string.login_fail_null, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -187,7 +187,6 @@ class LoginPage : AppCompatActivity() {
                             font = null
                         )
 
-//                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
                     }
                 }
         }
