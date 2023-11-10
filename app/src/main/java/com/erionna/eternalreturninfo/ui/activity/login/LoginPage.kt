@@ -116,7 +116,7 @@ class LoginPage : AppCompatActivity() {
                     docRef.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
-                                MotionToast.createColorToast(
+                                MotionToast.darkColorToast(
                                     this, "", getString(R.string.login_success),
                                     MotionToastStyle.SUCCESS,
                                     MotionToast.GRAVITY_BOTTOM,
@@ -137,7 +137,7 @@ class LoginPage : AppCompatActivity() {
                         .addOnFailureListener { exception ->
                         }
                 } else {
-                    MotionToast.createColorToast(
+                    MotionToast.darkColorToast(
                         this, "", getString(R.string.login_fail),
                         MotionToastStyle.ERROR,
                         MotionToast.GRAVITY_BOTTOM,

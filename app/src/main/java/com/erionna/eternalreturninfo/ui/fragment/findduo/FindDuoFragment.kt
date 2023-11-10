@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindDuoFragmentBinding
-import com.erionna.eternalreturninfo.databinding.FindDuoFragmentJyBinding
 import com.erionna.eternalreturninfo.model.ERModel
 import com.erionna.eternalreturninfo.ui.activity.chat.ChatActivity
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
@@ -34,8 +33,9 @@ class FindDuoFragment : Fragment() {
 
     }
 
-    private var _binding: FindDuoFragmentJyBinding? = null
-    private val binding get() = _binding!!
+    private var _binding: FindDuoFragmentBinding? = null
+//    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding)
     private lateinit var mDbRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
     private var mUID = ""
@@ -79,7 +79,7 @@ class FindDuoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FindDuoFragmentJyBinding.inflate(inflater, container, false)
+        _binding = FindDuoFragmentBinding.inflate(inflater, container, false)
         mAuth = FirebaseAuth.getInstance()
         mDbRef = FirebaseDatabase.getInstance().reference
         mUID = mAuth.currentUser?.uid ?: ""
@@ -88,6 +88,13 @@ class FindDuoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+//        binding.findduoRecyclerview.adapter = adapter
+//        initView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
         initView()
@@ -100,11 +107,11 @@ class FindDuoFragment : Fragment() {
 
     private fun initView() = with(binding) {
         findduoPopupWindow = FindduoPopupWindow(requireContext())
-//        binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
-        binding.findduoText2.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
+        binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
         adapter.notifyDataSetChanged()
         loadAllUserDataFromFirebase()
     }
+
 
     private fun loadAllUserDataFromFirebase() {
         val databasePath = "user"
