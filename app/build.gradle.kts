@@ -119,5 +119,7 @@ dependencies {
     implementation("com.github.Spikeysanju:MotionToast:1.4")
 
     //제발 바껴라...
+    implementation("com.github.skydoves:powerspinner:1.2.6")
+    implementation("com.github.skydoves:powerspinner:1.2.6")
 
 }
