@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.erionna.eternalreturninfo.BuildConfig
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.SignupInformationActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
@@ -314,7 +315,6 @@ class SignUpActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
                         val nickname = binding.signupNickNameEt.text.toString()
-
                         //수정 : 로그인한 사람 닉네임 가져오기
                         val userID_call = RetrofitInstance.searchUserIDApi.getUserByNickname(Constants.MAIN_APIKEY, nickname)
                         val userID_response = userID_call.execute()
