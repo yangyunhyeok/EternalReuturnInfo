@@ -2,11 +2,14 @@ package com.erionna.eternalreturninfo.ui.fragment.myprofile
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +18,18 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.Spinner
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
-import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.ui.activity.login.LoginPage
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
-import com.erionna.eternalreturninfo.ui.adapter.board.BoardMyProfileRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyProfileViewPagerAdapter
-import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +40,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.skydoves.powermenu.CircularEffect
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 
 class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
@@ -102,130 +107,26 @@ class MyProfileFragment : Fragment() {
         })
 
         binding.myprofileBtnSetting.setOnClickListener {
-            val popup = PopupMenu(binding.root.context, binding.myprofileBtnSetting) // View 변경
-            popup.menuInflater.inflate(R.menu.menu_myprofile, popup.menu)
-            popup.setOnMenuItemClickListener { menu ->
-                when (menu.itemId) {
-                    R.id.menu_myprofile_update -> {
-
-                        val dialogView =
-                            layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
-                        val alertDialog = AlertDialog.Builder(requireActivity())
-                            .setView(dialogView)
-                            .create()
-
-                        val characterSpinner =
-                            dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
-                        val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
-                        val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
-                        val characterlist = resources.getStringArray(R.array.character)
-
-                        val adapter = ArrayAdapter<String>(
-                            requireContext(),
-                            R.layout.signup_spinner,
-                            R.id.spinner_tv,
-                            characterlist
-                        )
-
-                        var selectCharacter = characterlist[0]
-                        characterSpinner.adapter = adapter
-
-                        characterSpinner.onItemSelectedListener =
-                            object : AdapterView.OnItemSelectedListener {
-                                override fun onItemSelected(
-                                    parent: AdapterView<*>?,
-                                    view: View?,
-                                    position: Int,
-                                    id: Long
-                                ) {
-                                    selectCharacter = characterlist[position]
-                                }
-
-                                override fun onNothingSelected(parent: AdapterView<*>?) {
-                                }
-                            }
-                        // 프로필 변경버튼
-                        button.setOnClickListener {
-                            FirebaseFirestore.getInstance()
-                                .collection("EternalReturnInfo")
-                                .document(auth!!.uid!!)
-                                .update(
-                                    mapOf(
-                                        "character" to selectCharacter
-                                    )
-                                )
-                            database.child("user").child(auth!!.uid!!).updateChildren(
-                                mapOf(
-                                    "character" to selectCharacter
-                                )
-                            )
-                            alertDialog.dismiss()
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                var uid = auth?.uid.toString()
-                                Patch(uid)
-                            }, 2000)
-                        }
-
-                        alertDialog.show()
-
-                    }
-
-                    R.id.menu_logout -> {
-                        Firebase.auth.signOut()
-                        var intent = Intent(activity, LoginPage::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
-                    }
-
-                    R.id.menu_withdraw -> {
-                        val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
-                        val deleteDialog = AlertDialog.Builder(requireActivity())
-                            .setView(deleteDialogView)
-                            .create()
-
-                        var yesBtn = deleteDialogView.findViewById<Button>(R.id.delete_yes_btn)
-                        var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
-
-                        yesBtn.setOnClickListener {
-                            email = auth!!.currentUser?.email
-                            // storage 인스턴스 생성
-                            val storage = Firebase.storage
-                            // storage 참조
-                            val storageRef = storage.getReference("image")
-                            // storage에서 삭제 할 파일명
-                            val fileName = email.toString()
-                            Log.d("스토리지", fileName)
-                            val mountainsRef = storageRef.child("${fileName}.jpg")
-                            mountainsRef.delete()
-                            database.child("user").child(auth!!.uid!!).removeValue()
-
-                            FirebaseFirestore.getInstance()
-                                .collection("EternalReturnInfo")
-                                .document(auth!!.uid!!)
-                                .delete()
-                            val user = Firebase.auth.currentUser!!
-                            user.delete()
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        Log.d("계정삭제", "User account deleted.")
-                                    }
-                                }
-                            deleteDialog.dismiss()
-                            var intent = Intent(activity, LoginPage::class.java)
-                            (context as MainActivity).finish()
-                            startActivity(intent)
-                        }
-                        noBtn.setOnClickListener {
-                            deleteDialog.dismiss()
-                        }
-                        deleteDialog.show()
-                    }
-                }
-                false
-            }
-            popup.show()
+            val powerMenu = PowerMenu.Builder(requireContext())
+                .addItem(PowerMenuItem("프로필 수정"))
+                .addItem(PowerMenuItem("로그아웃"))
+                .addItem(PowerMenuItem("회원 탈퇴"))
+                .setMenuRadius(20f) // sets the corner radius.
+                .setTextSize(18)
+                .setWidth(430)
+                .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+//                .setTextGravity(Gravity.CENTER)
+//                .setDivider(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.darkgray)))
+//                .setDividerHeight(4)
+                .setMenuColor(ContextCompat.getColor(requireContext(), R.color.darkgray))
+                .setSelectedMenuColor(ContextCompat.getColor(requireContext(), R.color.black))
+                .setOnMenuItemClickListener(onMenuItemClickListener)
+                .setLifecycleOwner(viewLifecycleOwner)
+                .setCircularEffect(CircularEffect.BODY)
+                .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+                .build()
+                .showAsDropDown(it)
         }
-
     }
 
     private fun setOnClickListener() {
@@ -302,5 +203,123 @@ class MyProfileFragment : Fragment() {
             .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
 
+    // 팝업메뉴 onClick 리스너
+    private val onMenuItemClickListener = object : OnMenuItemClickListener<PowerMenuItem> {
+        override fun onItemClick(position: Int, item: PowerMenuItem) {
+            when (position) {
+                // 0 : 프로필수정,   1 : 로그아웃,   2 : 회원탈퇴
+                0 -> {
+                    val dialogView =
+                        layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
+                    val alertDialog = AlertDialog.Builder(requireActivity())
+                        .setView(dialogView)
+                        .create()
+
+                    val characterSpinner =
+                        dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
+                    val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
+                    val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
+                    val characterlist = resources.getStringArray(R.array.character)
+
+                    val adapter = ArrayAdapter<String>(
+                        requireContext(),
+                        R.layout.signup_spinner,
+                        R.id.spinner_tv,
+                        characterlist
+                    )
+
+                    var selectCharacter = characterlist[0]
+                    characterSpinner.adapter = adapter
+
+                    characterSpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                selectCharacter = characterlist[position]
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                            }
+                        }
+                    // 프로필 변경버튼
+                    button.setOnClickListener {
+                        FirebaseFirestore.getInstance()
+                            .collection("EternalReturnInfo")
+                            .document(auth!!.uid!!)
+                            .update(
+                                mapOf(
+                                    "character" to selectCharacter
+                                )
+                            )
+                        database.child("user").child(auth!!.uid!!).updateChildren(
+                            mapOf(
+                                "character" to selectCharacter
+                            )
+                        )
+                        alertDialog.dismiss()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            var uid = auth?.uid.toString()
+                            Patch(uid)
+                        }, 2000)
+                    }
+
+                    alertDialog.show()
+                }
+                1 -> {
+                    Firebase.auth.signOut()
+                    var intent = Intent(activity, LoginPage::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                else -> {
+                    val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
+                    val deleteDialog = AlertDialog.Builder(requireActivity())
+                        .setView(deleteDialogView)
+                        .create()
+
+                    var yesBtn = deleteDialogView.findViewById<Button>(R.id.delete_yes_btn)
+                    var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
+
+                    yesBtn.setOnClickListener {
+                        email = auth!!.currentUser?.email
+                        // storage 인스턴스 생성
+                        val storage = Firebase.storage
+                        // storage 참조
+                        val storageRef = storage.getReference("image")
+                        // storage에서 삭제 할 파일명
+                        val fileName = email.toString()
+                        Log.d("스토리지", fileName)
+                        val mountainsRef = storageRef.child("${fileName}.jpg")
+                        mountainsRef.delete()
+                        database.child("user").child(auth!!.uid!!).removeValue()
+
+                        FirebaseFirestore.getInstance()
+                            .collection("EternalReturnInfo")
+                            .document(auth!!.uid!!)
+                            .delete()
+                        val user = Firebase.auth.currentUser!!
+                        user.delete()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Log.d("계정삭제", "User account deleted.")
+                                }
+                            }
+                        deleteDialog.dismiss()
+                        var intent = Intent(activity, LoginPage::class.java)
+                        (context as MainActivity).finish()
+                        startActivity(intent)
+                    }
+                    noBtn.setOnClickListener {
+                        deleteDialog.dismiss()
+                    }
+                    deleteDialog.show()
+                }
+            }
+        }
+    }
 
 }

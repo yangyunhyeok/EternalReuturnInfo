@@ -32,6 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import www.sanju.motiontoast.MotionToast
+import www.sanju.motiontoast.MotionToastStyle
 
 class SignUpPage : AppCompatActivity() {
     private lateinit var binding: SignupInformationActivityBinding
@@ -151,10 +153,15 @@ class SignUpPage : AppCompatActivity() {
                         ?.addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 BoardSingletone.Login()
-                                Toast.makeText(
-                                    this, "계정 생성 완료.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+
+                                MotionToast.darkColorToast(
+                                    this, "", "계정 생성 완료",
+                                    MotionToastStyle.SUCCESS,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
+
                                 var baseImage =
                                     "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
                                 setDocument(
@@ -183,20 +190,41 @@ class SignUpPage : AppCompatActivity() {
                                 startActivity(intent)
                                 finish()
                             } else {
-                                Toast.makeText(
-                                    this, "계정 생성 실패",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MotionToast.darkColorToast(
+                                    this, "", "계정 생성 실패",
+                                    MotionToastStyle.ERROR,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
                             }
                         }
                 } else {
-                    Toast.makeText(this, "중복된 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                    MotionToast.darkColorToast(
+                        this, "CHECK", "중복된 닉네임입니다.",
+                        MotionToastStyle.WARNING,
+                        MotionToast.GRAVITY_BOTTOM,
+                        MotionToast.SHORT_DURATION,
+                        font = null
+                    )
                 }
             } else {
-                Toast.makeText(this, "같은 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show()
+                MotionToast.darkColorToast(
+                    this, "CHECK", "같은 비밀번호를 입력하세요",
+                    MotionToastStyle.WARNING,
+                    MotionToast.GRAVITY_BOTTOM,
+                    MotionToast.SHORT_DURATION,
+                    font = null
+                )
             }
         } else {
-            Toast.makeText(this, "회원가입 정보를 입력하세요", Toast.LENGTH_SHORT).show()
+            MotionToast.darkColorToast(
+                this, "CHECK", "회원가입 정보를 입력하세요",
+                MotionToastStyle.WARNING,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.SHORT_DURATION,
+                font = null
+            )
         }
     }
 
@@ -208,7 +236,13 @@ class SignUpPage : AppCompatActivity() {
             .addOnSuccessListener {
             }
             .addOnFailureListener {
-                Toast.makeText(this, "닉네임 값 저장 실패", Toast.LENGTH_SHORT).show()
+                MotionToast.darkColorToast(
+                    this, "ERROR", "닉네임 값 저장 실패",
+                    MotionToastStyle.ERROR,
+                    MotionToast.GRAVITY_BOTTOM,
+                    MotionToast.SHORT_DURATION,
+                    font = null
+                )
             }
     }
 
