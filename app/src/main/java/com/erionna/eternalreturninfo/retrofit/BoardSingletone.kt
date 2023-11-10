@@ -11,9 +11,14 @@ import com.google.firebase.database.ktx.getValue
 object BoardSingletone {
 
     private var loginUser: ERModel = ERModel()
+    private var seasonID: String = ""
 
     fun LoginUser(): ERModel {
         return loginUser
+    }
+
+    fun seasonID(): String{
+        return seasonID
     }
 
     fun manager(): ERModel{
@@ -43,6 +48,24 @@ object BoardSingletone {
             })
         }
 
+        FBRef.seasonRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                if (snapshot.exists()) {
+                    val season = snapshot.getValue<String>()
+                    if (season != null) {
+                        seasonID = season
+                        Log.d("seasonID", season)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
     }
+
 
 }

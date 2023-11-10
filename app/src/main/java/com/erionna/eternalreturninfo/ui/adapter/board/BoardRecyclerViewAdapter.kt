@@ -1,21 +1,17 @@
 package com.erionna.eternalreturninfo.ui.adapter.board
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.erionna.eternalreturninfo.R
-import com.erionna.eternalreturninfo.databinding.BoardMyProfileRvItemBinding
 import com.erionna.eternalreturninfo.databinding.BoardRvItemBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.model.ERModel
-import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -107,8 +103,6 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
 
             boardPostTvTitle.text = item.title
 
-
-//            boardPostTvDate.text = formatTimeOrDate(item.date)
             boardPostTvContent.text = item.content
 
             if(item.comments.size == 0){

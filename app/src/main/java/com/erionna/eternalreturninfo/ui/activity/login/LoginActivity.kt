@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
 
         //회원가입 버튼
         binding.loginSignupBtn.setOnClickListener {
-            val intent = Intent(this, SignUpPage::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 
@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
                                     MotionToast.GRAVITY_BOTTOM,
                                     MotionToast.SHORT_DURATION,
                                     font = null
-                                    )
+                                )
 
                                 BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)

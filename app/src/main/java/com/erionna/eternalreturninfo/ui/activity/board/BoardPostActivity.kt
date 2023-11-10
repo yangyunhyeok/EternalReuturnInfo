@@ -36,7 +36,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BoardPost : AppCompatActivity() {
+class BoardPostActivity : AppCompatActivity() {
 
     private lateinit var binding: BoardPostActivityBinding
 
@@ -83,7 +83,7 @@ class BoardPost : AppCompatActivity() {
 
 
         boardPostRvComment.adapter = listAdapter
-        boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPost)
+        boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPostActivity)
 
         id = intent.getStringExtra("ID") ?: ""
 
@@ -132,7 +132,7 @@ class BoardPost : AppCompatActivity() {
                                                 when (position) {
                                                     // 0 : 수정,   1 : 삭제
                                                     0 -> {
-                                                        val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
+                                                        val updateIntent = Intent(this@BoardPostActivity, BoardUpdateActivity::class.java)
                                                         updateIntent.putExtra("updateBoard", board)
                                                         startActivity(updateIntent)
                                                     }
@@ -147,16 +147,16 @@ class BoardPost : AppCompatActivity() {
                                         }
 
 
-                                        val powerMenu = PowerMenu.Builder(this@BoardPost)
+                                        val powerMenu = PowerMenu.Builder(this@BoardPostActivity)
                                             .addItem(PowerMenuItem("수정"))
                                             .addItem(PowerMenuItem("삭제"))
                                             .setMenuRadius(20f) // sets the corner radius.
                                             .setTextSize(18)
                                             .setWidth(400)
 //                                    .setTextGravity(Gravity.CENTER)
-                                            .setTextColor(ContextCompat.getColor(this@BoardPost, R.color.white))
-                                            .setMenuColor(ContextCompat.getColor(this@BoardPost, R.color.darkgray))
-                                            .setSelectedMenuColor(ContextCompat.getColor(this@BoardPost, R.color.black))
+                                            .setTextColor(ContextCompat.getColor(this@BoardPostActivity, R.color.white))
+                                            .setMenuColor(ContextCompat.getColor(this@BoardPostActivity, R.color.darkgray))
+                                            .setSelectedMenuColor(ContextCompat.getColor(this@BoardPostActivity, R.color.black))
                                             .setOnMenuItemClickListener(onMenuItemClickListener)
 //                                            .setLifecycleOwner(viewLifecycleOwner)
                                             .setCircularEffect(CircularEffect.BODY)
@@ -169,11 +169,11 @@ class BoardPost : AppCompatActivity() {
                                     boardPostIbMenu.visibility = View.INVISIBLE
 
                                     boardPostIbProfile.setOnClickListener {
-                                        val customDialog = BoardDialog(this@BoardPost, user?.name ?: "",object : DialogListener {
+                                        val customDialog = BoardDialog(this@BoardPostActivity, user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
                                                 startActivity(
                                                     ChatActivity.newIntent(
-                                                        this@BoardPost,
+                                                        this@BoardPostActivity,
                                                         ERModel(
                                                             uid = user?.uid,
                                                             profilePicture = user?.profilePicture,
@@ -283,7 +283,7 @@ class BoardPost : AppCompatActivity() {
     }
 
     private fun initModel() = with(binding) {
-        boardViewModel.commentList.observe(this@BoardPost){ commentList ->
+        boardViewModel.commentList.observe(this@BoardPostActivity){ commentList ->
             listAdapter.submitList(commentList)
             boardPostBtnComment.text = commentList.size.toString()
         }

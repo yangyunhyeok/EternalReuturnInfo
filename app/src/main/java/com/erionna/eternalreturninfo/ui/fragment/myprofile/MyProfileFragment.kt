@@ -27,7 +27,7 @@ import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
-import com.erionna.eternalreturninfo.ui.activity.login.LoginPage
+import com.erionna.eternalreturninfo.ui.activity.login.LoginActivity
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
 import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyProfileViewPagerAdapter
 import com.google.android.material.appbar.AppBarLayout
@@ -271,7 +271,7 @@ class MyProfileFragment : Fragment() {
                 }
                 1 -> {
                     Firebase.auth.signOut()
-                    var intent = Intent(activity, LoginPage::class.java)
+                    var intent = Intent(activity, LoginActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
                 }
@@ -309,7 +309,7 @@ class MyProfileFragment : Fragment() {
                                 }
                             }
                         deleteDialog.dismiss()
-                        var intent = Intent(activity, LoginPage::class.java)
+                        var intent = Intent(activity, LoginActivity::class.java)
                         (context as MainActivity).finish()
                         startActivity(intent)
                     }
