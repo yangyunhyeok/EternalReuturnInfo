@@ -45,7 +45,6 @@ class FindDuoFragment : Fragment() {
         FindduoAdapter(
             requireContext(),
             onClickUser = { position, item ->
-                Log.d("choco5733", "$item")
                 if (item.uid != mAuth.uid) {
                     val customDialog = BoardDialog(requireContext(), item.name ?: "", object :
                         DialogListener {
@@ -87,6 +86,13 @@ class FindDuoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        //binding.findduoRecyclerview.adapter = adapter
+        //initView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         binding.findduoRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.findduoRecyclerview.adapter = adapter
         initView()
@@ -99,7 +105,7 @@ class FindDuoFragment : Fragment() {
 
     private fun initView() = with(binding) {
         findduoPopupWindow = FindduoPopupWindow(requireContext())
-        binding.findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
+        findduoRegisterBtn.setOnClickListener { findduoPopupWindow.showPopup(binding.root) }
         adapter.notifyDataSetChanged()
         loadAllUserDataFromFirebase()
     }
