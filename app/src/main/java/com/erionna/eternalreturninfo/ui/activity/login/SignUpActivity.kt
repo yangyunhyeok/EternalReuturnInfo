@@ -35,7 +35,7 @@ import kotlinx.coroutines.withContext
 import www.sanju.motiontoast.MotionToast
 import www.sanju.motiontoast.MotionToastStyle
 
-class SignUpPage : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: SignupInformationActivityBinding
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
@@ -67,7 +67,7 @@ class SignUpPage : AppCompatActivity() {
                         val nickname = binding.signupNickNameEt.text.toString()
 
                         //수정 : 로그인한 사람 닉네임 가져오기
-                        val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                        val userID_call = RetrofitInstance.searchUserIDApi.getUserByNickname(Constants.MAIN_APIKEY, nickname)
                         val userID_response = userID_call.execute()
 
                         if (userID_response.isSuccessful) {
@@ -76,17 +76,17 @@ class SignUpPage : AppCompatActivity() {
                             withContext(Dispatchers.Main) {
                                 if (gameResponse?.user == null) {
                                     binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color2))
+                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpActivity, R.color.highlight_color2))
                                     binding.signupTvCheckMessage.text = "닉네임이 존재하지 않습니다."
                                     signup_nickname = ""
                                 } else if(nickNameCheck == 1){
                                     binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color2))
+                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpActivity, R.color.highlight_color2))
                                     binding.signupTvCheckMessage.text = "중복된 닉네임입니다."
                                     signup_nickname = ""
                                 }else {
                                     binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpPage, R.color.highlight_color))
+                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpActivity, R.color.highlight_color))
                                     binding.signupTvCheckMessage.text = "사용가능한 닉네임입니다."
                                     signup_nickname = gameResponse.user.nickname
                                 }
@@ -166,10 +166,10 @@ class SignUpPage : AppCompatActivity() {
                                     "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
                                 setDocument(
                                     SignUpData(
-                                        Email = email,
-                                        PW = password,
-                                        NickName = nickname,
-                                        Character = character,
+                                        email = email,
+                                        pw = password,
+                                        nickName = nickname,
+                                        character = character,
                                         profile = baseImage
                                     )
                                 )

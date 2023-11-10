@@ -1,5 +1,3 @@
-import java.util.regex.Pattern.compile
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -117,6 +115,4 @@ dependencies {
 
     // MotionToast
     implementation("com.github.Spikeysanju:MotionToast:1.4")
-
-
 }

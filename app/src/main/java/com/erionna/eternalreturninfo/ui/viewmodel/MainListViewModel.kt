@@ -36,7 +36,7 @@ class MainListViewModel() : ViewModel(){
     init {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val call = RetrofitInstance.eternal_api.getNews("locale=ko_KR")
+                val call = RetrofitInstance.eternalApi.getNews("locale=ko_KR")
                 val response = call.execute()
 
                 if (response.isSuccessful) {
@@ -52,34 +52,40 @@ class MainListViewModel() : ViewModel(){
 
                     }
                 } else {
-                    println("API 요청 실패: ${response.code()}")
+                    Log.d("공지 api 응답 오류", response.message())
                 }
 
 
                 //전적 검색
                 val nickname = fetchNonNullableNickname()
 
-                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
-                val userID_response = userID_call.execute()
+                val userIDCall = RetrofitInstance.searchUserIDApi.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                val userIDResponse = userIDCall.execute()
 
-                if (userID_response.isSuccessful) {
-                    val gameResponse = userID_response.body()
-                    val userNum = gameResponse?.user?.userNum.toString()
-                    val seasonId = "19"
+                if (userIDResponse.isSuccessful) {
+                    val gameResponse = userIDResponse.body()
 
-                    val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
-                        Constants.MAIN_APIKEY, userNum, seasonId)
-                    val userstate_response = userstate_call.execute()
+                    if(gameResponse != null){
+                        val userNum = gameResponse?.user?.userNum.toString()
+                        val seasonId = BoardSingletone.seasonID()
 
-                    if (userstate_response.isSuccessful) {
-                        val userStateResponse = userstate_response.body()
-                        val user = userStateResponse?.userStats?.get(0)
+                        val userStateCall = RetrofitInstance.searchUserStateApi.getUserStats(
+                            Constants.MAIN_APIKEY, userNum, seasonId)
+                        val userStateResponse = userStateCall.execute()
 
-                        _userRecordList.postValue(user)
+                        if (userStateResponse.isSuccessful) {
+                            val userState = userStateResponse.body()
 
-                    } else {
-                        Log.d("userStateResponse", "${userstate_response}")
+                            if(userState != null){
+                                val user = userState?.userStats?.get(0)
+                                _userRecordList.postValue(user)
+                            }
+
+                        } else {
+                            Log.d("userStateResponse", "${userStateResponse}")
+                        }
                     }
+
                 }
 
             }catch (e: Exception) {
@@ -112,11 +118,14 @@ class MainListViewModel() : ViewModel(){
             if (response.isSuccessful) {
                 val youtubeVideo = response.body()!!
 
-                youtubeVideo?.items?.forEach { snippet ->
-                    val title = snippet.snippet.title
-                    val url = snippet.snippet.thumbnails.medium.url
-                    resItems.add(VideoModel(id= snippet.id.videoId, title = title, thumbnail = url,  url = "https://www.youtube.com/watch?v=${snippet.id}"))
+                if(youtubeVideo != null){
+                    youtubeVideo?.items?.forEach { snippet ->
+                        val title = snippet.snippet.title
+                        val url = snippet.snippet.thumbnails.medium.url
+                        resItems.add(VideoModel(id= snippet.id.videoId, title = title, thumbnail = url,  url = "https://www.youtube.com/watch?v=${snippet.id}"))
+                    }
                 }
+
             }else{
             }
 

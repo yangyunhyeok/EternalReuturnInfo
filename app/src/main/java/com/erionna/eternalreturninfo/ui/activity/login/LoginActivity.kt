@@ -26,7 +26,7 @@ import com.google.firebase.ktx.Firebase
 import www.sanju.motiontoast.MotionToast
 import www.sanju.motiontoast.MotionToastStyle
 
-class LoginPage : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     private lateinit var binding: LoginActivityBinding
     private lateinit var binding_: FindpwDialogBinding
     private lateinit var googlebinding: GoogleDialogBinding
@@ -67,8 +67,7 @@ class LoginPage : AppCompatActivity() {
             val Email = dialogView.findViewById<EditText>(R.id.findpw_id_et).text
             val button = dialogView.findViewById<Button>(R.id.findpw_findpw_btn)
 
-            val de = null
-            // 비밀번호 찾기 이메일 전송 버튼
+            // 비밀번호찾기 이메일 전송 버튼
             button.setOnClickListener {
                 if (Email.isNotEmpty()) {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
@@ -107,7 +106,7 @@ class LoginPage : AppCompatActivity() {
 
         //회원가입 버튼
         binding.loginSignupBtn.setOnClickListener {
-            val intent = Intent(this, SignUpPage::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 
@@ -128,7 +127,7 @@ class LoginPage : AppCompatActivity() {
                                     MotionToast.GRAVITY_BOTTOM,
                                     MotionToast.SHORT_DURATION,
                                     font = null
-                                    )
+                                )
 
                                 BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)

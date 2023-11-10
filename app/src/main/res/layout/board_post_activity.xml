@@ -82,14 +82,16 @@
 
                 <TextView
                     android:id="@+id/board_post_tv_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="32dp"
-                    android:text="제목"
+                    android:layout_marginEnd="24dp"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,7 +101,6 @@
                     android:layout_height="30dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
-                    android:src="@drawable/ic_launcher_background"
                     app:circularflow_defaultRadius="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/board_post_tv_title" />
@@ -107,13 +108,15 @@
 
                 <TextView
                     android:id="@+id/board_post_tv_user"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="게시판 관리자"
+                    android:layout_marginEnd="32dp"
+                    android:singleLine="true"
                     android:textColor="@color/light_gray"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/board_post_ib_profile"
+                    app:layout_constraintEnd_toStartOf="@+id/board_post_tv_date"
                     app:layout_constraintStart_toEndOf="@+id/board_post_ib_profile"
                     app:layout_constraintTop_toTopOf="@+id/board_post_ib_profile" />
 
@@ -122,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    android:text="2023.10.12"
+                    android:text=""
                     android:textColor="@color/light_gray"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/board_post_tv_user"
@@ -151,7 +154,7 @@
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="42dp"
                     android:lineSpacingExtra="8dp"
-                    android:text="1. 예쁜 말로 소통하기 \n \n\n\n\n\n\n"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -191,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:gravity="center"
-                    android:text="2"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -231,7 +234,6 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/ic_launcher_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

@@ -20,7 +20,7 @@ object RetrofitInstance {
         retrofit.create(YoutubeApiService::class.java)
     }
 
-    private val eternal_retrofit by lazy {
+    private val eternalRetrofit by lazy {
         val okHttpClient = OkHttpClient.Builder().addInterceptor(
             HttpLoggingInterceptor(logger = HttpLoggingInterceptor.Logger.DEFAULT).apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -34,23 +34,23 @@ object RetrofitInstance {
             .build()
     }
 
-    val eternal_api by lazy {
-        eternal_retrofit.create(ApiService::class.java)
+    val eternalApi by lazy {
+        eternalRetrofit.create(ApiService::class.java)
     }
 
-    private val user_retrofit by lazy {
+    private val userRetrofit by lazy {
         Retrofit.Builder()
             .baseUrl(Constants.MAIN_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    val search_userID_api by lazy {
-        user_retrofit.create(UserService::class.java)
+    val searchUserIDApi by lazy {
+        userRetrofit.create(UserService::class.java)
     }
 
-    val search_user_state_api by lazy {
-        user_retrofit.create(UserStatsService::class.java)
+    val searchUserStateApi by lazy {
+        userRetrofit.create(UserStatsService::class.java)
     }
 
 }
