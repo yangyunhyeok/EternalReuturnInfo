@@ -34,7 +34,7 @@ class FindDuoFragment : Fragment() {
     }
 
     private var _binding: FindDuoFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding)
     private lateinit var mDbRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
     private var mUID = ""
