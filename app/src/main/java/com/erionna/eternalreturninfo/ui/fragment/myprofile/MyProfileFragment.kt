@@ -48,6 +48,8 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
+import www.sanju.motiontoast.MotionToast
+import www.sanju.motiontoast.MotionToastStyle
 
 class MyProfileFragment : Fragment() {
     private val binding get() = _binding!!
@@ -72,7 +74,7 @@ class MyProfileFragment : Fragment() {
             .addItem(PowerMenuItem("비밀번호 변경"))
             .setMenuRadius(20f) // sets the corner radius.
             .setTextSize(18)
-            .setWidth(450)
+            .setWidth(500)
             .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             .setMenuColor(ContextCompat.getColor(requireContext(), R.color.darkgray))
             .setSelectedMenuColor(ContextCompat.getColor(requireContext(), R.color.black))
@@ -369,19 +371,22 @@ class MyProfileFragment : Fragment() {
                                 PwChange(pw, pwCheck)
                                 pwChangeDialog.dismiss()
                             } else {
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "동일한 비밀번호를 입력하세요",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MotionToast.darkColorToast(
+                                    requireActivity(), "CHECK", "동일한 비밀번호를 입력하세요",
+                                    MotionToastStyle.WARNING,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
                             }
                         } else {
-                            Toast.makeText(
-                                requireActivity(),
-                                "비밀번호를 입력하세요",
-                                Toast.LENGTH_SHORT
+                            MotionToast.darkColorToast(
+                                requireActivity(), "CHECK", "비밀번호를 입력하세요",
+                                MotionToastStyle.WARNING,
+                                MotionToast.GRAVITY_BOTTOM,
+                                MotionToast.SHORT_DURATION,
+                                font = null
                             )
-                                .show()
                         }
 
                     }
