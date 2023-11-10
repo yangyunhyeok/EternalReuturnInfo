@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +12,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erionna.eternalreturninfo.databinding.BoardRvFragmentBinding
-import com.erionna.eternalreturninfo.databinding.MyprofileBoardRvFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.activity.board.BoardDeletedActivity
-import com.erionna.eternalreturninfo.ui.activity.board.BoardPostActivity
+import com.erionna.eternalreturninfo.ui.activity.board.BoardDeleted
+import com.erionna.eternalreturninfo.ui.activity.board.BoardPost
 import com.erionna.eternalreturninfo.ui.adapter.board.BoardRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.firebase.database.DataSnapshot
@@ -33,11 +31,29 @@ class MyProfileBoardFragment : Fragment() {
 
     private val boardViewModel: BoardListViewModel by activityViewModels()
 
-    private var _binding: MyprofileBoardRvFragmentBinding? = null
+    private var _binding: BoardRvFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val listAdapter by lazy {
         BoardRecyclerViewAdapter()
+    }
+
+    private val loadBoardLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getParcelableExtra("updateBoard", BoardModel::class.java)?.let { updateBoard ->
+                    boardViewModel.updateBoard(updateBoard)
+                }
+            } else {
+                result.data?.getParcelableExtra<BoardModel>("updateBoard")?.let { updateBoard ->
+                    boardViewModel.updateBoard(updateBoard)
+                }
+            }
+
+        }else{
+
+        }
     }
 
     override fun onCreateView(
@@ -45,7 +61,7 @@ class MyProfileBoardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = MyprofileBoardRvFragmentBinding.inflate(inflater, container, false)
+        _binding = BoardRvFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,25 +78,6 @@ class MyProfileBoardFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-
-        val loadBoardLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    result.data?.getParcelableExtra("updateBoard", BoardModel::class.java)?.let { updateBoard ->
-                        boardViewModel.updateBoard(updateBoard)
-                    }
-                } else {
-                    result.data?.getParcelableExtra<BoardModel>("updateBoard")?.let { updateBoard ->
-                        boardViewModel.updateBoard(updateBoard)
-                    }
-                }
-
-            }else{
-
-            }
-        }
-
         boardNoticeRv.adapter = listAdapter
         boardNoticeRv.layoutManager = LinearLayoutManager(requireContext())
 
@@ -91,19 +88,19 @@ class MyProfileBoardFragment : Fragment() {
                     ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (!dataSnapshot.exists()) {
-                            val intent = Intent(requireContext(), BoardDeletedActivity::class.java)
+                            val intent = Intent(requireContext(), BoardDeleted::class.java)
                             startActivity(intent)
                         } else {
                             val views = boardItem.views + 1
                             FBRef.postRef.child(boardItem.id).child("views").setValue(views)
-                            val intent = Intent(requireContext(), BoardPostActivity::class.java)
+                            val intent = Intent(requireContext(), BoardPost::class.java)
                             intent.putExtra("ID", boardItem.id)
                             loadBoardLauncher.launch(intent)
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
-                        Log.d("error", "firebase data loading failed")
+                        // 데이터 읽기 실패 처리
                     }
                 })
 

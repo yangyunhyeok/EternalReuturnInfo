@@ -6,7 +6,7 @@ import coil.api.load
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.BoardDeletedActivityBinding
 
-class BoardDeletedActivity : AppCompatActivity() {
+class BoardDeleted : AppCompatActivity() {
 
     private lateinit var binding: BoardDeletedActivityBinding
     override fun onCreate(savedInstanceState: Bundle?) {

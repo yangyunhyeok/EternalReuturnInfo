@@ -36,7 +36,7 @@ class MainListViewModel() : ViewModel(){
     init {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val call = RetrofitInstance.eternalApi.getNews("locale=ko_KR")
+                val call = RetrofitInstance.eternal_api.getNews("locale=ko_KR")
                 val response = call.execute()
 
                 if (response.isSuccessful) {
@@ -52,40 +52,34 @@ class MainListViewModel() : ViewModel(){
 
                     }
                 } else {
-                    Log.d("공지 api 응답 오류", response.message())
+                    println("API 요청 실패: ${response.code()}")
                 }
 
 
                 //전적 검색
                 val nickname = fetchNonNullableNickname()
 
-                val userIDCall = RetrofitInstance.searchUserIDApi.getUserByNickname(Constants.MAIN_APIKEY, nickname)
-                val userIDResponse = userIDCall.execute()
+                val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                val userID_response = userID_call.execute()
 
-                if (userIDResponse.isSuccessful) {
-                    val gameResponse = userIDResponse.body()
+                if (userID_response.isSuccessful) {
+                    val gameResponse = userID_response.body()
+                    val userNum = gameResponse?.user?.userNum.toString()
+                    val seasonId = "19"
 
-                    if(gameResponse != null){
-                        val userNum = gameResponse?.user?.userNum.toString()
-                        val seasonId = BoardSingletone.seasonID()
+                    val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
+                        Constants.MAIN_APIKEY, userNum, seasonId)
+                    val userstate_response = userstate_call.execute()
 
-                        val userStateCall = RetrofitInstance.searchUserStateApi.getUserStats(
-                            Constants.MAIN_APIKEY, userNum, seasonId)
-                        val userStateResponse = userStateCall.execute()
+                    if (userstate_response.isSuccessful) {
+                        val userStateResponse = userstate_response.body()
+                        val user = userStateResponse?.userStats?.get(0)
 
-                        if (userStateResponse.isSuccessful) {
-                            val userState = userStateResponse.body()
+                        _userRecordList.postValue(user)
 
-                            if(userState != null){
-                                val user = userState?.userStats?.get(0)
-                                _userRecordList.postValue(user)
-                            }
-
-                        } else {
-                            Log.d("userStateResponse", "${userStateResponse}")
-                        }
+                    } else {
+                        Log.d("userStateResponse", "${userstate_response}")
                     }
-
                 }
 
             }catch (e: Exception) {
@@ -118,14 +112,11 @@ class MainListViewModel() : ViewModel(){
             if (response.isSuccessful) {
                 val youtubeVideo = response.body()!!
 
-                if(youtubeVideo != null){
-                    youtubeVideo?.items?.forEach { snippet ->
-                        val title = snippet.snippet.title
-                        val url = snippet.snippet.thumbnails.medium.url
-                        resItems.add(VideoModel(id= snippet.id.videoId, title = title, thumbnail = url,  url = "https://www.youtube.com/watch?v=${snippet.id}"))
-                    }
+                youtubeVideo?.items?.forEach { snippet ->
+                    val title = snippet.snippet.title
+                    val url = snippet.snippet.thumbnails.medium.url
+                    resItems.add(VideoModel(id= snippet.id.videoId, title = title, thumbnail = url,  url = "https://www.youtube.com/watch?v=${snippet.id}"))
                 }
-
             }else{
             }
 

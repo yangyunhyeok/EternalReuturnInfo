@@ -26,17 +26,24 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+import com.skydoves.powermenu.CircularEffect
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BoardPostActivity : AppCompatActivity() {
+class BoardPost : AppCompatActivity() {
 
     private lateinit var binding: BoardPostActivityBinding
 
     private val listAdapter by lazy {
-        BoardCommentRecyclerViewAdpater()
+        BoardCommentRecyclerViewAdpater(
+            this
+        )
     }
 
     private val boardViewModel by lazy {
@@ -58,7 +65,7 @@ class BoardPostActivity : AppCompatActivity() {
         initModel()
     }
 
-    private fun setProgressbar(isLoading:Boolean){
+    private fun progressbar(isLoading:Boolean){
 
         if(isLoading){
             binding.boardPostProgressbar.visibility = View.VISIBLE
@@ -76,19 +83,20 @@ class BoardPostActivity : AppCompatActivity() {
 
 
         boardPostRvComment.adapter = listAdapter
-        boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPostActivity)
+        boardPostRvComment.layoutManager = LinearLayoutManager(this@BoardPost)
 
         id = intent.getStringExtra("ID") ?: ""
 
         FBRef.postRef.child(id).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                setProgressbar(isLoading = true)
+                progressbar(isLoading = true)
 
                 if(snapshot.exists()){
                     board = snapshot.getValue<BoardModel>()
 
                     boardPostTvContent.text = board?.content
+//                    boardPostTvVisit.text = board?.views.toString()
 
                     if(board?.category == "공지"){
                         boardPostTvTitle.text = board?.title
@@ -106,8 +114,8 @@ class BoardPostActivity : AppCompatActivity() {
                                 val user = snapshot.getValue<ERModel>()
                                 boardPostTvUser.text = user?.name
 
-                                if(user?.profilePicture?.isNullOrEmpty() == true){
-                                    boardPostIbProfile.setImageResource(R.drawable.ic_baseimage)
+                                if(user?.profilePicture?.isEmpty() == true){
+                                    boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
                                 }else{
                                     boardPostIbProfile.load(user?.profilePicture)
                                 }
@@ -116,33 +124,56 @@ class BoardPostActivity : AppCompatActivity() {
                                     boardPostIbMenu.visibility = View.VISIBLE
 
                                     boardPostIbMenu.setOnClickListener {
-                                        val popup = PopupMenu(binding.root.context, boardPostIbMenu) // View 변경
-                                        popup.menuInflater.inflate(R.menu.menu_option_comment, popup.menu)
-                                        popup.setOnMenuItemClickListener { menu ->
-                                            when (menu.itemId) {
-                                                R.id.menu_comment_update -> {
-                                                    val updateIntent = Intent(this@BoardPostActivity, BoardUpdateActivity::class.java)
-                                                    updateIntent.putExtra("updateBoard", board)
-                                                    startActivity(updateIntent)
-                                                }
-                                                R.id.menu_comment_delete -> {
-                                                    finish()
-                                                    FBRef.postRef.child(board?.id.toString()).removeValue()
+
+                                        // 팝업메뉴 onClick 리스너
+                                        val onMenuItemClickListener = object :
+                                            OnMenuItemClickListener<PowerMenuItem> {
+                                            override fun onItemClick(position: Int, item: PowerMenuItem) {
+                                                when (position) {
+                                                    // 0 : 수정,   1 : 삭제
+                                                    0 -> {
+                                                        val updateIntent = Intent(this@BoardPost, BoardUpdate::class.java)
+                                                        updateIntent.putExtra("updateBoard", board)
+                                                        startActivity(updateIntent)
+                                                    }
+                                                    else -> {
+                                                        finish()
+
+                                                        Log.d("board.id", board?.id.toString())
+                                                        FBRef.postRef.child(board?.id.toString()).removeValue()
+                                                    }
                                                 }
                                             }
-                                            false
                                         }
-                                        popup.show()
+
+
+                                        val powerMenu = PowerMenu.Builder(this@BoardPost)
+                                            .addItem(PowerMenuItem("수정"))
+                                            .addItem(PowerMenuItem("삭제"))
+                                            .setMenuRadius(20f) // sets the corner radius.
+                                            .setTextSize(18)
+                                            .setWidth(400)
+//                                    .setTextGravity(Gravity.CENTER)
+                                            .setTextColor(ContextCompat.getColor(this@BoardPost, R.color.white))
+                                            .setMenuColor(ContextCompat.getColor(this@BoardPost, R.color.darkgray))
+                                            .setSelectedMenuColor(ContextCompat.getColor(this@BoardPost, R.color.black))
+                                            .setOnMenuItemClickListener(onMenuItemClickListener)
+//                                            .setLifecycleOwner(viewLifecycleOwner)
+                                            .setCircularEffect(CircularEffect.BODY)
+                                            .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+                                            .build()
+                                            .showAsDropDown(it)
+
                                     }
                                 } else {
                                     boardPostIbMenu.visibility = View.INVISIBLE
 
                                     boardPostIbProfile.setOnClickListener {
-                                        val customDialog = BoardDialog(this@BoardPostActivity, user?.name ?: "",object : DialogListener {
+                                        val customDialog = BoardDialog(this@BoardPost, user?.name ?: "",object : DialogListener {
                                             override fun onOKButtonClicked() {
                                                 startActivity(
                                                     ChatActivity.newIntent(
-                                                        this@BoardPostActivity,
+                                                        this@BoardPost,
                                                         ERModel(
                                                             uid = user?.uid,
                                                             profilePicture = user?.profilePicture,
@@ -183,7 +214,7 @@ class BoardPostActivity : AppCompatActivity() {
                     }
                 }
 
-                setProgressbar(isLoading = false)
+                progressbar(isLoading = false)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -191,8 +222,8 @@ class BoardPostActivity : AppCompatActivity() {
 
         })
 
-        if(BoardSingletone.LoginUser().profilePicture.isNullOrEmpty()){
-            boardPostIbProfile.setImageResource(R.drawable.ic_baseimage)
+        if(BoardSingletone.LoginUser().profilePicture == null){
+            boardPostIbProfile.setImageResource(R.drawable.ic_xiuk)
         }else{
             boardPostIbCommentProfile.load(BoardSingletone.LoginUser().profilePicture)
         }
@@ -252,7 +283,7 @@ class BoardPostActivity : AppCompatActivity() {
     }
 
     private fun initModel() = with(binding) {
-        boardViewModel.commentList.observe(this@BoardPostActivity){ commentList ->
+        boardViewModel.commentList.observe(this@BoardPost){ commentList ->
             listAdapter.submitList(commentList)
             boardPostBtnComment.text = commentList.size.toString()
         }

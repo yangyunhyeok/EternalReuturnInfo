@@ -142,8 +142,6 @@ class MainFragment : Fragment() {
             binding.mainTvAverageAssiants.text = (user?.averageAssistants ?: 0).toString()
             binding.mainTvTop3.text = (percent(user?.top3) ?: 0).toString()
 
-            binding.mainPbTotalWin.setProgress(100)
-            binding.mainPbTotalGames.setProgress(100)
             binding.mainPbTop1.setProgress(percent(user?.top1)?.toInt() ?: 0)
             binding.mainPbTop2.setProgress(percent(user?.top2)?.toInt() ?: 0)
             binding.mainPbTop3.setProgress(percent(user?.top3)?.toInt() ?: 0)

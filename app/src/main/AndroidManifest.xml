@@ -22,19 +22,19 @@
             android:name=".ui.activity.main.WebView"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.board.BoardDeletedActivity"
+            android:name=".ui.activity.board.BoardDeleted"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.board.BoardSearchActivity"
+            android:name=".ui.activity.board.BoardSearch"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.board.BoardUpdateActivity"
+            android:name=".ui.activity.board.BoardUpdate"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.board.BoardPostActivity"
+            android:name=".ui.activity.board.BoardPost"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.board.BoardAddActivity"
+            android:name=".ui.activity.board.BoardAdd"
             android:exported="false" />
         <activity
             android:name=".ui.activity.chat.ChatActivity"
@@ -52,7 +52,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.login.SignUpActivity"
+            android:name=".ui.activity.login.SignUpImagePage"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.login.SignUpPage"
             android:exported="false" />
         <activity
             android:name=".ui.activity.login.LoginPage"
