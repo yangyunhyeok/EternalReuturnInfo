@@ -1,6 +1,7 @@
 package com.erionna.eternalreturninfo.ui.adapter.board
 
 import android.content.Context
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,23 @@ class BoardCommentRecyclerViewAdpater(
     private var onDeleteItemClickListener: OnItemClickListener? = null
     private var onUpdateItemClickListener: OnItemClickListener? = null
 
+    private val refPowerMenu: PowerMenu by lazy {
+        PowerMenu.Builder(context)
+            .addItem(PowerMenuItem("수정"))
+            .addItem(PowerMenuItem("삭제"))
+            .setMenuRadius(20f) // sets the corner radius.
+            .setTextSize(18)
+            .setWidth(330)
+            .setTextGravity(Gravity.CENTER)
+            .setTextColor(ContextCompat.getColor(context, R.color.white))
+            .setMenuColor(ContextCompat.getColor(context, R.color.darkgray))
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.black))
+            .setCircularEffect(CircularEffect.BODY)
+            .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+            .build()
+    }
+
+
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.onDeleteItemClickListener = listener
         this.onUpdateItemClickListener = listener
@@ -106,40 +124,25 @@ class BoardCommentRecyclerViewAdpater(
                             boardCommentIbMenu.visibility = View.VISIBLE
                             boardCommentIbMenu.setOnClickListener {
 
-
                                 // 팝업메뉴 onClick 리스너
                                 val onMenuItemClickListener = object : OnMenuItemClickListener<PowerMenuItem> {
                                     override fun onItemClick(position: Int, item2: PowerMenuItem) {
                                         when (position) {
                                             // 0 : 수정,   1 : 삭제
                                             0 -> {
+                                                refPowerMenu.dismiss()
                                                 onUpdateItemClickListener?.onUpdateItemClick(item, adapterPosition)
                                             }
                                             else -> {
+                                                refPowerMenu.dismiss()
                                                 onDeleteItemClickListener?.onDeleteItemClick(item, adapterPosition)
                                             }
                                         }
                                     }
                                 }
 
-                                val powerMenu = PowerMenu.Builder(context)
-                                    .addItem(PowerMenuItem("수정"))
-                                    .addItem(PowerMenuItem("삭제"))
-                                    .setMenuRadius(20f) // sets the corner radius.
-                                    .setTextSize(18)
-                                    .setWidth(400)
-//                                    .setTextGravity(Gravity.CENTER)
-                                    .setTextColor(ContextCompat.getColor(context, R.color.white))
-                                    .setMenuColor(ContextCompat.getColor(context, R.color.darkgray))
-                                    .setSelectedMenuColor(ContextCompat.getColor(context, R.color.black))
-                                    .setOnMenuItemClickListener(onMenuItemClickListener)
-//                                    .setLifecycleOwner(viewLifecycleOwner)
-                                    .setCircularEffect(CircularEffect.BODY)
-                                    .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
-                                    .build()
-                                    .showAsDropDown(it)
-//                                    .dissmiss()
-
+                                refPowerMenu.showAsDropDown(it)
+                                refPowerMenu.setOnMenuItemClickListener(onMenuItemClickListener)
                             }
                         } else {
                             boardCommentIbMenu.visibility = View.INVISIBLE
@@ -170,10 +173,8 @@ class BoardCommentRecyclerViewAdpater(
 
             })
 
-
             boardCommentTvContent.text = item.content
             boardCommentTvDate.text = formatTimeOrDate(item.date)
-
         }
 
         fun formatTimeOrDate(postTime: Long): String {

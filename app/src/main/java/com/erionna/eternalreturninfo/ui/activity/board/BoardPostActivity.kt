@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -54,6 +55,24 @@ class BoardPostActivity : AppCompatActivity() {
     private var id: String = ""
 
     private var dataload = false
+
+    private val refPowerMenu: PowerMenu by lazy {
+        PowerMenu.Builder(this@BoardPostActivity)
+            .addItem(PowerMenuItem("수정"))
+            .addItem(PowerMenuItem("삭제"))
+            .setMenuRadius(20f) // sets the corner radius.
+            .setTextSize(18)
+            .setWidth(330)
+            .setTextGravity(Gravity.CENTER)
+            .setTextColor(ContextCompat.getColor(this@BoardPostActivity, R.color.white))
+            .setMenuColor(ContextCompat.getColor(this@BoardPostActivity, R.color.darkgray))
+            .setSelectedMenuColor(ContextCompat.getColor(this@BoardPostActivity, R.color.black))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setCircularEffect(CircularEffect.BODY)
+            .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+            .build()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,46 +143,7 @@ class BoardPostActivity : AppCompatActivity() {
                                     boardPostIbMenu.visibility = View.VISIBLE
 
                                     boardPostIbMenu.setOnClickListener {
-
-                                        // 팝업메뉴 onClick 리스너
-                                        val onMenuItemClickListener = object :
-                                            OnMenuItemClickListener<PowerMenuItem> {
-                                            override fun onItemClick(position: Int, item: PowerMenuItem) {
-                                                when (position) {
-                                                    // 0 : 수정,   1 : 삭제
-                                                    0 -> {
-                                                        val updateIntent = Intent(this@BoardPostActivity, BoardUpdateActivity::class.java)
-                                                        updateIntent.putExtra("updateBoard", board)
-                                                        startActivity(updateIntent)
-                                                    }
-                                                    else -> {
-                                                        finish()
-
-                                                        Log.d("board.id", board?.id.toString())
-                                                        FBRef.postRef.child(board?.id.toString()).removeValue()
-                                                    }
-                                                }
-                                            }
-                                        }
-
-
-                                        val powerMenu = PowerMenu.Builder(this@BoardPostActivity)
-                                            .addItem(PowerMenuItem("수정"))
-                                            .addItem(PowerMenuItem("삭제"))
-                                            .setMenuRadius(20f) // sets the corner radius.
-                                            .setTextSize(18)
-                                            .setWidth(400)
-//                                    .setTextGravity(Gravity.CENTER)
-                                            .setTextColor(ContextCompat.getColor(this@BoardPostActivity, R.color.white))
-                                            .setMenuColor(ContextCompat.getColor(this@BoardPostActivity, R.color.darkgray))
-                                            .setSelectedMenuColor(ContextCompat.getColor(this@BoardPostActivity, R.color.black))
-                                            .setOnMenuItemClickListener(onMenuItemClickListener)
-//                                            .setLifecycleOwner(viewLifecycleOwner)
-                                            .setCircularEffect(CircularEffect.BODY)
-                                            .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
-                                            .build()
-                                            .showAsDropDown(it)
-
+                                        refPowerMenu.showAsDropDown(it)
                                     }
                                 } else {
                                     boardPostIbMenu.visibility = View.INVISIBLE
@@ -305,5 +285,27 @@ class BoardPostActivity : AppCompatActivity() {
         }
 
         return simpleDateFormat.format(Date(postTime))
+    }
+
+    // 팝업메뉴 onClick 리스너
+    private val onMenuItemClickListener = object :
+        OnMenuItemClickListener<PowerMenuItem> {
+        override fun onItemClick(position: Int, item: PowerMenuItem) {
+            when (position) {
+                // 0 : 수정,   1 : 삭제
+                0 -> {
+                    refPowerMenu.dismiss()
+                    val updateIntent = Intent(this@BoardPostActivity, BoardUpdateActivity::class.java)
+                    updateIntent.putExtra("updateBoard", board)
+                    startActivity(updateIntent)
+                }
+                else -> {
+                    refPowerMenu.dismiss()
+                    finish()
+                    Log.d("board.id", board?.id.toString())
+                    FBRef.postRef.child(board?.id.toString()).removeValue()
+                }
+            }
+        }
     }
 }
