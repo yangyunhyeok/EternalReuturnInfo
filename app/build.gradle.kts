@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,6 +13,9 @@ android {
     namespace = "com.erionna.eternalreturninfo"
     compileSdk = 34
 
+    val localProperties = Properties()
+    localProperties.load(FileInputStream(rootProject.file("local.properties")))
+
     defaultConfig {
         applicationId = "com.erionna.eternalreturninfo"
         minSdk = 24
@@ -18,6 +24,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "google_Token",localProperties.getProperty("googleToken"))
+        buildConfigField("String", "MAIN_APIKEY", localProperties.getProperty("mainAPIKEY"))
     }
 
     buildTypes {
@@ -40,7 +48,9 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
+
 }
 
 dependencies {
@@ -52,12 +62,16 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
     // CircleView
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
     // Converter ( JSON 타입 결과를 객체로 매핑 )
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     // okhttp3
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
@@ -102,4 +116,12 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
+    // spinner
+    implementation ("com.github.skydoves:powerspinner:1.2.6")
+
+    // powerMenu
+    implementation ("com.github.skydoves:powermenu:2.2.4")
+
+    // MotionToast
+    implementation("com.github.Spikeysanju:MotionToast:1.4")
 }

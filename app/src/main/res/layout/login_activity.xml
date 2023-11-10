@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".ui.activity.LoginPage">
+    tools:context=".ui.activity.login.LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -51,6 +51,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/shape_login_btn"
+                android:text=""
                 android:ems="16"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
@@ -80,6 +81,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/shape_login_btn"
+                android:text=""
                 android:ems="16"
                 android:inputType="textPassword"
                 android:padding="12dp"
@@ -104,27 +106,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_PW_et" />
 
-
-            <Button
-                android:id="@+id/login_snsLogin_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="200dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:background="@drawable/shape_google_login_btn"
-                android:text="구글 로그인"
-                android:textColor="#00E2FF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_login_btn" />
-
-
             <Button
                 android:id="@+id/login_lost_btn"
                 android:layout_width="wrap_content"
@@ -140,7 +121,7 @@
 
             <Button
                 android:id="@+id/login_signup_btn"
-                android:layout_width="60dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@null"
@@ -149,6 +130,11 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/login_login_btn"
                 app:layout_constraintTop_toBottomOf="@+id/login_login_btn" />
+
+
+
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

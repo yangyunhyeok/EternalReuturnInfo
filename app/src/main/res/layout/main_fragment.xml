@@ -29,8 +29,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -40,7 +42,7 @@
                 android:id="@+id/constraintLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:background="@color/dark_navy"
+                android:background="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -87,7 +89,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout6"
                 android:layout_width="match_parent"
-                android:layout_height="330dp"
+                android:layout_height="340dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -116,7 +118,7 @@
                     android:layout_marginTop="8dp"
                     android:text="0위 (상위 0%)"
                     android:textColor="@color/light_gray"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_tv_rp" />
@@ -142,7 +144,7 @@
                         android:layout_marginTop="16dp"
                         android:text="전체 WIN"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -153,7 +155,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_total_win"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_total_win" />
 
@@ -164,7 +166,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_average_kill"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_average_kill" />
 
@@ -176,7 +178,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_average_assiants" />
 
@@ -187,7 +189,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_top3"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_top3" />
 
@@ -198,7 +200,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_top2"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_top2" />
 
@@ -209,7 +211,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_average_rank"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_average_rank" />
 
@@ -220,7 +222,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_total_games"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_total_games" />
 
@@ -231,7 +233,7 @@
                         android:layout_marginTop="4dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_top1"
                         app:layout_constraintTop_toBottomOf="@+id/main_pb_top1" />
 
@@ -242,7 +244,7 @@
                         android:layout_marginTop="24dp"
                         android:text="평균 킬"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_average_kill"
                         app:layout_constraintTop_toBottomOf="@+id/main_tv_total_win" />
 
@@ -254,7 +256,7 @@
                         android:layout_marginTop="24dp"
                         android:text="평균 어시"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/main_tv_average_kill" />
 
@@ -265,7 +267,7 @@
                         android:layout_marginTop="24dp"
                         android:text="TOP 3"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_top3"
                         app:layout_constraintTop_toBottomOf="@+id/main_tv_top2" />
 
@@ -288,7 +290,7 @@
                         android:layout_marginTop="16dp"
                         android:text="승률"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_top1"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -299,7 +301,7 @@
                         android:layout_marginTop="24dp"
                         android:text="TOP 2"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_top2"
                         app:layout_constraintTop_toBottomOf="@+id/main_tv_top1" />
 
@@ -310,7 +312,7 @@
                         android:layout_marginTop="16dp"
                         android:text="게임 수"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_total_games"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -321,7 +323,7 @@
                         android:layout_marginTop="24dp"
                         android:text="평균 순위"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/main_pb_average_rank"
                         app:layout_constraintTop_toBottomOf="@+id/main_tv_total_games" />
 
@@ -333,8 +335,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:max="100"
-                        android:progress="100"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintBottom_toTopOf="@+id/main_tv_total_win"
                         app:layout_constraintEnd_toStartOf="@+id/main_pb_top1"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -351,7 +353,7 @@
                         android:layout_marginTop="8dp"
                         android:max="3"
                         android:progress="0"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintEnd_toStartOf="@+id/main_pb_top2"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -366,7 +368,7 @@
                         android:layout_marginTop="8dp"
                         android:max="5"
                         android:progress="0"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintEnd_toStartOf="@+id/main_pb_top3"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -381,7 +383,7 @@
                         android:layout_marginTop="8dp"
                         android:max="100"
                         android:progress="0"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintEnd_toStartOf="@+id/progressBar9"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/main_pb_average_assiants"
@@ -397,7 +399,7 @@
                         android:layout_marginEnd="16dp"
                         android:max="100"
                         android:progress="70"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0"
@@ -413,7 +415,7 @@
                         android:layout_marginTop="8dp"
                         android:max="100"
                         android:progress="0"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintEnd_toStartOf="@+id/main_pb_average_rank"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/main_pb_average_kill"
@@ -428,8 +430,9 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:max="8"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:scaleX="-1"
+                        android:progress="8"
+                        android:progressDrawable="@drawable/shape_reverse_progressbar"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toEndOf="@+id/main_pb_top2"
@@ -444,7 +447,7 @@
                         android:layout_marginTop="8dp"
                         android:max="100"
                         android:progress="0"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintBottom_toTopOf="@+id/main_tv_top1"
                         app:layout_constraintEnd_toStartOf="@+id/main_pb_total_games"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -461,8 +464,8 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:max="100"
-                        android:progress="100"
-                        android:progressDrawable="@drawable/custom_progressbar"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/shape_progressbar"
                         app:layout_constraintBottom_toTopOf="@+id/main_tv_total_games"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        style="@style/MenuTextStyle"
+        android:id="@+id/menu_myprofile_update"
+        android:title="프로필 수정"
+        />
+
+    <item
+        style="@style/MenuTextStyle"
+        android:id="@+id/menu_logout"
+        android:title="로그아웃"
+        />
+    <item
+        style="@style/MenuTextStyle"
+        android:id="@+id/menu_withdraw"
+        android:title="회원탈퇴"
+        />
+    <item
+        style="@style/MenuTextStyle"
+        android:id="@+id/menu_pwchange"
+        android:title="비밀번호 변경"
+        />
+</menu>

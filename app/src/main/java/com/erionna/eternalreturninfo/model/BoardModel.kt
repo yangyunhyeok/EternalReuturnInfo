@@ -9,6 +9,7 @@ import java.util.Date
 @Parcelize
 data class BoardModel (
     val id: String = "",
+    val category:String = "",
     val title: String = "",
     val content: String = "",
     val author: String? = "",
