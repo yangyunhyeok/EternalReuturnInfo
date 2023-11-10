@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.FindpwDialogBinding
 import com.erionna.eternalreturninfo.databinding.GoogleDialogBinding
@@ -22,6 +23,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import www.sanju.motiontoast.MotionToast
+import www.sanju.motiontoast.MotionToastStyle
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: LoginActivityBinding
@@ -41,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         binding_ = FindpwDialogBinding.inflate(layoutInflater)
         googlebinding = GoogleDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         //구글로그인 기본 설정
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,22 +73,32 @@ class LoginActivity : AppCompatActivity() {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(Email.toString())
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    Email.toString() + R.string.login_lostpw_success,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MotionToast.darkColorToast(
+                                    this, "", Email.toString() + getString(R.string.login_success),
+                                    MotionToastStyle.SUCCESS,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
                             } else {
-                                Toast.makeText(
-                                    this,
-                                    R.string.login_lostpw_fail,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                MotionToast.darkColorToast(
+                                    this, "CHECK", getString(R.string.login_lostpw_fail),
+                                    MotionToastStyle.WARNING,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                )
                             }
                         }
                     alertDialog.dismiss()
                 } else {
-                    Toast.makeText(this, R.string.login_lostpw_null, Toast.LENGTH_SHORT).show()
+                    MotionToast.darkColorToast(
+                        this, "CHECK", getString(R.string.login_lostpw_null),
+                        MotionToastStyle.WARNING,
+                        MotionToast.GRAVITY_BOTTOM,
+                        MotionToast.SHORT_DURATION,
+                        font = null
+                    )
                 }
             }
             alertDialog.show()
@@ -92,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
 
         //회원가입 버튼
         binding.loginSignupBtn.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
+            val intent = Intent(this, SignUpPage::class.java)
             startActivity(intent)
         }
 
@@ -107,8 +121,14 @@ class LoginActivity : AppCompatActivity() {
                     docRef.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
-                                Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT)
-                                    .show()
+                                MotionToast.darkColorToast(
+                                    this, "", getString(R.string.login_success),
+                                    MotionToastStyle.SUCCESS,
+                                    MotionToast.GRAVITY_BOTTOM,
+                                    MotionToast.SHORT_DURATION,
+                                    font = null
+                                    )
+
                                 BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
@@ -119,14 +139,25 @@ class LoginActivity : AppCompatActivity() {
                         .addOnFailureListener { exception ->
                         }
                 } else {
-                    Toast.makeText(
-                        this, R.string.login_fail,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    MotionToast.darkColorToast(
+                        this, "", getString(R.string.login_fail),
+                        MotionToastStyle.ERROR,
+                        MotionToast.GRAVITY_BOTTOM,
+                        MotionToast.SHORT_DURATION,
+                        font = null
+                    )
+
                 }
             }
         } else {
-            Toast.makeText(this, R.string.login_fail_null, Toast.LENGTH_SHORT).show()
+            MotionToast.createColorToast(
+                this, "", getString(R.string.login_fail),
+                MotionToastStyle.ERROR,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.SHORT_DURATION,
+                font = null
+            )
+
         }
     }
 
@@ -143,7 +174,14 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                        MotionToast.createColorToast(
+                            this, "", task.exception?.message.toString(),
+                            MotionToastStyle.ERROR,
+                            MotionToast.GRAVITY_BOTTOM,
+                            MotionToast.SHORT_DURATION,
+                            font = null
+                        )
+
                     }
                 }
         }

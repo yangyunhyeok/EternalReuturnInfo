@@ -204,7 +204,7 @@ class FindduoAdapter(
                 try {
                     val nickname = name
 
-                    val userID_call = RetrofitInstance.searchUserIDApi.getUserByNickname(
+                    val userID_call = RetrofitInstance.search_userID_api.getUserByNickname(
                         Constants.MAIN_APIKEY,
                         nickname
                     )
@@ -215,7 +215,7 @@ class FindduoAdapter(
                         val userNum = gameResponse?.user?.userNum.toString()
                         val seasonId = "19"
 
-                        val userstate_call = RetrofitInstance.searchUserStateApi.getUserStats(
+                        val userstate_call = RetrofitInstance.search_user_state_api.getUserStats(
                             Constants.MAIN_APIKEY, userNum, seasonId
                         )
                         val userstate_response = userstate_call.execute()

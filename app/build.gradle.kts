@@ -1,3 +1,5 @@
+import java.util.regex.Pattern.compile
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -24,13 +26,11 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
-
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -118,5 +118,8 @@ dependencies {
     // MotionToast
     implementation("com.github.Spikeysanju:MotionToast:1.4")
 
+    //제발 바껴라...
+    implementation("com.github.skydoves:powerspinner:1.2.6")
+    implementation("com.github.skydoves:powerspinner:1.2.6")
 
 }

@@ -60,6 +60,17 @@ class BoardListViewModel() : ViewModel(){
         _boardList.value = items
     }
 
+    fun addBoard(item: BoardModel) {
+        if (item == null) {
+            return
+        }
+
+        val currentList = boardList.value.orEmpty().toMutableList()
+        currentList.add(item)
+        val sortedList = currentList.sortedBy { it.date }
+        _boardList.value = sortedList.toMutableList()
+    }
+
     fun addSearchBoard(item: BoardModel) {
         if (item == null) {
             return

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,8 @@ import androidx.fragment.app.activityViewModels
 import com.erionna.eternalreturninfo.databinding.BoardFragmentBinding
 import com.erionna.eternalreturninfo.model.BoardModel
 import com.erionna.eternalreturninfo.retrofit.FBRef
-import com.erionna.eternalreturninfo.ui.activity.board.BoardAddActivity
-import com.erionna.eternalreturninfo.ui.activity.board.BoardSearchActivity
+import com.erionna.eternalreturninfo.ui.activity.board.BoardAdd
+import com.erionna.eternalreturninfo.ui.activity.board.BoardSearch
 import com.erionna.eternalreturninfo.ui.adapter.board.BoardViewPagerAdapter
 import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -63,12 +62,12 @@ class BoardFragment : Fragment() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         val board = result.data?.getParcelableExtra("board", BoardModel::class.java)
                         if (board != null) {
-                            refresh()
+                            boardViewModel.addBoard(board)
                         }
                     } else {
                         val board = result.data?.getParcelableExtra<BoardModel>("board")
                         if (board != null) {
-                            refresh()
+                            boardViewModel.addBoard(board)
                         }
                     }
 
@@ -85,12 +84,12 @@ class BoardFragment : Fragment() {
         }.attach()
 
         boardFab.setOnClickListener {
-            val intent = Intent(requireContext(), BoardAddActivity::class.java)
+            val intent = Intent(requireContext(), BoardAdd::class.java)
             addBoardLauncher.launch(intent)
         }
 
         boardIbProfile.setOnClickListener {
-            val intent = Intent(requireContext(), BoardSearchActivity::class.java)
+            val intent = Intent(requireContext(), BoardSearch::class.java)
             startActivity(intent)
         }
 
@@ -98,31 +97,28 @@ class BoardFragment : Fragment() {
 
         boardSwipeRefreshLayout.setOnRefreshListener {
 
-            refresh()
+            FBRef.postRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val unsortedBoardList = mutableListOf<BoardModel>()
+                    for (data in snapshot.children) {
+                        val board = data.getValue<BoardModel>()
+                        if (board != null) {
+                            unsortedBoardList.add(board)
+                        }
+                    }
+
+                    boardViewModel.initBoard(unsortedBoardList)
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // 에러 처리
+                }
+            })
+
             boardSwipeRefreshLayout.isRefreshing = false
         }
 
-    }
-
-    fun refresh(){
-        FBRef.postRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val unsortedBoardList = mutableListOf<BoardModel>()
-                for (data in snapshot.children) {
-                    val board = data.getValue<BoardModel>()
-                    if (board != null) {
-                        unsortedBoardList.add(board)
-                    }
-                }
-
-                boardViewModel.initBoard(unsortedBoardList)
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("error", "firebase data loading failed")
-            }
-        })
     }
 
 

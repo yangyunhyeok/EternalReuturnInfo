@@ -26,7 +26,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdapter.ViewHolder>(
+class BoardMyProfileRecyclerViewAdapter() : ListAdapter<BoardModel, BoardMyProfileRecyclerViewAdapter.ViewHolder>(
 
     object : DiffUtil.ItemCallback<BoardModel>() {
         override fun areItemsTheSame(
@@ -57,7 +57,7 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            BoardRvItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            BoardMyProfileRvItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -67,7 +67,7 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     }
 
     inner class ViewHolder(
-        private val binding: BoardRvItemBinding
+        private val binding: BoardMyProfileRvItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoardModel) = with(binding) {
@@ -80,14 +80,7 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
                     if(snapshot.exists()){
                         val author = snapshot.getValue<ERModel>()
 
-                        boardPostIvProfile.load(author?.profilePicture)
                         boardPostTvUser.text = author?.name
-
-                    }else{
-
-                        boardPostIvProfile.load(R.drawable.ic_baseimage)
-                        boardPostTvUser.text = "탈퇴한 회원"
-
                     }
 
                 }
@@ -97,30 +90,26 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
 
             })
 
-            if(item.category == "공지"){
-                boardPostCategory.setBackgroundResource(R.drawable.shape_board_category_notice)
-                boardPostCategory.text = "공지"
-            }else{
-                boardPostCategory.setBackgroundResource(R.drawable.shape_board_category)
-                boardPostCategory.text = item.category
+            if (item.category == "공지") {
+                boardPostTvTitle.text = "[공지]  " + item.title
+                val blueColor =
+                    ContextCompat.getColor(binding.root.context, R.color.blue)
+                boardPostTvTitle.setTextColor(blueColor)
+            } else {
+                boardPostTvTitle.text = "[${item.category}]  "+ item.title
+                boardPostTvTitle.setTextColor(Color.WHITE)
             }
 
-            boardPostTvTitle.text = item.title
-
-
-//            boardPostTvDate.text = formatTimeOrDate(item.date)
-            boardPostTvContent.text = item.content
+            boardPostTvDate.text = formatTimeOrDate(item.date)
 
             if(item.comments.size == 0){
                 boardPostBtnComment.visibility = View.INVISIBLE
-                boardPostIvComment.visibility = View.INVISIBLE
             }else{
-                boardPostIvComment.visibility = View.VISIBLE
                 boardPostBtnComment.visibility = View.VISIBLE
                 boardPostBtnComment.text = item.comments.size.toString()
             }
 
-            boardPostLayout.setOnClickListener {
+            itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(item)
             }
 
@@ -146,5 +135,3 @@ class BoardRecyclerViewAdapter() : ListAdapter<BoardModel, BoardRecyclerViewAdap
     }
 
 }
-
-

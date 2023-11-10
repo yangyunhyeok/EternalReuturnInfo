@@ -9,6 +9,5 @@ class FBRef {
 
         val postRef = database.getReference("post")
         val userRef = database.getReference("user")
-        val seasonRef = database.getReference("seasonID")
     }
 }
