@@ -1,5 +1,7 @@
 package com.erionna.eternalreturninfo.util
 
+import com.erionna.eternalreturninfo.BuildConfig
+
 class Constants {
     companion object {
         const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
@@ -10,7 +12,7 @@ class Constants {
         const val EXTRA_TIME = "extra_time"
 
         const val MAIN_BASE_URL = "https://open-api.bser.io"
-        const val MAIN_APIKEY = "ir1CnLrsNK2EbPKc8QNRE3Fx4C3dPoHP2UDTjKhE"
+        const val MAIN_APIKEY = BuildConfig.MAIN_APIKEY
 
         const val ETERNAL_RETURN_BASE_URL = "https://playeternalreturn.com"
     }

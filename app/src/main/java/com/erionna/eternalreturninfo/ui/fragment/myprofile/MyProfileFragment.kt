@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.Toast
@@ -28,11 +29,13 @@ import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
 import com.erionna.eternalreturninfo.ui.activity.login.LoginActivity
+import com.erionna.eternalreturninfo.ui.activity.login.SignUpActivity
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
 import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyProfileViewPagerAdapter
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -66,6 +69,7 @@ class MyProfileFragment : Fragment() {
             .addItem(PowerMenuItem("프로필 수정"))
             .addItem(PowerMenuItem("로그아웃"))
             .addItem(PowerMenuItem("회원 탈퇴"))
+            .addItem(PowerMenuItem("비밀번호 변경"))
             .setMenuRadius(20f) // sets the corner radius.
             .setTextSize(18)
             .setWidth(450)
@@ -170,10 +174,6 @@ class MyProfileFragment : Fragment() {
             if (uri != null) {
                 upload(uri, email!!)
             }
-            Handler(Looper.getMainLooper()).postDelayed({
-                var uid = auth?.uid.toString()
-                Patch(uid)
-            }, 2000)
         }
     }
 
@@ -197,17 +197,38 @@ class MyProfileFragment : Fragment() {
                             "profilePicture" to uri.toString()
                         )
                     )
+                    var uid = auth?.uid
+                    uid?.let { Patch(it) }
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
             .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
 
+    fun PwChange(pw: String, pwCheck: String) {
+        val user: FirebaseUser? = auth?.currentUser
+        user?.updatePassword(pw)
+        auth?.uid?.let {
+            db.collection(SignUpActivity.collection).document(it).update(
+                mapOf(
+                    "pw" to pw
+                )
+            )
+        }
+        auth?.uid?.let {
+            database.child("user").child(it).updateChildren(
+                mapOf(
+                    "password" to pw
+                )
+            )
+        }
+    }
+
     // 팝업메뉴 onClick 리스너
     private val onMenuItemClickListener = object : OnMenuItemClickListener<PowerMenuItem> {
         override fun onItemClick(position: Int, item: PowerMenuItem) {
             when (position) {
-                // 0 : 프로필수정,   1 : 로그아웃,   2 : 회원탈퇴
+                // 0 : 프로필수정,   1 : 로그아웃,   2 : 회원탈퇴, 3 : 비밀번호 변경
                 0 -> {
                     refPowerMenu.dismiss()
                     val dialogView =
@@ -271,6 +292,7 @@ class MyProfileFragment : Fragment() {
                     alertDialog.show()
 
                 }
+
                 1 -> {
                     refPowerMenu.dismiss()
                     Firebase.auth.signOut()
@@ -278,7 +300,8 @@ class MyProfileFragment : Fragment() {
                     startActivity(intent)
                     requireActivity().finish()
                 }
-                else -> {
+
+                2 -> {
                     refPowerMenu.dismiss()
                     val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
                     val deleteDialog = AlertDialog.Builder(requireActivity())
@@ -322,8 +345,50 @@ class MyProfileFragment : Fragment() {
                     }
                     deleteDialog.show()
                 }
+
+                else -> {
+                    val pwChangeDialogView =
+                        layoutInflater.inflate(R.layout.myprofile_pwchange_dialog, null)
+                    val pwChangeDialog = AlertDialog.Builder(requireActivity())
+                        .setView(pwChangeDialogView)
+                        .create()
+
+                    val changeBtn =
+                        pwChangeDialogView.findViewById<Button>(R.id.myprofile_pwChange_btn)
+                    val firstPw =
+                        pwChangeDialogView.findViewById<EditText>(R.id.myprofile_pwChange_et)
+                    val secondPw =
+                        pwChangeDialogView.findViewById<EditText>(R.id.myprofile_pwChange2_et)
+
+                    changeBtn.setOnClickListener {
+
+                        val pw = firstPw.text.toString()
+                        val pwCheck = secondPw.text.toString()
+                        if (pw.isNotEmpty() && pwCheck.isNotEmpty()) {
+                            if (pw == pwCheck) {
+                                PwChange(pw, pwCheck)
+                                pwChangeDialog.dismiss()
+                            } else {
+                                Toast.makeText(
+                                    requireActivity(),
+                                    "동일한 비밀번호를 입력하세요",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            Toast.makeText(
+                                requireActivity(),
+                                "비밀번호를 입력하세요",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+
+                    }
+                    pwChangeDialog.show()
+                }
             }
         }
     }
-
 }
+

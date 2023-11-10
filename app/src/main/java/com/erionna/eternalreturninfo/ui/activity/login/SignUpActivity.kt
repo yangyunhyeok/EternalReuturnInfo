@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.erionna.eternalreturninfo.BuildConfig
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.SignupInformationActivityBinding
 import com.erionna.eternalreturninfo.model.ERModel
@@ -43,10 +44,16 @@ class SignUpActivity : AppCompatActivity() {
     private val PICK_IMAGE = 1111
     private lateinit var database: DatabaseReference
     val storage = Firebase.storage
-    var ImageCheck = 0
+    var imageCheck = false
+    var emailCheck = false
     var baseImage = "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
-    var nickNameCheck = 0
-    private var signup_nickname:String = ""
+    var nickNameCheck = false
+    private var signupNickname: String = ""
+    private var signupEmail: String = ""
+
+    companion object {
+        val collection = "EternalReturnInfo"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,49 +66,18 @@ class SignUpActivity : AppCompatActivity() {
             selectProfile()
         }
 
+        binding.signupBtnIDCheck.setOnClickListener {
+            var email = binding.signupIDEt.text.toString()
+            Log.d("이메일중복",email)
+            if(email.isNotEmpty()){
+                EmailCheck(email)
+            }else{
+                Toast.makeText(this, "이메일을 입력하세요", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.signupBtnNicknameCheck.setOnClickListener {
-            nicknameCheck(binding.signupNickNameEt.text.toString())
-            Handler(Looper.getMainLooper()).postDelayed({
-                GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        val nickname = binding.signupNickNameEt.text.toString()
-
-                        //수정 : 로그인한 사람 닉네임 가져오기
-                        val userID_call = RetrofitInstance.searchUserIDApi.getUserByNickname(Constants.MAIN_APIKEY, nickname)
-                        val userID_response = userID_call.execute()
-
-                        if (userID_response.isSuccessful) {
-                            val gameResponse = userID_response.body()
-
-                            withContext(Dispatchers.Main) {
-                                if (gameResponse?.user == null) {
-                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpActivity, R.color.highlight_color2))
-                                    binding.signupTvCheckMessage.text = "닉네임이 존재하지 않습니다."
-                                    signup_nickname = ""
-                                } else if(nickNameCheck == 1){
-                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpActivity, R.color.highlight_color2))
-                                    binding.signupTvCheckMessage.text = "중복된 닉네임입니다."
-                                    signup_nickname = ""
-                                }else {
-                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
-                                    binding.signupTvCheckMessage.setTextColor(ContextCompat.getColor(this@SignUpActivity, R.color.highlight_color))
-                                    binding.signupTvCheckMessage.text = "사용가능한 닉네임입니다."
-                                    signup_nickname = gameResponse.user.nickname
-                                }
-                            }
-                            Log.d("닉네임체크",signup_nickname)
-
-                        }
-
-                    } catch (e: Exception) {
-                        // 오류 처리
-                        e.printStackTrace()
-                    }
-                }
-            }, 2000)
-
+            NickNameCheck(binding.signupNickNameEt.text.toString())
         }
 
         // 실험체 스피너
@@ -127,15 +103,13 @@ class SignUpActivity : AppCompatActivity() {
             }
 
         binding.signupSignupBtn.setOnClickListener {
-            Handler(Looper.getMainLooper()).postDelayed({
-                createAccount(
-                    binding.signupIDEt.text.toString(),
-                    binding.signupPWEt.text.toString(),
-                    binding.signupPWCheckEt.text.toString(),
-                    signup_nickname,
-                    selectCharacter,
-                )
-            }, 2000)
+            createAccount(
+                signupEmail,
+                binding.signupPWEt.text.toString(),
+                binding.signupPWCheckEt.text.toString(),
+                signupNickname,
+                selectCharacter,
+            )
         }
     }
 
@@ -148,7 +122,7 @@ class SignUpActivity : AppCompatActivity() {
     ) {
         if (email.isNotEmpty() && password.isNotEmpty() && passwordCheck.isNotEmpty() && nickname.isNotEmpty()) {
             if (password == passwordCheck) {
-                if (nickNameCheck == 0) {
+                if (!nickNameCheck) {
                     auth?.createUserWithEmailAndPassword(email, password)
                         ?.addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
@@ -161,9 +135,6 @@ class SignUpActivity : AppCompatActivity() {
                                     MotionToast.SHORT_DURATION,
                                     font = null
                                 )
-
-                                var baseImage =
-                                    "https://firebasestorage.googleapis.com/v0/b/eternalreturninfo-4dc4b.appspot.com/o/ic_baseImage.jpg?alt=media&token=50e58bfe-873f-4772-bddc-a3401dc3d8a3&_gl=1*lgw3h7*_ga*MjY4NTI2NjgxLjE2OTY5MzI3ODU.*_ga_CW55HF8NVT*MTY5OTIzNDQwMS42Ny4xLjE2OTkyMzQ2NjcuOS4wLjA."
                                 setDocument(
                                     SignUpData(
                                         email = email,
@@ -183,7 +154,7 @@ class SignUpActivity : AppCompatActivity() {
                                             uid = auth.uid!!
                                         )
                                     )
-                                if (ImageCheck == 1) {
+                                if (imageCheck) {
                                     upload(selectedImageURI, email)
                                 }
                                 var intent = Intent(this, MainActivity::class.java)
@@ -258,7 +229,7 @@ class SignUpActivity : AppCompatActivity() {
             if (uri != null) {
                 selectedImageURI = uri
                 binding.signupProfileImg.setImageURI(uri)
-                ImageCheck = 1
+                imageCheck = true
             }
         }
     }
@@ -268,34 +239,126 @@ class SignUpActivity : AppCompatActivity() {
         email: String,
     ) {
         val storageRef = storage.reference
-        val fileName = email + ".jpg"
+        val fileName = email + "_profile"
         val riversRef = storageRef.child("/$fileName")
 
         riversRef.putFile(uri)
             .addOnProgressListener { taskSnapshot ->
                 riversRef.downloadUrl.addOnSuccessListener { uri ->
-                    FirebaseFirestore.getInstance()
-                        .collection("EternalReturnInfo")
-                        .document(auth.uid!!)
-                        .update("profile", uri.toString())
-                    database.child("user").child(auth.uid!!).updateChildren(mapOf(
-                        "profilePicture" to uri.toString()
-                    ))
-
+                    auth.uid?.let {
+                        db.collection(collection)
+                            .document(it)
+                            .update("profile", uri.toString())
+                    }
+                    database.child("user").child(auth.uid!!).updateChildren(
+                        mapOf(
+                            "profilePicture" to uri.toString()
+                        )
+                    )
                 }
             }
             .addOnFailureListener { Log.i("업로드 실패", "") }
             .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
 
-    fun nicknameCheck(nickname: String) {
-        nickNameCheck = 0
-        db.collection("EternalReturnInfo")
+    fun EmailCheck(email: String) {
+        emailCheck = false
+        db.collection(collection)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d("이메일중복확인",document.data["email"].toString())
+                    if (email == document.data["email"].toString()) {
+                        emailCheck = true
+                        Log.d("이메일체크",emailCheck.toString())
+                    }
+                }
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        if (emailCheck) {
+                            binding.signupTvIDcheckMessage.visibility = View.VISIBLE
+                            binding.signupTvIDcheckMessage.setTextColor(
+                                ContextCompat.getColor(
+                                    this@SignUpActivity,
+                                    R.color.highlight_color2
+                                )
+                            )
+                            binding.signupTvIDcheckMessage.text = "중복된 이메일이 존재합니다."
+                            signupEmail = ""
+                        } else {
+                            binding.signupTvIDcheckMessage.visibility = View.VISIBLE
+                            binding.signupTvIDcheckMessage.setTextColor(
+                                ContextCompat.getColor(
+                                    this@SignUpActivity,
+                                    R.color.highlight_color
+                                )
+                            )
+                            binding.signupTvIDcheckMessage.text = "사용가능한 이메일입니다."
+                            signupEmail = email
+                        }
+
+                    }
+                }
+            }
+    }
+
+    fun NickNameCheck(nickname: String) {
+        nickNameCheck = false
+        db.collection(collection)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     if (nickname == document.data["nickName"]) {
-                        nickNameCheck = 1
+                        nickNameCheck = true
+                    }
+                }
+                GlobalScope.launch(Dispatchers.IO) {
+                    try {
+                        val nickname = binding.signupNickNameEt.text.toString()
+                        //수정 : 로그인한 사람 닉네임 가져오기
+                        val userID_call = RetrofitInstance.searchUserIDApi.getUserByNickname(Constants.MAIN_APIKEY, nickname)
+                        val userID_response = userID_call.execute()
+
+                        if (userID_response.isSuccessful) {
+                            val gameResponse = userID_response.body()
+
+                            withContext(Dispatchers.Main) {
+                                if (gameResponse?.user == null) {
+                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                    binding.signupTvCheckMessage.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SignUpActivity,
+                                            R.color.highlight_color2
+                                        )
+                                    )
+                                    binding.signupTvCheckMessage.text = "닉네임이 존재하지 않습니다."
+                                    signupNickname = ""
+                                } else if (nickNameCheck) {
+                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                    binding.signupTvCheckMessage.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SignUpActivity,
+                                            R.color.highlight_color2
+                                        )
+                                    )
+                                    binding.signupTvCheckMessage.text = "중복된 닉네임입니다."
+                                    signupNickname = ""
+                                } else {
+                                    binding.signupTvCheckMessage.visibility = View.VISIBLE
+                                    binding.signupTvCheckMessage.setTextColor(
+                                        ContextCompat.getColor(
+                                            this@SignUpActivity,
+                                            R.color.highlight_color
+                                        )
+                                    )
+                                    binding.signupTvCheckMessage.text = "사용가능한 닉네임입니다."
+                                    signupNickname = gameResponse.user.nickname
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // 오류 처리
+                        e.printStackTrace()
                     }
                 }
             }

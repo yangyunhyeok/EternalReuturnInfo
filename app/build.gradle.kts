@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,6 +13,9 @@ android {
     namespace = "com.erionna.eternalreturninfo"
     compileSdk = 34
 
+    val localProperties = Properties()
+    localProperties.load(FileInputStream(rootProject.file("local.properties")))
+
     defaultConfig {
         applicationId = "com.erionna.eternalreturninfo"
         minSdk = 24
@@ -18,6 +24,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "google_Token",localProperties.getProperty("googleToken"))
+        buildConfigField("String", "MAIN_APIKEY", localProperties.getProperty("mainAPIKEY"))
     }
 
     buildTypes {
@@ -40,6 +48,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
 }
