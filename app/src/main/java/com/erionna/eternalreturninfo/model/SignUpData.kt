@@ -1,9 +1,9 @@
 package com.erionna.eternalreturninfo.model
 
 data class SignUpData(
-    val Email:String,
-    val PW:String,
-    val NickName:String,
-    val Character:String,
+    val email:String,
+    val pw:String,
+    val nickName:String,
+    val character:String,
     val profile:String
 )

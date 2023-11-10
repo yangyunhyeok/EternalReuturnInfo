@@ -15,12 +15,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/myprofile_logo_img"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="24dp"
-        android:background="@drawable/ic_white_logo" />
+        <ImageView
+            android:id="@+id/myprofile_logo_img"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="24dp"
+            android:background="@drawable/ic_white_logo" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -33,20 +33,20 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
     <TextView
-        android:id="@+id/myprofile_id_tw"
+        android:id="@+id/myprofile_pwChange_tw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="50dp"
-        android:text="선호실험체"
+        android:text="비밀번호"
         android:textColor="@color/white"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myprofile_line_view" />
 
-    <Spinner
-        android:id="@+id/myprofile_character_sp"
+    <EditText
+        android:id="@+id/myprofile_pwChange_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -54,14 +54,50 @@
         android:layout_marginEnd="32dp"
         android:background="@drawable/shape_login_btn"
         android:ems="16"
-        android:spinnerMode="dropdown"
+        android:padding="15dp"
+        android:hint="비밀번호는 6글자 이상 입력하세요."
+        android:textColorHint="#919191"
+        android:textSize="17dp"
         android:textColor="@color/white"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myprofile_id_tw" />
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_pwChange_tw" />
+
+    <TextView
+        android:id="@+id/myprofile_pwChange2_tw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="15dp"
+        android:text="비밀번호 확인"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_pwChange_et" />
+
+    <EditText
+        android:id="@+id/myprofile_pwChange2_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/shape_login_btn"
+        android:ems="16"
+        android:hint="동일한 비밀번호로 입력하세요."
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textColorHint="#919191"
+        android:textSize="17dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_pwChange2_tw" />
 
     <Button
-        android:id="@+id/myprofile_select_btn"
+        android:id="@+id/myprofile_pwChange_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -74,7 +110,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myprofile_character_sp" />
+        app:layout_constraintTop_toBottomOf="@+id/myprofile_pwChange2_et" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

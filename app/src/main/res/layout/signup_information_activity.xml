@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.login.SignUpPage"
+    tools:context=".ui.activity.login.SignUpActivity"
     android:background="@color/black">
 
     <ImageView
@@ -76,24 +76,52 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_profile_tv" />
 
+            <TextView
+                android:id="@+id/signup_tv_IDcheck_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="10dp"
+                android:text="이메일이 존재하지 않습니다."
+                android:textColor="@color/highlight_color2"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/signup_ID_et"
+                app:layout_constraintStart_toEndOf="@+id/signup_ID_tv" />
+
             <EditText
                 android:id="@+id/signup_ID_et"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/shape_login_btn"
+                android:ems="16"
+                android:hint="이메일로 입력하세요."
+                android:inputType="textEmailAddress"
                 android:padding="15dp"
-                android:hint="이메일 형식으로 입력하세요."
+                android:textColor="@color/white"
                 android:textColorHint="#919191"
                 android:textSize="17dp"
-                android:ems="16"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/signup_btn_ID_check"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signup_ID_tv" />
+
+            <Button
+                android:id="@+id/signup_btn_ID_check"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/shape_highlight_btn"
+                android:text="중복확인"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/signup_ID_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/signup_ID_et"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/signup_PW_tv"
@@ -195,7 +223,7 @@
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/shape_login_btn"
                 android:ems="16"
-                android:hint="닉네임을 입력하세요"
+                android:hint="인게임 닉네임을 입력하세요"
                 android:padding="15dp"
                 android:textColor="@color/white"
                 android:textColorHint="#919191"

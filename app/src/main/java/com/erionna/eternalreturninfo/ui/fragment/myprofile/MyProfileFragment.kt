@@ -1,6 +1,5 @@
 package com.erionna.eternalreturninfo.ui.fragment.myprofile
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,30 +12,29 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Spinner
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.erionna.eternalreturninfo.R
 import com.erionna.eternalreturninfo.databinding.MyprofileCharacterDialogBinding
 import com.erionna.eternalreturninfo.databinding.MyprofileFragmentBinding
-import com.erionna.eternalreturninfo.model.BoardModel
+import com.erionna.eternalreturninfo.databinding.MyprofileRecordFragmentBinding
 import com.erionna.eternalreturninfo.retrofit.BoardSingletone
-import com.erionna.eternalreturninfo.ui.activity.login.LoginPage
+import com.erionna.eternalreturninfo.ui.activity.login.LoginActivity
+import com.erionna.eternalreturninfo.ui.activity.login.SignUpActivity.Companion.collection
 import com.erionna.eternalreturninfo.ui.activity.main.MainActivity
-import com.erionna.eternalreturninfo.ui.adapter.board.BoardMyProfileRecyclerViewAdapter
 import com.erionna.eternalreturninfo.ui.adapter.myprofile.MyProfileViewPagerAdapter
-import com.erionna.eternalreturninfo.ui.viewmodel.BoardListViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -46,11 +44,12 @@ class MyProfileFragment : Fragment() {
     private var _binding: MyprofileFragmentBinding? = null
     private var auth: FirebaseAuth? = null
     var db = Firebase.firestore
-    private lateinit var characterbinding: MyprofileCharacterDialogBinding
-    private val PICK_IMAGE = 1111
+    private lateinit var characterBinding: MyprofileCharacterDialogBinding
+    private val pickImage = 1111
     val storage = Firebase.storage
     var email: String? = null
     private lateinit var database: DatabaseReference
+
 
     companion object {
         fun newInstance() = MyProfileFragment()
@@ -61,7 +60,7 @@ class MyProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = MyprofileFragmentBinding.inflate(inflater, container, false)
-        characterbinding = MyprofileCharacterDialogBinding.inflate(layoutInflater)
+        characterBinding = MyprofileCharacterDialogBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         var uid = auth?.uid.toString()
@@ -117,7 +116,6 @@ class MyProfileFragment : Fragment() {
                         val characterSpinner =
                             dialogView.findViewById<Spinner>(R.id.myprofile_character_sp)
                         val button = dialogView.findViewById<Button>(R.id.myprofile_select_btn)
-                        val deleteBtn = dialogView.findViewById<Button>(R.id.myprofile_delete_btn)
                         val characterlist = resources.getStringArray(R.array.character)
 
                         val adapter = ArrayAdapter<String>(
@@ -126,6 +124,7 @@ class MyProfileFragment : Fragment() {
                             R.id.spinner_tv,
                             characterlist
                         )
+
 
                         var selectCharacter = characterlist[0]
                         characterSpinner.adapter = adapter
@@ -146,33 +145,37 @@ class MyProfileFragment : Fragment() {
                             }
                         // 프로필 변경버튼
                         button.setOnClickListener {
-                            FirebaseFirestore.getInstance()
-                                .collection("EternalReturnInfo")
-                                .document(auth!!.uid!!)
-                                .update(
+                            auth?.uid?.let { it1 ->
+                                db.collection(collection)
+                                    .document(it1)
+                                    .update(
+                                        mapOf(
+                                            "character" to selectCharacter
+                                        )
+                                    ).addOnCompleteListener {
+                                        var uid = auth?.uid.toString()
+                                        Patch(uid)
+                                    }
+                            }
+                            auth?.uid?.let { it1 ->
+                                database.child("user").child(it1).updateChildren(
                                     mapOf(
                                         "character" to selectCharacter
                                     )
                                 )
-                            database.child("user").child(auth!!.uid!!).updateChildren(
-                                mapOf(
-                                    "character" to selectCharacter
-                                )
-                            )
+                            }
                             alertDialog.dismiss()
                             Handler(Looper.getMainLooper()).postDelayed({
                                 var uid = auth?.uid.toString()
                                 Patch(uid)
                             }, 2000)
                         }
-
                         alertDialog.show()
-
                     }
 
                     R.id.menu_logout -> {
                         Firebase.auth.signOut()
-                        var intent = Intent(activity, LoginPage::class.java)
+                        var intent = Intent(activity, LoginActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
                     }
@@ -187,22 +190,22 @@ class MyProfileFragment : Fragment() {
                         var noBtn = deleteDialogView.findViewById<Button>(R.id.delete_no_btn)
 
                         yesBtn.setOnClickListener {
-                            email = auth!!.currentUser?.email
-                            // storage 인스턴스 생성
-                            val storage = Firebase.storage
+                            email = auth?.currentUser?.email
+
                             // storage 참조
                             val storageRef = storage.getReference("image")
                             // storage에서 삭제 할 파일명
                             val fileName = email.toString()
-                            Log.d("스토리지", fileName)
                             val mountainsRef = storageRef.child("${fileName}.jpg")
                             mountainsRef.delete()
-                            database.child("user").child(auth!!.uid!!).removeValue()
-
-                            FirebaseFirestore.getInstance()
-                                .collection("EternalReturnInfo")
-                                .document(auth!!.uid!!)
-                                .delete()
+                            auth?.uid?.let { it1 ->
+                                database.child("user").child(it1).removeValue()
+                            }
+                            auth?.uid?.let { it1 ->
+                                db.collection(collection)
+                                    .document(it1)
+                                    .delete()
+                            }
                             val user = Firebase.auth.currentUser!!
                             user.delete()
                                 .addOnCompleteListener { task ->
@@ -211,7 +214,7 @@ class MyProfileFragment : Fragment() {
                                     }
                                 }
                             deleteDialog.dismiss()
-                            var intent = Intent(activity, LoginPage::class.java)
+                            var intent = Intent(activity, LoginActivity::class.java)
                             (context as MainActivity).finish()
                             startActivity(intent)
                         }
@@ -219,6 +222,58 @@ class MyProfileFragment : Fragment() {
                             deleteDialog.dismiss()
                         }
                         deleteDialog.show()
+                    }
+
+                    R.id.menu_pwchange -> {
+                        var emailCheck = auth?.currentUser?.providerData?.get(0)?.providerId
+                        Log.d("로그인 방식 체크", emailCheck!!)
+                        if (emailCheck == "password") {
+                            val pwChangeDialogView =
+                                layoutInflater.inflate(R.layout.myprofile_pwchange_dialog, null)
+                            val pwChangeDialog = AlertDialog.Builder(requireActivity())
+                                .setView(pwChangeDialogView)
+                                .create()
+
+                            val changeBtn =
+                                pwChangeDialogView.findViewById<Button>(R.id.myprofile_pwChange_btn)
+                            val firstPw =
+                                pwChangeDialogView.findViewById<EditText>(R.id.myprofile_pwChange_et)
+                            val secondPw =
+                                pwChangeDialogView.findViewById<EditText>(R.id.myprofile_pwChange2_et)
+
+                            changeBtn.setOnClickListener {
+
+                                val pw = firstPw.text.toString()
+                                val pwCheck = secondPw.text.toString()
+                                if (pw.isNotEmpty() && pwCheck.isNotEmpty()) {
+                                    if (pw == pwCheck) {
+                                        PwChange(pw, pwCheck)
+                                        pwChangeDialog.dismiss()
+                                    } else {
+                                        Toast.makeText(
+                                            requireActivity(),
+                                            "동일한 비밀번호를 입력하세요",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "비밀번호를 입력하세요",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+
+                            }
+                            pwChangeDialog.show()
+                        } else {
+                            Toast.makeText(
+                                requireActivity(),
+                                "SNS 로그인은 비밀번호를 변동 할 수 없습니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
                 false
@@ -237,8 +292,7 @@ class MyProfileFragment : Fragment() {
 
     // 마이페이지 생성
     fun Patch(uid: String) {
-        val docRef = db.collection("EternalReturnInfo").document("$uid")
-
+        val docRef = db.collection(collection).document("$uid")
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -259,20 +313,16 @@ class MyProfileFragment : Fragment() {
 
     fun selectProfile() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
-        startActivityForResult(intent, PICK_IMAGE)
+        startActivityForResult(intent, pickImage)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE) {
+        if (requestCode == pickImage) {
             val uri: Uri? = data?.data
             if (uri != null) {
-                upload(uri, email!!)
+                email?.let { upload(uri, it) }
             }
-            Handler(Looper.getMainLooper()).postDelayed({
-                var uid = auth?.uid.toString()
-                Patch(uid)
-            }, 2000)
         }
     }
 
@@ -281,26 +331,47 @@ class MyProfileFragment : Fragment() {
         email: String,
     ) {
         val storageRef = storage.reference
-        val fileName = email + ".jpg"
+        val fileName = email + "_profile"
         val riversRef = storageRef.child("/$fileName")
 
         riversRef.putFile(uri)
             .addOnProgressListener { taskSnapshot ->
                 riversRef.downloadUrl.addOnSuccessListener { uri ->
-                    FirebaseFirestore.getInstance()
-                        .collection("EternalReturnInfo")
-                        .document(auth!!.uid!!)
-                        .update("profile", uri.toString())
-                    database.child("user").child(auth!!.uid!!).updateChildren(
-                        mapOf(
-                            "profilePicture" to uri.toString()
+                    auth?.uid?.let {
+                        db.collection(collection)
+                            .document(it)
+                            .update("profile", uri.toString()).addOnCompleteListener {
+                                var uid = auth?.uid.toString()
+                                Patch(uid)
+                            }
+                    }
+                    auth?.uid?.let {
+                        database.child("user").child(it).updateChildren(
+                            mapOf(
+                                "profilePicture" to uri.toString()
+                            )
                         )
-                    )
+                    }
                 }
             }
-            .addOnFailureListener { Log.i("업로드 실패", "") }
-            .addOnSuccessListener { Log.i("업로드 성공", "") }
     }
 
-
+    fun PwChange(pw: String, pwCheck: String) {
+        val user: FirebaseUser? = auth?.currentUser
+        user?.updatePassword(pw)
+        auth?.uid?.let {
+            db.collection(collection).document(it).update(
+                mapOf(
+                    "pw" to pw
+                )
+            )
+        }
+        auth?.uid?.let {
+            database.child("user").child(it).updateChildren(
+                mapOf(
+                    "password" to pw
+                )
+            )
+        }
+    }
 }

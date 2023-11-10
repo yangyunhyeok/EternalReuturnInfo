@@ -1,4 +1,5 @@
-import java.util.regex.Pattern.compile
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
@@ -12,6 +13,9 @@ android {
     namespace = "com.erionna.eternalreturninfo"
     compileSdk = 34
 
+    val localProperties = Properties()
+    localProperties.load(FileInputStream(rootProject.file("local.properties")))
+
     defaultConfig {
         applicationId = "com.erionna.eternalreturninfo"
         minSdk = 24
@@ -20,6 +24,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "google_Token", localProperties.getProperty("googleToken"))
     }
 
     buildTypes {
@@ -42,8 +47,8 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
-
 }
 
 dependencies {

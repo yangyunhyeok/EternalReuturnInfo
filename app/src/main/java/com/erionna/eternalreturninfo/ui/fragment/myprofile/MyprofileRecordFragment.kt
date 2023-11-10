@@ -103,6 +103,8 @@ class MyprofileRecordFragment : Fragment() {
                             val adapter = MyprofileListAdapter(dataList, array)
                             binding.myprofileCharacterRv.adapter = adapter
                             binding.myprofileCharacterRv.layoutManager = LinearLayoutManager(requireContext())
+
+                            binding.myprofilelistTvGameCount2.text = user?.rankSize.toString()
                         }
 
                     } else {
