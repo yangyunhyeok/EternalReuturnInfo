@@ -139,7 +139,6 @@ class BoardCommentRecyclerViewAdpater() : ListAdapter<CommentModel, BoardComment
 
             })
 
-
             boardCommentTvContent.text = item.content
             boardCommentTvDate.text = formatTimeOrDate(item.date)
 
