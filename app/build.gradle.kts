@@ -26,6 +26,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "google_Token",localProperties.getProperty("googleToken"))
         buildConfigField("String", "MAIN_APIKEY", localProperties.getProperty("mainAPIKEY"))
+        buildConfigField("String", "YOUTUBE_APIKEY", localProperties.getProperty("youtube_api_key"))
     }
 
     buildTypes {
