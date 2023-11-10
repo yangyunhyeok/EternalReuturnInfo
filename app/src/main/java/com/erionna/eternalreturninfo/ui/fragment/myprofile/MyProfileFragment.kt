@@ -61,6 +61,24 @@ class MyProfileFragment : Fragment() {
         fun newInstance() = MyProfileFragment()
     }
 
+    private val refPowerMenu: PowerMenu by lazy {
+        PowerMenu.Builder(requireContext())
+            .addItem(PowerMenuItem("프로필 수정"))
+            .addItem(PowerMenuItem("로그아웃"))
+            .addItem(PowerMenuItem("회원 탈퇴"))
+            .setMenuRadius(20f) // sets the corner radius.
+            .setTextSize(18)
+            .setWidth(450)
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            .setMenuColor(ContextCompat.getColor(requireContext(), R.color.darkgray))
+            .setSelectedMenuColor(ContextCompat.getColor(requireContext(), R.color.black))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .setCircularEffect(CircularEffect.BODY)
+            .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+            .build()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -107,25 +125,7 @@ class MyProfileFragment : Fragment() {
         })
 
         binding.myprofileBtnSetting.setOnClickListener {
-            val powerMenu = PowerMenu.Builder(requireContext())
-                .addItem(PowerMenuItem("프로필 수정"))
-                .addItem(PowerMenuItem("로그아웃"))
-                .addItem(PowerMenuItem("회원 탈퇴"))
-                .setMenuRadius(20f) // sets the corner radius.
-                .setTextSize(18)
-                .setWidth(430)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-//                .setTextGravity(Gravity.CENTER)
-//                .setDivider(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.darkgray)))
-//                .setDividerHeight(4)
-                .setMenuColor(ContextCompat.getColor(requireContext(), R.color.darkgray))
-                .setSelectedMenuColor(ContextCompat.getColor(requireContext(), R.color.black))
-                .setOnMenuItemClickListener(onMenuItemClickListener)
-                .setLifecycleOwner(viewLifecycleOwner)
-                .setCircularEffect(CircularEffect.BODY)
-                .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
-                .build()
-                .showAsDropDown(it)
+            refPowerMenu.showAsDropDown(it)
         }
     }
 
@@ -209,6 +209,7 @@ class MyProfileFragment : Fragment() {
             when (position) {
                 // 0 : 프로필수정,   1 : 로그아웃,   2 : 회원탈퇴
                 0 -> {
+                    refPowerMenu.dismiss()
                     val dialogView =
                         layoutInflater.inflate(R.layout.myprofile_character_dialog, null)
                     val alertDialog = AlertDialog.Builder(requireActivity())
@@ -268,14 +269,17 @@ class MyProfileFragment : Fragment() {
                     }
 
                     alertDialog.show()
+
                 }
                 1 -> {
+                    refPowerMenu.dismiss()
                     Firebase.auth.signOut()
                     var intent = Intent(activity, LoginActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
                 }
                 else -> {
+                    refPowerMenu.dismiss()
                     val deleteDialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
                     val deleteDialog = AlertDialog.Builder(requireActivity())
                         .setView(deleteDialogView)
