@@ -96,11 +96,6 @@ class LoginPage : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //구글로그인 다이얼로그 버튼
-        binding.loginSnsLoginBtn.setOnClickListener {
-            val intent = mGoogleSignInClient!!.signInIntent
-            startActivityForResult(intent, 100)
-        }
     }
 
     // 일반 이메일 로그인
