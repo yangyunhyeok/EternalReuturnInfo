@@ -16,4 +16,9 @@
         android:id="@+id/menu_withdraw"
         android:title="회원탈퇴"
         />
+    <item
+        style="@style/MenuTextStyle"
+        android:id="@+id/menu_pwchange"
+        android:title="비밀번호 변경"
+        />
 </menu>
