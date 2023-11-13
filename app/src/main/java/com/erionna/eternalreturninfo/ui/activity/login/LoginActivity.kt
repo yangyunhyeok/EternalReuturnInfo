@@ -121,6 +121,7 @@ class LoginActivity : AppCompatActivity() {
                     docRef.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
+                                BoardSingletone.Login()
                                 MotionToast.darkColorToast(
                                     this, "", getString(R.string.login_success),
                                     MotionToastStyle.SUCCESS,
@@ -128,8 +129,6 @@ class LoginActivity : AppCompatActivity() {
                                     MotionToast.SHORT_DURATION,
                                     font = null
                                 )
-
-                                BoardSingletone.Login()
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
