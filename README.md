@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=7FEBFF&height=300&section=header&text=ER%20Info&fontSize=90)
+![header](https://capsule-render.vercel.app/api?type=waving&color=7FEBFF&height=300&section=header&text=ER%20Info&fontSize=90&fontColor=000000)
 
 
 # 🎧 팀 소개
