@@ -33,3 +33,5 @@
 # ☑️ 주요 기능
 
 <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">
+<img src="https://img.shields.io/badge/API-6BA539?style=for-the-badge&logo=Openapiinitiative&logoColor=white">
+
