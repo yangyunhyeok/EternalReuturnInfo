@@ -7,9 +7,10 @@
 
 | 이름   | 역할 | MBTI        | BLOG                                               | GitHub                                                  | 
 | ------ | ---- | ---------- | -------------------------------------------------- | -------------------------------------------------------- |
-| 주찬영 | 팀장 | INTP        | [dannyjoo.tistory](https://dannyjoo.tistory.com/)  | [dannyjoo7](https://github.com/dannyjoo7)                |
+| 이호식 | 팀장 | ENFP        | [qhj6068(Owler) - velog](https://velog.io/@ghj6068)  | [hosiker](https://github.com/hosiker)                |
+| 양윤혁 | 팀원 | ISFP        | [jiyeon-tistory.tistory](https://jiyeon-tistory.tistory.com/)       | [Ji-Yeon-98](https://github.com/Ji-Yeon-98) |
+| 장재용 | 팀원 | ISFP        | [sh4340.tistory](https://sh4340.tistory.com/)       | [shyr0809](https://github.com/shyr0809)                |
 | 추지연 | 팀원 | ISFP        | [jiyeon-tistory.tistory](https://jiyeon-tistory.tistory.com/)       | [Ji-Yeon-98](https://github.com/Ji-Yeon-98) |
-| 이승현 | 팀원 | ISFP        | [sh4340.tistory](https://sh4340.tistory.com/)       | [shyr0809](https://github.com/shyr0809)                |
 
 
 <br>
