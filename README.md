@@ -37,6 +37,7 @@
 ### ⭐ 1. 로그인 & 회원가입
 
 | 일반 로그인 기능 | 비밀번호 찾기 기능 | 회원가입 기능 (아이디, 닉네임 중복체크) |
+| ---------------- | ------------------- | ---------------------------------------- |
 | ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | 
 
 
