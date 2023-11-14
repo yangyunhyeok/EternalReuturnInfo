@@ -44,5 +44,4 @@
 <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
 
 
-<img src="https://img.shields.io/badge/Google Play-414141?style=for-the-badge&logo=googleplay&logoColor=white">
-<img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/Google Play-414141?style=for-the-badge&logo=googleplay&logoColor=white"> <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white">
