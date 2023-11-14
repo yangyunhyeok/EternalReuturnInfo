@@ -16,9 +16,9 @@
 <br>
 
 # 📽️ 프로젝트
-- **Team Repository** : **[[MyMedia]](https://github.com/Team15MyMedia/MyMedia)**
+- **Team Repository** : **[[EternalReturnInfo]](https://github.com/EternalReturnInfo/EternalReuturnInfo)**
 
-- 주제 : 유튜브 API를 활용한 동영상 검색 및 저장
+- 주제 : 온라인 게임 Eternal Return 에 대한 정보를 제공하고 공유하는 커뮤니티 앱
 
 <br>
 
