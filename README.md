@@ -24,7 +24,7 @@
 
 # 💡 설계
 
-- **WireFrame** : **[[Figma]](https://www.figma.com/file/QeoG6p7FXXILdlve6gRwzu?embed_host=notion&kind=&mode=design&t=meaQ85aivbeFcUn4-0&type=design&viewer=1)**
+- **WireFrame** : **[[Figma]](https://www.figma.com/file/XuJjkieTkTy1Oz63AeLL5e/TEAM18_%EC%9D%B4%EB%A6%AC%EC%98%A8%EB%82%98?type=design&node-id=0-1&mode=design&t=uo3ZA4LfYOYDcF15-0)**
 
 ![image](https://github.com/Team15MyMedia/MyMedia/assets/58664438/fb94d2ae-5a2e-4f67-a758-82567dcbad4e)
 
