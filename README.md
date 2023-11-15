@@ -38,7 +38,7 @@
 
 | 일반 로그인 기능 | 비밀번호 찾기 기능 | 회원가입 기능 (아이디, 닉네임 중복체크) |
 | ---------------- | ------------------- | ---------------------------------------- |
-| ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![Screen_recording_20231115_104431.webm](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/01a68f55-0346-4277-a27f-da77b790f189) | ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | 
+| ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![2](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/3741289d-aef7-48c1-993e-a2f50fcc6902) | ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | 
 
 
 
