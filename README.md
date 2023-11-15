@@ -38,9 +38,7 @@
 
 | 시연영상 | 기능 |
 | -------- | ---- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/ffa7f595-fe50-4273-b89c-0084e9bb1125.gif" width="400" height="800"> | - 일반 로그인 기능 <br> - 비밀번호 찾기 기능 <br> - 회원가입 기능 |
-
-| 일반 로그인 기능 | 비밀번호 찾기 기능 | 회원가입 기능 (아이디, 닉네임 중복체크) |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | - 일반 로그인 기능 <br> - 비밀번호 찾기 기능 <br> - 회원가입 기능 |
 
 
 ### ⭐ 2. 메인 화면
