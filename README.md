@@ -43,7 +43,7 @@
 
 ### ⭐ 2. 메인 화면
 
-<img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/main.gif" width="400" height="800">
+<img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/main.gif">
 
 - 전적 검색 기능
 - 공식 홈페이지 공지사항 확인
