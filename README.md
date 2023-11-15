@@ -36,9 +36,12 @@
 
 ### ⭐ 1. 로그인 & 회원가입
 
-| 시연영상 | 기능 |
-| :--------: | :----: |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 일반 로그인 기능 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br><br> - 비밀번호 찾기 기능 <br><br> - 회원가입 기능 |
+- 일반 로그인 기능
+- 비밀번호 찾기 기능
+- 회원가입 기능
+| 시연영상 |
+| :--------: |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
 
 
 ### ⭐ 2. 메인 화면
