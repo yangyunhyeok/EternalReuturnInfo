@@ -38,18 +38,20 @@
 
 | 시연영상 | 기능 |
 | :--------: | :----: |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 일반 로그인 기능 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br> - 비밀번호 찾기 기능 <br> - 회원가입 기능 |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - 일반 로그인 기능 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br> - 비밀번호 찾기 기능 <br> - 회원가입 기능 |
 
 
 ### ⭐ 2. 메인 화면
+
+- 전적 검색 기능
+- 공식 홈페이지 공지사항 확인
+- 관련 유튜브 영상 확인
 
 | 시연영상 |
 | -------- |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
 
-- 전적 검색 기능
-- 공식 홈페이지 공지사항 확인
-- 관련 유튜브 영상 확인
+
 
 ### ⭐ 3. 듀오 찾기 화면
 - 듀오 찾기 CRUD
