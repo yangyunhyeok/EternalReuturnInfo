@@ -40,6 +40,7 @@
 - 비밀번호 찾기 기능
 - 회원가입 기능
 
+| Login |
 | -------- |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
 | 일반 로그인 비밀번호 찾기 회원가입 기능 |
