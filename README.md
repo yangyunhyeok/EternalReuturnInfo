@@ -82,6 +82,10 @@
 | -------- | -------- |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/findduo.gif" width="400" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/board.gif" width="400" height="800"> |
 
+
+
+<br>
+
 # 📚 STACKS
 
 ### Environment ###
