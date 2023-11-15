@@ -46,8 +46,7 @@
 
 | 전적 검색 기능 | 공식 홈페이지 공지사항 확인 | 관련 유튜브 영상 확인 |
 | ---------------- | ------------------- | ---------------------------------------- |
-| ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![Screen_recording_20231115_142549](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/0ec45b8f-709f-49f7-8a66-f8738992c966)
- | ![3](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/88002386-6c4a-4582-adfe-6dc8b3bc0fbe) | 
+| ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![Screen_recording_20231115_142549](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/0ec45b8f-709f-49f7-8a66-f8738992c966) | ![3](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/88002386-6c4a-4582-adfe-6dc8b3bc0fbe) | 
 
 
 ### ⭐ 3. 듀오 찾기 화면
