@@ -55,10 +55,6 @@
 
 ### ⭐ 4. 게시판 화면
 
-| Board |
-| -------- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/board.gif" width="400" height="800"> |
-
 - 게시글, 댓글 CRUD
 - 검색 기능
 - 새로고침 기능
@@ -82,7 +78,9 @@
 | -------- | -------- |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/main.gif" width="400" height="800"> |
 
-
+| FindDuo | Board |
+| -------- | -------- |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/board.gif" width="400" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/board.gif" width="400" height="800"> |
 
 # 📚 STACKS
 
