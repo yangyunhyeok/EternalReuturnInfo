@@ -35,11 +35,6 @@
 # ☑️ 주요 기능
 
 ### ⭐ 1. 로그인 & 회원가입
-
-| Login |
-| -------- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
-
 - 일반 로그인 기능
 - 비밀번호 찾기 기능
 - 회원가입 기능
@@ -48,9 +43,6 @@
 
 ### ⭐ 2. 메인 화면
 
-| MAIN |
-| -------- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
 
 - 전적 검색 기능
 - 공식 홈페이지 공지사항 확인
@@ -86,9 +78,9 @@
 
 # 📹 실행 영상
 
-| Login | Board |
+| Login | MAIN |
 | -------- | -------- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/board.gif" width="400" height="800"> |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/main.gif" width="400" height="800"> |
 
 
 # 📚 STACKS
