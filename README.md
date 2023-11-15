@@ -39,6 +39,7 @@
 - 일반 로그인 기능
 - 비밀번호 찾기 기능
 - 회원가입 기능
+
 | 시연영상 |
 | :--------: |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
