@@ -36,25 +36,25 @@
 
 ### ⭐ 1. 로그인 & 회원가입
 
+| Login |
+| -------- |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
+
 - 일반 로그인 기능
 - 비밀번호 찾기 기능
 - 회원가입 기능
 
-| Login |
-| -------- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
-| 일반 로그인 <br> 비밀번호 찾기 <br> 회원가입 기능 |
+
 
 ### ⭐ 2. 메인 화면
-
-- 전적 검색 기능
-- 공식 홈페이지 공지사항 확인
-- 관련 유튜브 영상 확인
 
 | MAIN |
 | -------- |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
 
+- 전적 검색 기능
+- 공식 홈페이지 공지사항 확인
+- 관련 유튜브 영상 확인
 
 
 ### ⭐ 3. 듀오 찾기 화면
