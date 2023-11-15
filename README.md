@@ -43,7 +43,7 @@
 | Login |
 | -------- |
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> |
-| 일반 로그인 비밀번호 찾기 회원가입 기능 |
+| 일반 로그인 <br> 비밀번호 찾기 <br> 회원가입 기능 |
 
 ### ⭐ 2. 메인 화면
 
