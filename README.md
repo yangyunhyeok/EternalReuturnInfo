@@ -40,7 +40,7 @@
 | ---------------- | ------------------- | ---------------------------------------- |
 | ![Screen_recording_20231114_195202](https://github.com/Team15MyMedia/MyMedia/assets/69956389/d2b5ef42-71f2-4223-87ed-439532886b74) | ![2](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/3741289d-aef7-48c1-993e-a2f50fcc6902) | ![3](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/88002386-6c4a-4582-adfe-6dc8b3bc0fbe) | 
 
-
+![login](https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/ffa7f595-fe50-4273-b89c-0084e9bb1125.gif)
 
 ### ⭐ 2. 메인 화면
 
