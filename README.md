@@ -15,6 +15,7 @@
 | 추지연 | 팀원 | ISFP        | [jiyeon-tistory.tistory](https://jiyeon-tistory.tistory.com/)       | [Ji-Yeon-98](https://github.com/Ji-Yeon-98) |
 
 
+
 <br>
 
 # 📽️ 프로젝트
