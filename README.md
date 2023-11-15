@@ -84,6 +84,13 @@
 
 <br>
 
+# 📹 실행 영상
+
+| Login | Board |
+| -------- | -------- |
+| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/login.gif" width="400" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/board.gif" width="400" height="800"> |
+
+
 # 📚 STACKS
 
 ### Environment ###
