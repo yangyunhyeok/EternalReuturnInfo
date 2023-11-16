@@ -23,13 +23,6 @@
 
 - 주제 : 온라인 게임 Eternal Return 에 대한 정보를 제공하고 공유하는 커뮤니티 앱
 
-<br>
-
-# 💡 설계
-
-- **WireFrame** : **[[Figma]](https://www.figma.com/file/XuJjkieTkTy1Oz63AeLL5e/TEAM18_%EC%9D%B4%EB%A6%AC%EC%98%A8%EB%82%98?type=design&node-id=0-1&mode=design&t=uo3ZA4LfYOYDcF15-0)**
-
-![image](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/35c34389-8879-440f-8cc6-f85a257e1f66)
 
 <br>
 
@@ -47,6 +40,15 @@
 
 
 <br>
+
+# 💡 설계
+
+- **WireFrame** : **[[Figma]](https://www.figma.com/file/XuJjkieTkTy1Oz63AeLL5e/TEAM18_%EC%9D%B4%EB%A6%AC%EC%98%A8%EB%82%98?type=design&node-id=0-1&mode=design&t=uo3ZA4LfYOYDcF15-0)**
+
+![image](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/35c34389-8879-440f-8cc6-f85a257e1f66)
+
+<br>
+
 
 # ☑️ 주요 기능
 
