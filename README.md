@@ -7,7 +7,7 @@
 
 - 팀 노션 : **[[Notion]](https://www.notion.so/7ed4416e04c644568de39205605569d7)**
 
-| 이름   | 역할 | MBTI        | BLOG                                               | GitHub                                                  | 
+| 이름   | 역할 | MBTI        | BLOG                                               | GITHUB                                                  | 
 | ------ | ---- | ---------- | -------------------------------------------------- | -------------------------------------------------------- |
 | 이호식 | 팀장 | ENFP        | [qhj6068(Owler).velog](https://velog.io/@ghj6068)  | [hosiker](https://github.com/hosiker)                |
 | 양윤혁 | 팀원 | ESTJ        | [Yangdriod.tistory](https://yangdriod.tistory.com/)       | [yangyunhyeok](https://github.com/yangyunhyeok) |
