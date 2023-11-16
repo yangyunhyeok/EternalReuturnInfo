@@ -33,6 +33,21 @@
 
 <br>
 
+# 📚 STACKS
+
+### Environment ###
+<img src="https://img.shields.io/badge/Androidstudio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Google Play-414141?style=for-the-badge&logo=googleplay&logoColor=white"> 
+
+### Development ###
+<img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"> <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"> 
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
+
+### Communication ###
+<img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+
+
+<br>
+
 # ☑️ 주요 기능
 
 ### ⭐ 1. 로그인 & 회원가입
@@ -88,17 +103,3 @@
 | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/chat.gif" width="380" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/myprofile.gif" width="380" height="800"> |
 
 
-
-<br>
-
-# 📚 STACKS
-
-### Environment ###
-<img src="https://img.shields.io/badge/Androidstudio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Google Play-414141?style=for-the-badge&logo=googleplay&logoColor=white"> 
-
-### Development ###
-<img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"> <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"> 
-<img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
-
-### Communication ###
-<img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
