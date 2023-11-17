@@ -87,7 +87,7 @@
 
 | Chat | Myprofile |
 | -------- | -------- |
-| <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/chat.gif" width="380" height="800"> | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/myprofile.gif" width="380" height="800"> |
+| ![chat](https://github.com/EternalReturnInfo/EternalReuturnInfo/assets/69956389/75b696e9-7216-4dd4-a095-54f09da53dda) | <img src="https://github.com/EternalReturnInfo/EternalReuturnInfo/blob/feature/board2/img/myprofile.gif" width="380" height="800"> |
 
 
 <br>
