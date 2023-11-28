@@ -1,6 +1,10 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&color=000000&height=300&section=header&text=ER%20Info&fontSize=90&fontColor=7FEBFF)
 
 
+# 트러블슈팅
+<br>
+
+
 # 🎧 팀 소개
 
 - 팀명 :  **이리온나**
